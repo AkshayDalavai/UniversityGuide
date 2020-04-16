@@ -1,66 +1,62 @@
-package com.univeristyguide.login.entity;
-
+package com.univeristyguide.login.dto;
 
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 
+public class UserDto {
+	
 
-@Entity
-@Table(name="users")
-public class User extends Auditable<String>{
-
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
 	private int id;
+	
 
-	@Column(name="first_name")
 	private String firstName;
-
-	@Column(name="last_name")
+	
+	
 	private String lastName;
+	
 
-	@Column(name="email")
 	private String email;
+	
 
-	@Column(name="password")
 	private String password;
+	
 
-
-	@Column(name="university")
+	private Date createdDate;
+	
+	private Date lastModifiedDate;
+	
 	private String university;
+	
 
-	@Column(name="roles")
 	private String roles;
 
 	
-
-	public User() {
-
+	
+	
+	
+	public UserDto() {
+	
 	}
 
 
+	
 
-	public User(String firstName, String lastName, String email, String password, String university, String roles) {
-		super();
+
+	public UserDto(int id, String firstName, String lastName, String email, String password, Date createdDate,
+			Date lastModifiedDate, String university, String roles) {
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
+		this.createdDate = createdDate;
+		this.lastModifiedDate = lastModifiedDate;
 		this.university = university;
 		this.roles = roles;
 	}
+
+
 
 
 
@@ -69,11 +65,9 @@ public class User extends Auditable<String>{
 	}
 
 
-
 	public void setId(int id) {
 		this.id = id;
 	}
-
 
 
 	public String getFirstName() {
@@ -81,11 +75,9 @@ public class User extends Auditable<String>{
 	}
 
 
-
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-
 
 
 	public String getLastName() {
@@ -93,11 +85,9 @@ public class User extends Auditable<String>{
 	}
 
 
-
 	public void setLastName(String lastName) {
 		this.lastName = lastName;
 	}
-
 
 
 	public String getEmail() {
@@ -105,11 +95,9 @@ public class User extends Auditable<String>{
 	}
 
 
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
-
 
 
 	public String getPassword() {
@@ -117,11 +105,12 @@ public class User extends Auditable<String>{
 	}
 
 
-
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+
+	
 
 
 	public String getUniversity() {
@@ -129,11 +118,9 @@ public class User extends Auditable<String>{
 	}
 
 
-
 	public void setUniversity(String university) {
 		this.university = university;
 	}
-
 
 
 	public String getRoles() {
@@ -141,23 +128,38 @@ public class User extends Auditable<String>{
 	}
 
 
-
 	public void setRoles(String roles) {
 		this.roles = roles;
 	}
 
 
-
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", password=" + password + ", university=" + university + ", roles=" + roles + ", getCreatedBy()="
-				+ getCreatedBy() + ", getCreatedDate()=" + getCreatedDate() + ", getLastModifiedBy()="
-				+ getLastModifiedBy() + ", getLastModifiedDate()=" + getLastModifiedDate() + "]";
+		return "UserDto [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", password=" + password + ", createdDate=" 
+				+ ", university=" + university + ", roles=" + roles + "]";
 	}
 
-	
-	
 
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+
+	public Date getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+
+	public void setLastModifiedDate(Date lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
+	
+	
 
 }
