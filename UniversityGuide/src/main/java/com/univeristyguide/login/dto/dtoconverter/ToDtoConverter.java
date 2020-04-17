@@ -1,6 +1,10 @@
 package com.univeristyguide.login.dto.dtoconverter;
 
+import com.univeristyguide.login.dto.CommentsDto;
+import com.univeristyguide.login.dto.PostsDto;
 import com.univeristyguide.login.dto.UserDto;
+import com.univeristyguide.login.entity.Comments;
+import com.univeristyguide.login.entity.Posts;
 import com.univeristyguide.login.entity.User;
 
 public class ToDtoConverter {
@@ -18,5 +22,39 @@ public class ToDtoConverter {
 				user.getRoles()
 				);
 		return resultUser;
+	}
+	
+	public static PostsDto postsToDtoConverter(final Posts posts)
+	{
+		PostsDto resultPosts = new PostsDto(posts.getId(),
+				posts.getUser(),
+				posts.getCategory(),
+				posts.getTitle(),
+				posts.isHasComments(),
+				posts.getPostContent(),
+				posts.getLikesCount(),
+				posts.isAnonymous(),
+				posts.getCommentsCount(),
+				posts.getCreatedDate(),
+				posts.getLastModifiedDate(),
+				posts.getCreatedBy()	
+				);
+		return resultPosts;
+				
+	}
+	
+	public CommentsDto commentsToDtoConverter(final Comments comments)
+	{
+		CommentsDto resultComments = new CommentsDto(comments.getId(),
+				comments.getUser(),
+				comments.getPosts(),
+				comments.getCommentsContent(),
+				comments.getLikes(),
+				comments.isAnonymous(),
+				comments.getCreatedDate(),
+				comments.getLastModifiedDate(),
+				comments.getCreatedBy()
+				);
+		return resultComments;
 	}
 }
