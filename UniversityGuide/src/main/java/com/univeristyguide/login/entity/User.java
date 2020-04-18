@@ -1,17 +1,15 @@
 package com.univeristyguide.login.entity;
 
 
-import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 
 
@@ -45,23 +43,23 @@ public class User extends Auditable<String>{
 	private String roles;
 
 	
-
 	public User() {
 
 	}
 
-
-
-	public User(String firstName, String lastName, String email, String password, String university, String roles) {
+	
+	public User(int id, String firstName, String lastName, String email, String password, String university,
+			String roles) {
 		super();
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
 		this.password = password;
 		this.university = university;
 		this.roles = roles;
+		
 	}
-
 
 
 	public int getId() {
@@ -147,7 +145,6 @@ public class User extends Auditable<String>{
 	}
 
 
-
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
@@ -157,7 +154,4 @@ public class User extends Auditable<String>{
 	}
 
 	
-	
-
-
 }

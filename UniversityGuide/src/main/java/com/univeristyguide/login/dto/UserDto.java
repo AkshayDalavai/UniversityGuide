@@ -1,6 +1,10 @@
 package com.univeristyguide.login.dto;
 
 import java.util.Date;
+import java.util.List;
+
+import com.univeristyguide.login.entity.Comments;
+import com.univeristyguide.login.entity.Posts;
 
 
 
@@ -32,15 +36,9 @@ public class UserDto {
 	private String roles;
 
 	
-	
-	
-	
 	public UserDto() {
 	
 	}
-
-
-	
 
 
 	public UserDto(int id, String firstName, String lastName, String email, String password, Date createdDate,
@@ -54,8 +52,8 @@ public class UserDto {
 		this.lastModifiedDate = lastModifiedDate;
 		this.university = university;
 		this.roles = roles;
-	}
 
+	}
 
 
 
@@ -133,14 +131,6 @@ public class UserDto {
 	}
 
 
-	@Override
-	public String toString() {
-		return "UserDto [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", password=" + password + ", createdDate=" 
-				+ ", university=" + university + ", roles=" + roles + "]";
-	}
-
-
 	public Date getCreatedDate() {
 		return createdDate;
 	}
@@ -159,7 +149,15 @@ public class UserDto {
 	public void setLastModifiedDate(Date lastModifiedDate) {
 		this.lastModifiedDate = lastModifiedDate;
 	}
-	
+
+
+	@Override
+	public String toString() {
+		return "UserDto [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", password=" + password + ", createdDate=" + createdDate + ", lastModifiedDate=" + lastModifiedDate
+				+ ", university=" + university + ", roles=" + roles + "]";
+	}
+
 	
 
 }

@@ -80,7 +80,7 @@ public class UserService {
 		}
 		else
 		{
-			throw new RuntimeException("Did not find employee id - " + theId);
+			throw new RuntimeException("Did not find user id - " + theId);
 		}
 		
 		return ToDtoConverter.userToDtoConverter(theUser);
