@@ -12,6 +12,7 @@
 	<artifactId>UniversityGuide</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>UniversityGuide</name>
+	<packaging>war</packaging>
 	<description>Login Package</description>
 
 	<properties>

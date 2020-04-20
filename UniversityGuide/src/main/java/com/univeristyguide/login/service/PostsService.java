@@ -1,11 +1,14 @@
 package com.univeristyguide.login.service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+import com.univeristyguide.login.dto.CommentsDto;
 import com.univeristyguide.login.dto.PostsDto;
 import com.univeristyguide.login.dto.dtoconverter.ToDtoConverter;
 import com.univeristyguide.login.entity.Comments;
@@ -13,6 +16,7 @@ import com.univeristyguide.login.entity.Posts;
 import com.univeristyguide.login.repository.CommentsRepository;
 import com.univeristyguide.login.repository.PostsRepository;
 
+@Service
 public class PostsService {
 	
 	private PostsRepository postsRepository;
@@ -32,6 +36,10 @@ public class PostsService {
 	
 	public PostsDto createPost(Posts posts)
 	{
+		if(posts.isAnonymous())
+		{
+			posts.setCreatedBy("Anonymous");
+		}
 		postsRepository.save(posts);
 		return ToDtoConverter.postsToDtoConverter(posts);
 	}
@@ -73,7 +81,15 @@ public class PostsService {
 		}
 		
 		posts.setCreatedDate(thePosts.getCreatedDate());
-		posts.setCreatedBy(thePosts.getCreatedBy());
+		if(thePosts.isAnonymous())
+		{
+			posts.setCreatedBy("Anonymous");
+		}
+		else
+		{
+			posts.setCreatedBy(thePosts.getCreatedBy());
+		}
+		
 		posts.setLastModifiedDate(thePosts.getLastModifiedDate());
 		posts.setLastModifiedBy(thePosts.getLastModifiedBy());
 		
@@ -88,7 +104,7 @@ public class PostsService {
 		{
 			throw new RuntimeException("Did not find the post id -" + theId);
 		}
-		List<Comments> relatedComments = commentsRepository.findByPostId(theId);
+		List<Comments> relatedComments = commentsRepository.findByPosts(theId);
 		if(relatedComments.size() > 0)
 		{
 			for(Comments comments : relatedComments)
@@ -120,5 +136,45 @@ public class PostsService {
 			findPost.setLikesCount(findPost.getLikesCount()+1);
 		}
 		postsRepository.save(findPost);
+	}
+	
+	public void commentsCount(int postId)
+	{
+		Optional<Posts> result = postsRepository.findById(postId);
+		Posts findPost = null;
+		if(result.isPresent())
+		{
+			findPost = result.get();
+			List<Comments> comments = commentsRepository.findByPosts(postId);
+			if(comments.isEmpty())
+			{
+				findPost.setCommentsCount(0);
+			}
+			else
+			{
+				findPost.setCommentsCount(comments.size());
+			}
+		}
+		else
+		{
+			throw new RuntimeException("Did not find the post id -" + postId);
+		}
+		postsRepository.save(findPost);
+	}
+	
+	public List<PostsDto> getAllPostsByUserId(int theUserId)
+	{
+		List<Posts> posts = postsRepository.findByUser(theUserId);
+		return posts.stream().sorted(Comparator.comparing(Posts::getCreatedDate).reversed())
+				.map(ToDtoConverter::postsToDtoConverter).collect(Collectors.toList());
+		
+	}
+	
+	public List<PostsDto> getAllPostsByCategoryId(int theCategoryId)
+	{
+		List<Posts> posts = postsRepository.findByCategory(theCategoryId);
+		return posts.stream().sorted(Comparator.comparing(Posts::getCreatedDate).reversed())
+				.map(ToDtoConverter::postsToDtoConverter).collect(Collectors.toList());
+		
 	}
 }

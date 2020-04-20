@@ -15,7 +15,7 @@ public class CommentsDto {
 	
 	private String commentsContent;
 	
-	private int likes;
+	private int likesCount;
 	
 	private boolean isAnonymous;
 	
@@ -31,14 +31,14 @@ public class CommentsDto {
 
 	
 
-	public CommentsDto(int id, User user, Posts posts, String commentsContent, int likes, boolean isAnonymous,
+	public CommentsDto(int id, User user, Posts posts, String commentsContent, int likesCount, boolean isAnonymous,
 			Date createdDate, Date lastModifiedDate, String createdBy) {
 		
 		this.id = id;
 		this.user = user;
 		this.posts = posts;
 		this.commentsContent = commentsContent;
-		this.likes = likes;
+		this.likesCount = likesCount;
 		this.isAnonymous = isAnonymous;
 		this.createdDate = createdDate;
 		this.lastModifiedDate = lastModifiedDate;
@@ -80,11 +80,11 @@ public class CommentsDto {
 	}
 
 	public int getLikes() {
-		return likes;
+		return likesCount;
 	}
 
-	public void setLikes(int likes) {
-		this.likes = likes;
+	public void setLikes(int likesCount) {
+		this.likesCount = likesCount;
 	}
 
 	public boolean isAnonymous() {
@@ -122,7 +122,7 @@ public class CommentsDto {
 	@Override
 	public String toString() {
 		return "CommentsDto [id=" + id + ", user=" + user + ", posts=" + posts + ", commentsContent=" + commentsContent
-				+ ", likes=" + likes + ", isAnonymous=" + isAnonymous + ", createdDate=" + createdDate
+				+ ", likes=" + likesCount + ", isAnonymous=" + isAnonymous + ", createdDate=" + createdDate
 				+ ", lastModifiedDate=" + lastModifiedDate + ", createdBy=" + createdBy + "]";
 	}
 	
