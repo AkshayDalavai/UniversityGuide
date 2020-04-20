@@ -1,15 +1,16 @@
 package com.univeristyguide.login.entity;
 
-import java.util.List;
+
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+
 import javax.persistence.Table;
 
 @Entity
@@ -18,30 +19,30 @@ public class Posts extends Auditable<String>{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name="id",nullable=false)
 	private int id;
 	
-	@ManyToOne
-	@JoinColumn(name="id_user")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="id_user",nullable=false)
 	private User user;
 	
-	@ManyToOne
-	@JoinColumn(name="id_category")
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="id_category",nullable=false)
 	private Category category;
 	
-	@Column(name="title")
+	@Column(name="title",nullable=false)
 	private String title;
 	
-	@Column(name="has_comments")
+	@Column(name="has_comments",nullable=false)
 	private boolean hasComments;
 	
-	@Column(name="posts_content")
+	@Column(name="posts_content",nullable=false)
 	private String postContent;
 	
 	@Column(name="likes_count")
 	private int likesCount;
 	
-	@Column(name="is_anonymous")
+	@Column(name="is_anonymous",nullable=false)
 	private boolean isAnonymous;
 	
 	@Column(name="comments_count")

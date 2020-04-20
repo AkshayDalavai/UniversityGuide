@@ -43,7 +43,7 @@ public class ToDtoConverter {
 				
 	}
 	
-	public CommentsDto commentsToDtoConverter(final Comments comments)
+	public static CommentsDto commentsToDtoConverter(final Comments comments)
 	{
 		CommentsDto resultComments = new CommentsDto(comments.getId(),
 				comments.getUser(),

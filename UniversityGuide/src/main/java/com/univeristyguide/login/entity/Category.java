@@ -14,23 +14,20 @@ public class Category {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="id")
+	@Column(name="id",nullable=false)
 	private int id;
 	
-	@Column(name="name")
+	@Column(name="name",nullable=false)
 	private String categoryName;
 	
-	@OneToMany(mappedBy="category")
-	private Posts posts;
 
 	public Category() {
 		
 	}
 
-	public Category(int id, String categoryName, Posts posts) {
+	public Category(int id, String categoryName) {
 		this.id = id;
 		this.categoryName = categoryName;
-		this.posts = posts;
 	}
 
 	public int getId() {
@@ -49,17 +46,11 @@ public class Category {
 		this.categoryName = categoryName;
 	}
 
-	public Posts getPosts() {
-		return posts;
-	}
-
-	public void setPosts(Posts posts) {
-		this.posts = posts;
-	}
+	
 
 	@Override
 	public String toString() {
-		return "Category [id=" + id + ", categoryName=" + categoryName + ", posts=" + posts + "]";
+		return "Category [id=" + id + ", categoryName=" + categoryName + "]";
 	}
 	
 	
