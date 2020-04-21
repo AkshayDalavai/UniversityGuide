@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.univeristyguide.login.dto.CommentsDto;
 import com.univeristyguide.login.dto.PostsDto;
 import com.univeristyguide.login.entity.Posts;
 import com.univeristyguide.login.service.PostsService;
@@ -38,12 +37,22 @@ public class PostsRestController {
 		return new ResponseEntity<>(posts,HttpStatus.OK);
 	}
 	
-	@PostMapping("/posts")
-	public ResponseEntity<PostsDto> createPost(@RequestBody Posts posts)
+	/*@PostMapping("/user/{userId}/{categoryId}/posts")
+	public ResponseEntity<PostsDto> createPost(@PathVariable int userId,
+			@PathVariable int categoryId,@RequestBody Posts posts)
 	{
 		posts.setId(0);
-		postsService.createPost(posts);
+		postsService.createPost(userId,categoryId,posts);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}*/
+	
+	@PostMapping("/posts")
+	public ResponseEntity<PostsDto> createPost(@RequestBody PostsDto postsDto)
+	{
+		postsDto.setId(0);
+		
+		PostsDto resultPost = postsService.createPost(postsDto);
+		return new ResponseEntity<>(resultPost,HttpStatus.OK);
 	}
 	
 	@PutMapping("/posts/update")

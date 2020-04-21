@@ -8,25 +8,37 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.univeristyguide.login.dto.CommentsDto;
 import com.univeristyguide.login.dto.PostsDto;
+import com.univeristyguide.login.dto.UserDto;
+import com.univeristyguide.login.dto.dtoconverter.FromDtoConverter;
 import com.univeristyguide.login.dto.dtoconverter.ToDtoConverter;
+import com.univeristyguide.login.entity.Category;
 import com.univeristyguide.login.entity.Comments;
 import com.univeristyguide.login.entity.Posts;
+import com.univeristyguide.login.entity.User;
+import com.univeristyguide.login.repository.CategoryRepository;
 import com.univeristyguide.login.repository.CommentsRepository;
 import com.univeristyguide.login.repository.PostsRepository;
+import com.univeristyguide.login.repository.UserRepository;
 
 @Service
 public class PostsService {
 	
 	private PostsRepository postsRepository;
 	private CommentsRepository commentsRepository;
+	private UserRepository userRepository;
+	private CategoryRepository categoryRepository;
 	
 	@Autowired
-	public PostsService(PostsRepository thePostsRepository,CommentsRepository theCommentsRepository)
+	public PostsService(PostsRepository thePostsRepository,
+			CommentsRepository theCommentsRepository,
+			UserRepository theuserRepository,
+			CategoryRepository thecategoryRepository)
 	{
 		postsRepository = thePostsRepository;
 		commentsRepository = theCommentsRepository;
+		userRepository = theuserRepository;
+		categoryRepository = thecategoryRepository;
 	}
 	
 	public PostsService()
@@ -34,14 +46,79 @@ public class PostsService {
 		
 	}
 	
-	public PostsDto createPost(Posts posts)
+	/*public PostsDto createPost(int userId,int categoryId,Posts posts)
 	{
+		Optional<User> resultUser = userRepository.findById(userId);
+		User theUser = null;
+		if(resultUser.isPresent())
+		{
+			theUser=resultUser.get();
+		}
+		else
+		{
+			throw new RuntimeException("Did not find user id - " + userId);
+		}
+		Optional<Category> resultCategory = categoryRepository.findById(categoryId);
+		Category theCategory =null;
+		if(resultCategory.isPresent())
+		{
+			theCategory = resultCategory.get();
+		}
+		else
+		{
+			throw new RuntimeException("Did not find category id - " + categoryId);
+		}
 		if(posts.isAnonymous())
 		{
 			posts.setCreatedBy("Anonymous");
 		}
+		posts.setUser(theUser);
+		posts.setCategory(theCategory);
+		posts.setHasComments(false);
+		posts.setLikesCount(0);
+		posts.setCommentsCount(0);
+		
 		postsRepository.save(posts);
+		
 		return ToDtoConverter.postsToDtoConverter(posts);
+		
+		
+	}*/
+	
+	public PostsDto createPost(PostsDto postsDto)
+	{
+		int userId = postsDto.getUserId();
+		int categoryId = postsDto.getCategoryId();
+		Optional<User> resultUser = userRepository.findById(userId);
+		User theUser = null;
+		if(resultUser.isPresent())
+		{
+			theUser=resultUser.get();
+		}
+		else
+		{
+			throw new RuntimeException("Did not find user id - " + userId);
+		}
+		Optional<Category> resultCategory = categoryRepository.findById(categoryId);
+		Category theCategory =null;
+		if(resultCategory.isPresent())
+		{
+			theCategory = resultCategory.get();
+		}
+		else
+		{
+			throw new RuntimeException("Did not find category id - " + categoryId);
+		}
+		if(postsDto.isAnonymous())
+		{
+			postsDto.setCreatedBy("Anonymous");
+		}
+		postsDto.setUser(ToDtoConverter.userToDtoConverter(theUser));
+		postsDto.setCategory(ToDtoConverter.categoryToDtoConverter(theCategory));
+		postsDto.setHasComments(false);
+		postsRepository.save(FromDtoConverter.fromPostsDtoConverter(postsDto));
+		return postsDto;
+		
 	}
 	
 	public List<PostsDto> getAllPosts()
