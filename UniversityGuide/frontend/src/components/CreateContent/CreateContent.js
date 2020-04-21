@@ -1,60 +1,63 @@
 import React, { Component } from 'react'
 import { Modal, Form, Input, FormGroup, ModalHeader, ModalBody, CustomInput, Col, Row, Label, Button } from 'reactstrap';
-
+import PropTypes from 'prop-types'
 class CreateContent extends Component {
+    static propTypes = {
+        addNewPost: PropTypes.func.isRequired,
+        categories: PropTypes.array.isRequired,
+        toggle: PropTypes.func.isRequired,
+        modal: PropTypes.bool.isRequired
+    }
     constructor(props){
         super(props);
         this.state = {
-            modal: false,
-            id: '',
-            id_category: '',
+            isAnonymous: true,
+            categoryID: '',
             postTitle: '',
-            postsContent: ''
+            postContent: ''
         }
     }
 
-    toggle = () => {
-        this.setState((prevState) => {
-            return {
-                modal: !prevState.modal
-            }
-        });
-    }
     /**
      * @todo: userID, creation_date, updated_date, has_comments: false, to be added bfr sending it to server
      */
+    handleInputChange = event =>{
+        const value = event.target.type === 'checkbox' ? event.target.checked: event.target.value;
+        this.setState({
+            [event.target.name]: value
+        });
+    }
+
     render() {
         return (
             <React.Fragment>
-                <div className="container border border-secondary rounded" onClick={this.toggle}>
-                    <div className="mt-2 float-left ">Create POST</div>
-                    <Input type="text" className="mb-3" readOnly={true}  placeholder="Ask for advice, mentorship,  and more from the community . . ."
-                            />
-                </div>
-                <Modal isOpen={this.state.modal} toggle={this.toggle} size="lg" centered={true}>
-                    <ModalHeader toggle={this.toggle}>Create POST</ModalHeader>
+                <Modal isOpen={this.props.modal} toggle={this.props.toggle} size="lg" centered={true}>
+                    <ModalHeader toggle={this.props.toggle}>Create POST</ModalHeader>
                     <ModalBody>
-                        <Form onSubmit={this.handleSubmit}>
+                        <Form onSubmit={(event) => {this.props.addNewPost(event, this.state)}}>
                             <FormGroup>
                                 <Label for="postTitle" hidden>Post Title</Label>
-                                <Input type="text" className="mb-3" name="postTitle" id="postTitle" placeholder="Post Title" />
+                                <Input  type="text" className="mb-3" name="postTitle" id="postTitle" placeholder="Post Title"
+                                        value={this.state.postTitle} onChange={this.handleInputChange} />
                                 <Label for="postContent" hidden>Add a description or link</Label>
-                                <Input type="textarea" className="mb-3" name="postContent" id="postContent" placeholder="Add a description or link" />
+                                <Input type="textarea" className="mb-3" name="postContent" id="postContent" placeholder="Add a description or link"
+                                        value={this.state.postContent} onChange={this.handleInputChange} rows={4}/>
                             </FormGroup>
                             <Row form>
                                 <Col sm={4}>
                                     <FormGroup>
-                                        <CustomInput type="checkbox" id="postAnonymously" label="Post Anonymously" />
+                                        <CustomInput type="checkbox" id="postAnonymously" label="Post Anonymously" name="isAnonymous"
+                                                     value={this.state.isAnonymous} onChange={this.handleInputChange}/>
                                     </FormGroup>
                                 </Col>
                                 <Col sm={8}>
                                     <FormGroup className="float-right ml-2">
-                                        <Button color="danger">Post</Button>
+                                        <Button color="danger" disabled={!this.state.postTitle}>Post</Button>
                                     </FormGroup>
                                     <FormGroup className="float-right">
-                                        <Input type="select" name="category" id="category">
+                                        <Input type="select" name="category" id="category" name="categoryID" value={this.state.categoryID} onChange={this.handleInputChange}>
                                             {this.props.categories.map(category => {
-                                                return <option key={category.id}>{category.name}</option>
+                                                return <option key={category.id} value={category.id}>{category.name}</option>
                                             })}
                                         </Input>
                                     </FormGroup>
