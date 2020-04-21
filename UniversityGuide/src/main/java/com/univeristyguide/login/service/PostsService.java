@@ -117,9 +117,7 @@ public class PostsService {
 		postsDto.setCategory(ToDtoConverter.categoryToDtoConverter(theCategory));
 		postsDto.setHasComments(false);
 		postsRepository.save(FromDtoConverter.fromPostsDtoConverter(postsDto));
-		
 		return postsDto;
-		
 		
 	}
 	
