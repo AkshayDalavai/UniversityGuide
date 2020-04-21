@@ -37,22 +37,22 @@ public class PostsRestController {
 		return new ResponseEntity<>(posts,HttpStatus.OK);
 	}
 	
-	@PostMapping("/user/{userId}/{categoryId}/posts")
+	/*@PostMapping("/user/{userId}/{categoryId}/posts")
 	public ResponseEntity<PostsDto> createPost(@PathVariable int userId,
 			@PathVariable int categoryId,@RequestBody Posts posts)
 	{
 		posts.setId(0);
 		postsService.createPost(userId,categoryId,posts);
 		return new ResponseEntity<>(HttpStatus.OK);
-	}
+	}*/
 	
-	/*@PostMapping("/posts")
+	@PostMapping("/posts")
 	public ResponseEntity<PostsDto> createPost(@RequestBody PostsDto postsDto)
 	{
 		postsDto.setId(0);
 		postsService.createPost(postsDto);
 		return new ResponseEntity<>(HttpStatus.OK);
-	}*/
+	}
 	
 	@PutMapping("/posts/update")
 	public ResponseEntity<PostsDto> updatePost(@RequestBody Posts posts)

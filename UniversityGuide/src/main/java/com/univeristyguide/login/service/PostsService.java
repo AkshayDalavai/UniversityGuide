@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.univeristyguide.login.dto.PostsDto;
+import com.univeristyguide.login.dto.UserDto;
+import com.univeristyguide.login.dto.dtoconverter.FromDtoConverter;
 import com.univeristyguide.login.dto.dtoconverter.ToDtoConverter;
 import com.univeristyguide.login.entity.Category;
 import com.univeristyguide.login.entity.Comments;
@@ -44,46 +46,7 @@ public class PostsService {
 		
 	}
 	
-	public PostsDto createPost(int userId,int categoryId,Posts posts)
-	{
-		Optional<User> resultUser = userRepository.findById(userId);
-		User theUser = null;
-		if(resultUser.isPresent())
-		{
-			theUser=resultUser.get();
-		}
-		else
-		{
-			throw new RuntimeException("Did not find user id - " + userId);
-		}
-		Optional<Category> resultCategory = categoryRepository.findById(categoryId);
-		Category theCategory =null;
-		if(resultCategory.isPresent())
-		{
-			theCategory = resultCategory.get();
-		}
-		else
-		{
-			throw new RuntimeException("Did not find category id - " + categoryId);
-		}
-		if(posts.isAnonymous())
-		{
-			posts.setCreatedBy("Anonymous");
-		}
-		posts.setUser(theUser);
-		posts.setCategory(theCategory);
-		posts.setHasComments(false);
-		posts.setLikesCount(0);
-		posts.setCommentsCount(0);
-		
-		postsRepository.save(posts);
-		
-		return ToDtoConverter.postsToDtoConverter(posts);
-		
-		
-	}
-	
-	/*public PostsDto createPost(PostsDto postsDto)
+	/*public PostsDto createPost(int userId,int categoryId,Posts posts)
 	{
 		Optional<User> resultUser = userRepository.findById(userId);
 		User theUser = null;
@@ -121,6 +84,44 @@ public class PostsService {
 		
 		
 	}*/
+	
+	public PostsDto createPost(PostsDto postsDto)
+	{
+		int userId = postsDto.getUserId();
+		int categoryId = postsDto.getCategoryId();
+		Optional<User> resultUser = userRepository.findById(userId);
+		User theUser = null;
+		if(resultUser.isPresent())
+		{
+			theUser=resultUser.get();
+		}
+		else
+		{
+			throw new RuntimeException("Did not find user id - " + userId);
+		}
+		Optional<Category> resultCategory = categoryRepository.findById(categoryId);
+		Category theCategory =null;
+		if(resultCategory.isPresent())
+		{
+			theCategory = resultCategory.get();
+		}
+		else
+		{
+			throw new RuntimeException("Did not find category id - " + categoryId);
+		}
+		if(postsDto.isAnonymous())
+		{
+			postsDto.setCreatedBy("Anonymous");
+		}
+		postsDto.setUser(ToDtoConverter.userToDtoConverter(theUser));
+		postsDto.setCategory(ToDtoConverter.categoryToDtoConverter(theCategory));
+		postsDto.setHasComments(false);
+		postsRepository.save(FromDtoConverter.fromPostsDtoConverter(postsDto));
+		
+		return postsDto;
+		
+		
+	}
 	
 	public List<PostsDto> getAllPosts()
 	{

@@ -30,7 +30,9 @@ public class ToDtoConverter {
 	{
 		PostsDto resultPosts = new PostsDto(posts.getId(),
 				userToDtoConverter(posts.getUser()),
+				posts.getUser().getId(),
 				categoryToDtoConverter(posts.getCategory()),
+				posts.getCategory().getId(),
 				posts.getTitle(),
 				posts.isHasComments(),
 				posts.getPostContent(),
@@ -48,8 +50,8 @@ public class ToDtoConverter {
 	public static CommentsDto commentsToDtoConverter(final Comments comments)
 	{
 		CommentsDto resultComments = new CommentsDto(comments.getId(),
-				comments.getUser(),
-				comments.getPosts(),
+				userToDtoConverter(comments.getUser()),
+				postsToDtoConverter(comments.getPosts()),
 				comments.getCommentsContent(),
 				comments.getLikes(),
 				comments.isAnonymous(),
