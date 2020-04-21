@@ -50,8 +50,9 @@ public class PostsRestController {
 	public ResponseEntity<PostsDto> createPost(@RequestBody PostsDto postsDto)
 	{
 		postsDto.setId(0);
-		postsService.createPost(postsDto);
-		return new ResponseEntity<>(HttpStatus.OK);
+		
+		PostsDto resultPost = postsService.createPost(postsDto);
+		return new ResponseEntity<>(resultPost,HttpStatus.OK);
 	}
 	
 	@PutMapping("/posts/update")
