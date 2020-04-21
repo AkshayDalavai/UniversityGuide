@@ -57,7 +57,7 @@ class CreateContent extends Component {
                                     <FormGroup className="float-right">
                                         <Input type="select" name="category" id="category" name="categoryID" value={this.state.categoryID} onChange={this.handleInputChange}>
                                             {this.props.categories.map(category => {
-                                                return <option key={category.id} value={category.id}>{category.name}</option>
+                                                return <option key={category.id} value={category.id}>{category.categoryName}</option>
                                             })}
                                         </Input>
                                     </FormGroup>

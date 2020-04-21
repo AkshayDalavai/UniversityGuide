@@ -4,20 +4,13 @@ import PostModal from '../Post/PostModal';
 import {Switch, Route} from 'react-router-dom';
 
 class SUForum extends Component {
-    constructor(props){
-        super(props);
-        this.state = {
-            posts: []
-          }
-    }
-
     render() {
         return (
             <div className="container">
-                <Posts posts={this.state.posts} categories={this.props.categories} />
+                <Posts categories={this.props.categories} />
                 <Switch>
                     <Route exact path={`SUForum/:postID`}>
-                        <PostModal category={this.props.category}/>
+                        <PostModal category={this.props.categories[0]}/>
                     </Route>
                 </Switch>
             </div>

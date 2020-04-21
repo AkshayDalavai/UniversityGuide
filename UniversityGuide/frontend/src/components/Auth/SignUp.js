@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, FormFeedback} from 'reactstrap';
 //import PropTypes from 'prop-types';
+import axios from 'axios';
 
 class SignUp extends Component{
     constructor(props){
@@ -98,15 +99,21 @@ class SignUp extends Component{
             email: this.state.email,
             password: this.state.password,
             university: this.state.university,
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
         }
         console.log(user);
         /**
          * @todo: Make REST Call here
          * @todo: Handle User Already Exists error once REST is implemented
          */
-        this.toggle();
+        axios.post('http://192.168.1.56:8080/UniversityGuide-0.0.1-SNAPSHOT/api/categories', user)
+             .then(res => {
+                 alert("User Added Successfully");
+                 this.toggle();
+             })
+             .catch(err => {
+                 alert(`Error Occurred ${err}`)
+                 this.toggle();
+             });
     }
 
     render(){

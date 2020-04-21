@@ -32,23 +32,17 @@ class Posts extends Component {
     }
 
     componentDidMount(){
-        /**
-         * @todo: get posts here
-         */
-        axios.get('http://192.168.1.56:8080/UniversityGuide-0.0.1-SNAPSHOT/api/user')
-            .then(res =>{
-                console.log(res);
+        axios.get('http://192.168.1.56:8080/UniversityGuide-0.0.1-SNAPSHOT/api/posts')
+            .then(res => {
+                console.log(res.data);
+                this.setState({
+                    posts: res.data
+                })
             })
             .catch(err => {
                 console.log(err);
             })
-        let posts = localStorage.getItem('posts');
-        if(posts){
-            this.setState({
-                posts: JSON.parse(posts)
-            })
         }
-    }
 
     handleSubmit = e => {
         e.preventDefault();
@@ -61,21 +55,26 @@ class Posts extends Component {
     addNewPost = (event, postDetails) => {
         event.preventDefault();
         const post = {
-            id: Math.floor(Math.random() * 10000000),
-            userID: 'nik@g.com',
+            userId: 1,
             isAnonymous: postDetails.isAnonymous,
-            categoryID: postDetails.categoryID,
-            postTitle: postDetails.postTitle,
-            postContent: postDetails.postContent,
-            creationDate: new Date().toISOString(),
-            updatedDate: new Date().toISOString(),
-            likes: 10,
-            comments: 2
+            categoryId: +postDetails.categoryID,
+            title: postDetails.postTitle,
+            postContent: postDetails.postContent
         }
         console.log(post);
+        axios.post('http://192.168.1.56:8080/UniversityGuide-0.0.1-SNAPSHOT/api/posts', post)
+             .then(res =>{
+                const posts = this.state.posts;
+                posts.unshift(res.data);
+                this.setState({
+                    posts
+                });
+             })
+             .catch(err => {
+                console.log(err);
+             })
         const posts = this.state.posts;
         posts.unshift(post);
-        localStorage.setItem('posts', JSON.stringify(posts));
         this.setState({
             posts
         });
@@ -86,15 +85,15 @@ class Posts extends Component {
     render() {
         return (
             <div className="mt-2 mb-2">
-                <div className="border border-secondary rounded mb-3">
+                {/* <div className="border border-secondary rounded mb-3">
                     <Filter />
-                </div>
+                </div> */}
                 <div className="container border border-secondary rounded mb-3">
                             <Form onSubmit={this.handleSubmit}>
                                 <FormGroup>
                                     <Input  type="text" name="search" id="search" maxLength="45" className="mb-3 mt-3"
                                             placeholder="Search and Press Enter..." onChange={this.handleInputChange}
-                                            value={this.state.searcg}/>
+                                            value={this.state.search}/>
                                 </FormGroup>
                               </Form>
                 </div>
@@ -107,7 +106,7 @@ class Posts extends Component {
                 <CreateContent categories={this.props.categories} toggle={this.toggle} modal={this.state.modal}
                                addNewPost={this.addNewPost}/> : null}
                 
-                {this.state.posts.map(post => <PostCard key={post.id} post={post} category={this.props.categories.filter(cat => cat.id == post.categoryID)[0]} />)}
+                {this.state.posts.map(indPost => <PostCard key={indPost.id} post={indPost} category={this.props.categories.filter(cat => cat.id == indPost.categoryId)[0]} />)}
             </div>
         )
     }
