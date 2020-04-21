@@ -11,13 +11,14 @@ import org.springframework.stereotype.Service;
 import com.univeristyguide.login.dto.CommentsDto;
 import com.univeristyguide.login.dto.dtoconverter.ToDtoConverter;
 import com.univeristyguide.login.entity.Comments;
-
 import com.univeristyguide.login.repository.CommentsRepository;
+import com.univeristyguide.login.repository.PostsRepository;
 
 @Service
 public class CommentsService {
 	
 	private CommentsRepository commentsRepository;
+	
 	
 	@Autowired
 	public CommentsService(CommentsRepository theCommentsRepository)
