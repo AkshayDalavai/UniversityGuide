@@ -1,5 +1,6 @@
 package com.univeristyguide.login.service;
 
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.univeristyguide.login.dto.UserDto;
 import com.univeristyguide.login.dto.dtoconverter.ToDtoConverter;
+
 import com.univeristyguide.login.entity.User;
 import com.univeristyguide.login.repository.UserRepository;
 
@@ -85,5 +87,6 @@ public class UserService {
 		
 		return ToDtoConverter.userToDtoConverter(theUser);
 	}
-
+	
+	
 }

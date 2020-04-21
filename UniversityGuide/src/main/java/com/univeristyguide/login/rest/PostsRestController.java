@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.univeristyguide.login.dto.CommentsDto;
 import com.univeristyguide.login.dto.PostsDto;
 import com.univeristyguide.login.entity.Posts;
 import com.univeristyguide.login.service.PostsService;
@@ -59,17 +60,31 @@ public class PostsRestController {
 		return new ResponseEntity<>(postsDto,HttpStatus.OK);
 	}
 	
-	@DeleteMapping("posts/{postsId}")
+	@DeleteMapping("/posts/{postsId}")
 	public ResponseEntity<PostsDto> deletePost(@PathVariable int postsId)
 	{
 		postsService.deletePosts(postsId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@PutMapping("posts/{postsId}/likes")
+	@PutMapping("/posts/{postsId}/likes")
 	public ResponseEntity<PostsDto> likePost(@PathVariable int postsId,@RequestBody final int buttonState)
 	{
 		postsService.likes(postsId, buttonState);
 		return new ResponseEntity<>(HttpStatus.OK);
+	}
+	
+	@GetMapping("/posts/postsByUserId/{userId}")
+	public ResponseEntity<List<PostsDto>> getPostsByUserId(@PathVariable int userId)
+	{
+		List<PostsDto> posts = postsService.getAllPostsByUserId(userId);
+		return new ResponseEntity<>(posts,HttpStatus.OK);
+	}
+	
+	@GetMapping("/posts/postsByCategoryId/{categoryId}")
+	public ResponseEntity<List<PostsDto>> getPostsByCategoryId(@PathVariable int categoryId)
+	{
+		List<PostsDto> posts = postsService.getAllPostsByCategoryId(categoryId);
+		return new ResponseEntity<>(posts,HttpStatus.OK);
 	}
 }

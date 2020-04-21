@@ -22,7 +22,7 @@ public class Auditable<U> {
 	private U createdBy;
 
 	@CreatedDate
-	@Column(name = "created_date")
+	@Column(name = "created_date",nullable=false,updatable=false)
 	private Date createdDate;
 
 
