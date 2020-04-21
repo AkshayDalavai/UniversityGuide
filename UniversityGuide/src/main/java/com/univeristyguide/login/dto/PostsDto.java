@@ -13,7 +13,13 @@ public class PostsDto {
 	
 	private UserDto user;
 	
+	//Testing
+	private int userId;
+	
 	private CategoryDto category;
+	
+	//Testing
+	private int categoryId;
 	
 	private String title;
 	
@@ -38,7 +44,7 @@ public class PostsDto {
 	}
 
 
-	public PostsDto(int id, UserDto user, CategoryDto category, String title, boolean hasComments, String postContent,
+	/*public PostsDto(int id, UserDto user, CategoryDto category, String title, boolean hasComments, String postContent,
 			int likesCount, boolean isAnonymous, int commentsCount, Date createdDate, Date lastModifiedDate,
 			String createdBy) {
 		super();
@@ -54,11 +60,34 @@ public class PostsDto {
 		this.createdDate = createdDate;
 		this.lastModifiedDate = lastModifiedDate;
 		this.createdBy = createdBy;
-	}
+	}*/
+	
+	
 
 
 	public int getId() {
 		return id;
+	}
+
+
+	public PostsDto(int id, UserDto user, int userId, CategoryDto category, int categoryId, String title,
+			boolean hasComments, String postContent, int likesCount, boolean isAnonymous, int commentsCount,
+			Date createdDate, Date lastModifiedDate, String createdBy) {
+		super();
+		this.id = id;
+		this.user = user;
+		this.userId = userId;
+		this.category = category;
+		this.categoryId = categoryId;
+		this.title = title;
+		this.hasComments = hasComments;
+		this.postContent = postContent;
+		this.likesCount = likesCount;
+		this.isAnonymous = isAnonymous;
+		this.commentsCount = commentsCount;
+		this.createdDate = createdDate;
+		this.lastModifiedDate = lastModifiedDate;
+		this.createdBy = createdBy;
 	}
 
 
@@ -176,13 +205,34 @@ public class PostsDto {
 		this.createdBy = createdBy;
 	}
 
+	//Testing
+	public int getUserId() {
+		return userId;
+	}
+
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
+
+
+	public int getCategoryId() {
+		return categoryId;
+	}
+
+
+	public void setCategoryId(int categoryId) {
+		this.categoryId = categoryId;
+	}
+
 
 	@Override
 	public String toString() {
-		return "PostsDto [id=" + id + ", user=" + user + ", category=" + category + ", title=" + title
-				+ ", hasComments=" + hasComments + ", postContent=" + postContent + ", likesCount=" + likesCount
-				+ ", isAnonymous=" + isAnonymous + ", commentsCount=" + commentsCount + ", createdDate=" + createdDate
-				+ ", lastModifiedDate=" + lastModifiedDate + ", createdBy=" + createdBy + "]";
+		return "PostsDto [id=" + id + ", user=" + user + ", userId=" + userId + ", category=" + category
+				+ ", categoryId=" + categoryId + ", title=" + title + ", hasComments=" + hasComments + ", postContent="
+				+ postContent + ", likesCount=" + likesCount + ", isAnonymous=" + isAnonymous + ", commentsCount="
+				+ commentsCount + ", createdDate=" + createdDate + ", lastModifiedDate=" + lastModifiedDate
+				+ ", createdBy=" + createdBy + "]";
 	}
 
 		
