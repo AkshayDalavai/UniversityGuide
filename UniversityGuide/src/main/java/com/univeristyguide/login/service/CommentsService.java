@@ -9,27 +9,72 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.univeristyguide.login.dto.CommentsDto;
+import com.univeristyguide.login.dto.dtoconverter.FromDtoConverter;
 import com.univeristyguide.login.dto.dtoconverter.ToDtoConverter;
+import com.univeristyguide.login.entity.Category;
 import com.univeristyguide.login.entity.Comments;
+import com.univeristyguide.login.entity.Posts;
+import com.univeristyguide.login.entity.User;
 import com.univeristyguide.login.repository.CommentsRepository;
 import com.univeristyguide.login.repository.PostsRepository;
+import com.univeristyguide.login.repository.UserRepository;
 
 @Service
 public class CommentsService {
 	
 	private CommentsRepository commentsRepository;
-	
+	private UserRepository userRepository;
+	private PostsRepository postsRepository;
 	
 	@Autowired
-	public CommentsService(CommentsRepository theCommentsRepository)
+	public CommentsService(CommentsRepository theCommentsRepository,
+			UserRepository theUserRepository,
+			PostsRepository thePostsRepository)
 	{
 		commentsRepository = theCommentsRepository;
+		userRepository = theUserRepository;
+		postsRepository = thePostsRepository;
 	}
 	
-	public CommentsDto createComments(Comments comments)
+	public CommentsDto createComments(CommentsDto commentsDto)
 	{
-		commentsRepository.save(comments);
-		return ToDtoConverter.commentsToDtoConverter(comments);
+		int userId = commentsDto.getUserId();
+		int postsId = commentsDto.getPostsId();
+		Optional<User> resultUser = userRepository.findById(userId);
+		User theUser = null;
+		if(resultUser.isPresent())
+		{
+			theUser=resultUser.get();
+		}
+		else
+		{
+			throw new RuntimeException("Did not find user id - " + userId);
+		}
+		Optional<Posts> resultCategory = postsRepository.findById(postsId);
+		Posts thePosts =null;
+		if(resultCategory.isPresent())
+		{
+			thePosts = resultCategory.get();
+			Category theCategory = thePosts.getCategory();
+			thePosts.getCategory().setCategoryName(theCategory.getCategoryName());
+			thePosts.getCategory().setId(theCategory.getId());
+		}
+		else
+		{
+			throw new RuntimeException("Did not find category id - " + postsId);
+		}
+		if(commentsDto.isAnonymous())
+		{
+			commentsDto.setCreatedBy("Anonymous");
+		}
+		commentsDto.setUser(ToDtoConverter.userToDtoConverter(theUser));
+		commentsDto.setPosts(ToDtoConverter.postsToDtoConverter(thePosts));
+		Comments comments = commentsRepository.save(FromDtoConverter.fromCommentsDtoConverter(commentsDto));
+		commentsDto.setCreatedDate(comments.getCreatedDate());
+		commentsDto.setLastModifiedDate(comments.getLastModifiedDate());
+		commentsDto.setCreatedBy(comments.getCreatedBy());
+		commentsDto.setId(comments.getId());
+		return commentsDto;
 	}
 	
 	public List<CommentsDto> getAllCommentsByPostId(int theId)

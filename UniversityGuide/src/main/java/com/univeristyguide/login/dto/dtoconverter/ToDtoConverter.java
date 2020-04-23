@@ -51,7 +51,9 @@ public class ToDtoConverter {
 	{
 		CommentsDto resultComments = new CommentsDto(comments.getId(),
 				userToDtoConverter(comments.getUser()),
+				comments.getUser().getId(),
 				postsToDtoConverter(comments.getPosts()),
+				comments.getPosts().getId(),
 				comments.getCommentsContent(),
 				comments.getLikes(),
 				comments.isAnonymous(),
@@ -65,7 +67,8 @@ public class ToDtoConverter {
 	public static CategoryDto categoryToDtoConverter(final Category category)
 	{
 		CategoryDto resultCategory = new CategoryDto(category.getId(),
-				category.getCategoryName());
+				category.getCategoryName()
+				);
 		return resultCategory;
 	}
 }

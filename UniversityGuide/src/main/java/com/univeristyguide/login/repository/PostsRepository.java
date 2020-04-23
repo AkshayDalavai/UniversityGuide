@@ -14,8 +14,10 @@ public interface PostsRepository extends JpaRepository<Posts, Integer>{
 	@Query("from Posts p order by p.createdBy desc")
     List<Posts> findAllSortedByDateReverse();
 	
-	List<Posts> findByUser (final int userId);
+	@Query(value ="select * from university_guide.posts p where p.id_user =?1",nativeQuery=true)
+	List<Posts> findByIdUser (final int id_user);
 	
-	List<Posts> findByCategory (final int categoryId);
+	@Query(value ="select * from university_guide.posts p where p.id_category =?1",nativeQuery=true)
+	List<Posts> findByCategory (final int id_category);
 
 }
