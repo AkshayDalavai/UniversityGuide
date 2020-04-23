@@ -40,7 +40,8 @@ public class FromDtoConverter {
 	public static Category fromCategoryDtoConverter(final CategoryDto categoryDto)
 	{
 		Category resultsCategory = new Category(categoryDto.getId(),
-				categoryDto.getCategoryName());
+				categoryDto.getCategoryName()
+				);
 		return resultsCategory;
 	}
 	

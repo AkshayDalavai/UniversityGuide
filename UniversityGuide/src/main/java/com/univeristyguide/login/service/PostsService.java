@@ -115,8 +115,13 @@ public class PostsService {
 		}
 		postsDto.setUser(ToDtoConverter.userToDtoConverter(theUser));
 		postsDto.setCategory(ToDtoConverter.categoryToDtoConverter(theCategory));
+		
 		postsDto.setHasComments(false);
-		postsRepository.save(FromDtoConverter.fromPostsDtoConverter(postsDto));
+		Posts thePosts = postsRepository.save(FromDtoConverter.fromPostsDtoConverter(postsDto));
+		postsDto.setCreatedDate(thePosts.getCreatedDate());
+		postsDto.setLastModifiedDate(thePosts.getLastModifiedDate());
+		postsDto.setCreatedBy(thePosts.getCreatedBy());
+		postsDto.setId(thePosts.getId());
 		return postsDto;
 		
 	}
@@ -241,7 +246,7 @@ public class PostsService {
 	
 	public List<PostsDto> getAllPostsByUserId(int theUserId)
 	{
-		List<Posts> posts = postsRepository.findByUser(theUserId);
+		List<Posts> posts = postsRepository.findByIdUser(theUserId);
 		return posts.stream().sorted(Comparator.comparing(Posts::getCreatedDate).reversed())
 				.map(ToDtoConverter::postsToDtoConverter).collect(Collectors.toList());
 		
