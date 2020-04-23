@@ -26,7 +26,8 @@ public class FromDtoConverter {
 	
 	public static Posts fromPostsDtoConverter(final PostsDto postsDto)
 	{
-		Posts resultPosts = new Posts(fromUsersDtoConverter(postsDto.getUser()),
+		Posts resultPosts = new Posts(postsDto.getId(),
+				fromUsersDtoConverter(postsDto.getUser()),
 				fromCategoryDtoConverter(postsDto.getCategory()),
 				postsDto.getTitle(),
 				postsDto.isHasComments(),
