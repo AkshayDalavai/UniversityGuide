@@ -1,4 +1,4 @@
-package com.univeristyguide.login.dao;
+package com.univeristyguide.login.repository;
 
 import java.util.List;
 

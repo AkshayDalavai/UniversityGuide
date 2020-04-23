@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+//import org.springframework.security.core.context.SecurityContextHolder;
 
 
 
@@ -22,9 +23,9 @@ public class AppConfig {
 		//Below we are returning is a lambda function
 		//Yashu You need to work on this in order to obtain Admin or User
 		/*
-        if you are using spring security, you can get the currently logged username with following code segment.
-        SecurityContextHolder.getContext().getAuthentication().getName()
-       */
+        if you are using spring security, you can get the currently logged username with following code segment.*/
+       // SecurityContextHolder.getContext().getAuthentication().getName();
+      
         return () -> Optional.ofNullable("ADMIN");
     }
 	

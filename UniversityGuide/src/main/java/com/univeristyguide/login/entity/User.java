@@ -1,17 +1,19 @@
 package com.univeristyguide.login.entity;
 
 
-import java.util.Date;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 
 
@@ -41,19 +43,41 @@ public class User extends Auditable<String>{
 	@Column(name="university")
 	private String university;
 
+	/*
+	 * @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	 * 
+	 * @JoinTable(name = "user_role" , joinColumns = @JoinColumn(name= "role_id"))
+	 * private Set<Role> roles;
+	 */
 	@Column(name="roles")
 	private String roles;
-
-	
+	//private boolean is_enabled;
 
 	public User() {
 
 	}
 
 
+	/*
+	 * public User(int id, String firstName, String lastName, String email, String
+	 * password, String university, Set<Role> roles) { super(); this.id = id;
+	 * this.firstName = firstName; this.lastName = lastName; this.email = email;
+	 * this.password = password; this.university = university; this.roles = roles; }
+	 */
 
-	public User(String firstName, String lastName, String email, String password, String university, String roles) {
+	
+	
+
+	public int getId() {
+		return id;
+	}
+
+
+
+	public User(int id, String firstName, String lastName, String email, String password, String university,
+			String roles) {
 		super();
+		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.email = email;
@@ -61,13 +85,6 @@ public class User extends Auditable<String>{
 		this.university = university;
 		this.roles = roles;
 	}
-
-
-
-	public int getId() {
-		return id;
-	}
-
 
 
 	public void setId(int id) {
@@ -135,11 +152,27 @@ public class User extends Auditable<String>{
 	}
 
 
+	/*
+	 * public Set<Role> getRoles() { return roles; }
+	 * 
+	 * 
+	 * public void setRoles(Set<Role> roles) { this.roles = roles; }
+	 */
+
+	
+	
+	
+
+	@Override
+	public String toString() {
+		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
+				+ ", password=" + password + ", university=" + university + ", roles=" + roles + "]";
+	}
+
 
 	public String getRoles() {
 		return roles;
 	}
-
 
 
 	public void setRoles(String roles) {
@@ -147,17 +180,19 @@ public class User extends Auditable<String>{
 	}
 
 
+	
 
-	@Override
-	public String toString() {
-		return "User [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", email=" + email
-				+ ", password=" + password + ", university=" + university + ", roles=" + roles + ", getCreatedBy()="
-				+ getCreatedBy() + ", getCreatedDate()=" + getCreatedDate() + ", getLastModifiedBy()="
-				+ getLastModifiedBy() + ", getLastModifiedDate()=" + getLastModifiedDate() + "]";
+
+
+	/*public boolean getIs_enabled() {
+		return is_enabled;
 	}
 
-	
-	
+
+
+	public void setIs_enabled(boolean is_enabled) {
+		this.is_enabled = is_enabled;
+	}*/
 
 
 }

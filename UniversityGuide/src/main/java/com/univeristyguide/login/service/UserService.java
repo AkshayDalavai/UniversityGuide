@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.univeristyguide.login.dto.UserDto;
 import com.univeristyguide.login.dto.dtoconverter.ToDtoConverter;
@@ -16,7 +16,7 @@ import com.univeristyguide.login.repository.UserRepository;
 @Service
 public class UserService {
 	
-
+  
 	private UserRepository userRepository;
 	
 	public UserService() {

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import com.univeristyguide.login.dto.UserDto;
 import com.univeristyguide.login.entity.User;
 import com.univeristyguide.login.service.UserService;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("/api")
 public class UserRestController {
@@ -30,9 +32,10 @@ public class UserRestController {
 	}
 
 	// expose "/User" and return list of Users
+	
 	@GetMapping("/user")
 	public ResponseEntity<List<UserDto>> findAll(){
-		List<UserDto> users = userService.findAll();
+			List<UserDto> users = userService.findAll();
 		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 	
@@ -41,7 +44,7 @@ public class UserRestController {
 		user.setId(0);
 		userService.saveUser(user);
 		return new ResponseEntity<>(HttpStatus.OK);
-	}
+	}  
 	
 	@PutMapping("/user/update")
 	public ResponseEntity<UserDto> updateUser(@RequestBody User user)
