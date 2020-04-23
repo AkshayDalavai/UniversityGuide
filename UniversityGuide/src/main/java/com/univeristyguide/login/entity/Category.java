@@ -1,5 +1,9 @@
 package com.univeristyguide.login.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -20,12 +24,12 @@ public class Category {
 	@Column(name="name",nullable=false)
 	private String categoryName;
 	
-
+	
 	public Category() {
 		
 	}
 
-	public Category(int id, String categoryName) {
+	public Category(int id,String categoryName) {
 		this.id = id;
 		this.categoryName = categoryName;
 	}
@@ -46,13 +50,5 @@ public class Category {
 		this.categoryName = categoryName;
 	}
 
-	
 
-	@Override
-	public String toString() {
-		return "Category [id=" + id + ", categoryName=" + categoryName + "]";
-	}
-	
-	
-	
 }

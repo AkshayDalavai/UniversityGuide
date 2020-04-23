@@ -2,6 +2,7 @@ package com.univeristyguide.login.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,12 +19,12 @@ public class Comments extends Auditable<String>{
 	@Column(name="id")
 	private int id;
 	
-	@ManyToOne
-	@JoinColumn(name="id_user")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="id_user",nullable=false)
 	private User user;
 	
-	@ManyToOne
-	@JoinColumn(name="id_posts")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name="id_posts",nullable=false)
 	private Posts posts;
 	
 	@Column(name="comments_content")

@@ -1,10 +1,16 @@
 package com.univeristyguide.login.dto;
 
+import java.util.List;
+
+import com.univeristyguide.login.entity.Posts;
+
 public class CategoryDto {
 
 		private int id;
 		
 		private String CategoryName;
+		
+	
 
 		public CategoryDto() {
 			
@@ -14,6 +20,7 @@ public class CategoryDto {
 			
 			this.id = id;
 			CategoryName = categoryName;
+		
 		}
 
 		public int getId() {
@@ -36,6 +43,9 @@ public class CategoryDto {
 		public String toString() {
 			return "CategoryDto [id=" + id + ", CategoryName=" + CategoryName + "]";
 		}
+
+
+	
 		
 		
 		

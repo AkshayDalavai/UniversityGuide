@@ -32,11 +32,11 @@ public class CommentRestController {
 	}
 	
 	@PostMapping("/comments")
-	public ResponseEntity<CommentsDto> createComment(@RequestBody Comments comment)
+	public ResponseEntity<CommentsDto> createComment(@RequestBody CommentsDto commentDto)
 	{
-		comment.setId(0);
-		commentsService.createComments(comment);
-		return new ResponseEntity<>(HttpStatus.OK);
+		commentDto.setId(0);
+		CommentsDto theCommentsDto = commentsService.createComments(commentDto);
+		return new ResponseEntity<>(theCommentsDto,HttpStatus.OK);
 	}
 	
 	@GetMapping("/comments/{postId}")
