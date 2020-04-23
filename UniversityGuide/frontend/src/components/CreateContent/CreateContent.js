@@ -12,7 +12,7 @@ class CreateContent extends Component {
         super(props);
         this.state = {
             isAnonymous: true,
-            categoryID: '',
+            categoryId: this.props.categories[0].id,
             postTitle: '',
             postContent: ''
         }
@@ -55,7 +55,7 @@ class CreateContent extends Component {
                                         <Button color="danger" disabled={!this.state.postTitle}>Post</Button>
                                     </FormGroup>
                                     <FormGroup className="float-right">
-                                        <Input type="select" name="category" id="category" name="categoryID" value={this.state.categoryID} onChange={this.handleInputChange}>
+                                        <Input type="select" id="category" name="categoryId" value={this.state.categoryId} onChange={this.handleInputChange}>
                                             {this.props.categories.map(category => {
                                                 return <option key={category.id} value={category.id}>{category.categoryName}</option>
                                             })}

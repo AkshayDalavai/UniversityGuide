@@ -4,7 +4,7 @@ import SUForum from './components/SUForum/SUForum';
 import SUSports from './components/SUSports/SUSports';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import axios from 'axios';
-
+import {GET_CATEGORIES} from './constants'; 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
 
@@ -14,7 +14,7 @@ class App extends React.Component {
     categories: []
   };
   componentDidMount(){
-    axios.get('http://192.168.1.56:8080/UniversityGuide-0.0.1-SNAPSHOT/api/categories')
+    axios.get(GET_CATEGORIES)
          .then(res => {
             console.log(res.data)
             this.setState({

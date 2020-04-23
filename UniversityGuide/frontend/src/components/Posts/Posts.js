@@ -4,7 +4,9 @@ import PostCard from '../Post/PostCard';
 import CreateContent from '../CreateContent/CreateContent';
 import Filter from '../Filter/Filter';
 import {Form, FormGroup, Input} from 'reactstrap';
+
 import axios from 'axios';
+import {GET_POSTS, CREATE_POST, LIKE_POST} from '../../constants'; 
 
 class Posts extends Component {
     static propTypes = {
@@ -32,7 +34,7 @@ class Posts extends Component {
     }
 
     componentDidMount(){
-        axios.get('http://192.168.1.56:8080/UniversityGuide-0.0.1-SNAPSHOT/api/posts')
+        axios.get(GET_POSTS)
             .then(res => {
                 console.log(res.data);
                 this.setState({
@@ -49,20 +51,26 @@ class Posts extends Component {
         /**
          * @todo: get search results here
          */
-        console.log(this.state.search)
+        let posts = this.state.posts;
+        posts = posts.filter(post => post.postContent.toLowerCase().includes(this.state.search));
+        this.setState({
+            posts
+        })
     }
-    
+
     addNewPost = (event, postDetails) => {
         event.preventDefault();
         const post = {
             userId: 1,
             isAnonymous: postDetails.isAnonymous,
-            categoryId: +postDetails.categoryID,
+            categoryId: +postDetails.categoryId,
             title: postDetails.postTitle,
             postContent: postDetails.postContent
         }
-        console.log(post);
-        axios.post('http://192.168.1.56:8080/UniversityGuide-0.0.1-SNAPSHOT/api/posts', post)
+        /**
+         * @todo: DO a getPosts once a post is added in order to maintain synchronicity
+         */
+        axios.post(CREATE_POST, post)
              .then(res =>{
                 const posts = this.state.posts;
                 posts.unshift(res.data);
@@ -80,6 +88,14 @@ class Posts extends Component {
         });
         //Close the Modal
         this.toggle();
+    }
+
+    likePost = (postId) => {
+        
+        // axios.post(`${LIKE_POST}`, postId)
+        //      .then(res => {
+                 
+        //      })
     }
 
     render() {
@@ -106,7 +122,7 @@ class Posts extends Component {
                 <CreateContent categories={this.props.categories} toggle={this.toggle} modal={this.state.modal}
                                addNewPost={this.addNewPost}/> : null}
                 
-                {this.state.posts.map(indPost => <PostCard key={indPost.id} post={indPost} category={this.props.categories.filter(cat => cat.id == indPost.categoryId)[0]} />)}
+                {this.state.posts.map(indPost => <PostCard key={indPost.id} likePost={this.likePost} post={indPost} category={indPost.category} />)}
             </div>
         )
     }
