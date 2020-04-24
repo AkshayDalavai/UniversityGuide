@@ -6,5 +6,8 @@ export const GET_POSTS  = `${BASE_URI}/api/getposts`;
 export const GET_POST = `${BASE_URI}/api/getpost/`;
 export const CREATE_POST = `${BASE_URI}/api/createpost`;
 export const LIKE_POST = `${BASE_URI}/api/likepost/`;
+export const UPDATE_POST = `${BASE_URI}/api/updatepost`;
+
+export const CREATE_COMMENT = `${BASE_URI}/api/createcomment`;
 
 export const CREATE_USER = `${BASE_URI}/api/createuser`;

@@ -5,8 +5,9 @@ import PropTypes from 'prop-types';
 import PostModal from './PostModal';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faComments } from '@fortawesome/free-solid-svg-icons';
-library.add(faHeart, faComments);
+import { faHeart, faComments, faPenSquare } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faHeart, faComments, faPenSquare);
 
 class PostCard extends Component {
     static propTypes = {
@@ -32,12 +33,16 @@ class PostCard extends Component {
         if(this.props.post && !!this.props.post.id){
             const {id, isAnonymous, user, title, postContent, createdDate, likesCount, commentsCount} = this.props.post;
             postCard = <Card className="mt-2 mb-2" >
-                                <CardHeader onClick={this.toggle}>
+                                <CardHeader>
                                     {!this.props.disable ? <div className="text-left" > <Badge color="warning">{this.props.category.categoryName}</Badge></div> : null}
                                     <div className="small lead text-left">
                                         {isAnonymous ? "Anonymous" : `${user.lastName}, ${user.firstName}`} | &nbsp;
                                         {createdDate.split('T')[0]}
+                                        {!this.props.disable ? <div className="float-right" onClick={() => {this.props.editPost(this.props.post)}}>
+                                            <Button color="warning" outline > <FontAwesomeIcon icon="pen-square" /> </Button> 
+                                        </div> : null}
                                     </div>
+                                   
                                 </CardHeader>
                                 <CardBody onClick={this.toggle}>
                                     <CardTitle className="text-left">{title}</CardTitle>

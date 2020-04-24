@@ -11,10 +11,13 @@ class CreateContent extends Component {
     constructor(props){
         super(props);
         this.state = {
-            isAnonymous: true,
-            categoryId: this.props.categories[0].id,
-            postTitle: '',
-            postContent: ''
+            id:  this.props.editPostObj.id ?  this.props.editPostObj.id : '',
+            userId: this.props.editPostObj.id ? this.props.editPostObj.userId : 1,
+            isAnonymous: this.props.editPostObj.id ? this.props.editPostObj.isAnonymous : true,
+            categoryId: this.props.editPostObj.id ? this.props.editPostObj.categoryId : this.props.categories[0].id,
+            postTitle: this.props.editPostObj.id ? this.props.editPostObj.title : '',
+            postContent: this.props.editPostObj.id ? this.props.editPostObj.postContent : '',
+            isEditPost: this.props.editPostObj.id ? true : false
         }
     }
 

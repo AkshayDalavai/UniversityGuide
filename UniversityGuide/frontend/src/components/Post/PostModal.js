@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PostCard from './PostCard';
 import { Modal, ModalHeader, ModalBody, Form, FormGroup, Button, CustomInput, Label, Input } from 'reactstrap';
 import PropTypes from 'prop-types';
-import {GET_POST} from '../../constants';
+import {GET_POST, CREATE_COMMENT} from '../../constants';
 import axios from 'axios';
 
 class PostModal extends Component {
@@ -26,16 +26,13 @@ class PostModal extends Component {
          * 
          */
        if(this.props.postId){
-           /**
-            * @todo: Make axios call to get post details
-            */
            axios.get(`${GET_POST}${this.props.postId}`)
                 .then(res => {
                     this.setState({
-                      post: res.data
+                      post: res.data.posts,
+                      comments: res.data.comments
                     });
                 })
-         
        }
     }
     handleInputChange = (event) => {
@@ -47,13 +44,23 @@ class PostModal extends Component {
 
     handleCommentSubmit = (event) => {
         event.preventDefault();
-        // let comments  =  this.state.comments;
-        // comments.unshift(this.state.commentContent);
-        // localStorage.setItem('comments', comments)
-        // this.setState({
-        //     comments
-        // });
-        this.props.toggle();
+        const comment = {
+            userId: 3,
+            postsId: this.state.post.id,
+            isAnonymous: this.state.isAnonymous,
+            commentsContent: this.state.commentContent
+        }
+        axios.post(CREATE_COMMENT, comment)
+             .then(res => {
+                 let comments = [...this.state.comments];
+                 comments.unshift(res.data);
+                 this.setState({
+                     comments
+                 });
+             })
+             .catch(err => {
+                 console.log(err);
+             })
     }
     render() {
         return (
@@ -68,7 +75,7 @@ class PostModal extends Component {
                                     id="postComment" placeholder="Leave your comment here..." value={this.state.commentContent}/>
                         </FormGroup>
                         <FormGroup className="col-sm-12" >
-                            <Button color="danger" className="float-right"
+                            <Button color="danger" className="float-right" onClick={this.handleCommentSubmit}
                                     disabled={!this.state.commentContent} >Comment</Button>
                             <CustomInput type="checkbox" id="postAnonymously" label="Post Anonymously" onChange={this.handleInputChange}/>
                         </FormGroup>

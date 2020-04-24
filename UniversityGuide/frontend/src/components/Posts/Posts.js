@@ -6,7 +6,7 @@ import Filter from '../Filter/Filter';
 import {Form, FormGroup, Input} from 'reactstrap';
 
 import axios from 'axios';
-import {GET_POSTS, CREATE_POST, LIKE_POST} from '../../constants'; 
+import {GET_POSTS, CREATE_POST, UPDATE_POST, LIKE_POST} from '../../constants'; 
 
 class Posts extends Component {
     static propTypes = {
@@ -15,6 +15,7 @@ class Posts extends Component {
 
     state = {
         posts: [],
+        editPost: {},
         modal: false,
         search: ''
     }
@@ -34,17 +35,20 @@ class Posts extends Component {
     }
 
     componentDidMount(){
+        this.getPosts();
+    }
+
+    getPosts = () => {
         axios.get(GET_POSTS)
-            .then(res => {
-                console.log(res.data);
+             .then(res => {
                 this.setState({
                     posts: res.data
                 })
-            })
-            .catch(err => {
+             })
+             .catch(err => {
                 console.log(err);
-            })
-        }
+             })
+    }
 
     handleSubmit = e => {
         e.preventDefault();
@@ -61,16 +65,32 @@ class Posts extends Component {
     addNewPost = (event, postDetails) => {
         event.preventDefault();
         const post = {
-            userId: 1,
-            isAnonymous: postDetails.isAnonymous,
+            userId: postDetails.userId  ,
+            isAnonymous: postDetails.isAnonymous || false,
             categoryId: +postDetails.categoryId,
             title: postDetails.postTitle,
             postContent: postDetails.postContent
         }
-        /**
-         * @todo: DO a getPosts once a post is added in order to maintain synchronicity
-         */
-        axios.post(CREATE_POST, post)
+        if(postDetails.isEditPost){
+            post.id = postDetails.id
+            //Update Post
+            axios.post(UPDATE_POST, post)
+             .then(res =>{
+                let posts = [...this.state.posts];
+                let idx = posts.findIndex(post => post.id === res.data.id)
+                if(idx !== -1)
+                    posts[idx] = res.data;
+                this.setState({
+                    posts
+                });
+             })
+             .catch(err => {
+                console.log(err);
+             })
+
+        }else{
+            //Create Post
+            axios.post(CREATE_POST, post)
              .then(res =>{
                 const posts = this.state.posts;
                 posts.unshift(res.data);
@@ -81,11 +101,8 @@ class Posts extends Component {
              .catch(err => {
                 console.log(err);
              })
-        const posts = this.state.posts;
-        posts.unshift(post);
-        this.setState({
-            posts
-        });
+
+        }
         //Close the Modal
         this.toggle();
     }
@@ -96,6 +113,15 @@ class Posts extends Component {
         //      .then(res => {
                  
         //      })
+    }
+
+    editPost = (post) => {
+        this.setState((prevState) => {
+            return {
+                editPost: post,
+                modal: !prevState.modal
+            }
+        });
     }
 
     render() {
@@ -119,10 +145,10 @@ class Posts extends Component {
                             placeholder="Ask for advice, mentorship,  and more from the community . . ."/>
                 </div>
                 {this.state.modal ? 
-                <CreateContent categories={this.props.categories} toggle={this.toggle} modal={this.state.modal}
-                               addNewPost={this.addNewPost}/> : null}
+                <CreateContent categories={this.props.categories} toggle={this.toggle} modal={this.state.modal} 
+                               addNewPost={this.addNewPost} editPostObj={this.state.editPost}/> : null}
                 
-                {this.state.posts.map(indPost => <PostCard key={indPost.id} likePost={this.likePost} post={indPost} category={indPost.category} />)}
+                {this.state.posts.map(indPost => <PostCard key={indPost.id} editPost={this.editPost} likePost={this.likePost} post={indPost} category={indPost.category} />)}
             </div>
         )
     }
