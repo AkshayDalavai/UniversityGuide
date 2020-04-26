@@ -30,7 +30,7 @@ public class PostsRestController {
 		postsService = thePostsService;
 	}
 	
-	@GetMapping("/posts")
+	@GetMapping("/getposts")
 	public ResponseEntity<List<PostsDto>> findAllPosts()
 	{
 		List<PostsDto> posts = postsService.getAllPosts();
@@ -38,7 +38,7 @@ public class PostsRestController {
 	}
 	
 	
-	@PostMapping("/posts")
+	@PostMapping("/createpost")
 	public ResponseEntity<PostsDto> createPost(@RequestBody PostsDto postsDto)
 	{
 		postsDto.setId(0);
@@ -47,42 +47,42 @@ public class PostsRestController {
 		return new ResponseEntity<>(resultPost,HttpStatus.OK);
 	}
 	
-	@PutMapping("/posts/update")
+	@PutMapping("/updatepost")
 	public ResponseEntity<PostsDto> updatePost(@RequestBody Posts posts)
 	{
 		postsService.updatePosts(posts);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@GetMapping("/posts/{postsId}")
+	@GetMapping("/getpost/{postsId}")
 	public ResponseEntity<PostsDto> findPostById(@PathVariable int postsId)
 	{
 		PostsDto postsDto = postsService.getPostById(postsId);
 		return new ResponseEntity<>(postsDto,HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/posts/{postsId}")
+	@DeleteMapping("/deletepost/{postId}")
 	public ResponseEntity<PostsDto> deletePost(@PathVariable int postsId)
 	{
 		postsService.deletePosts(postsId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@PutMapping("/posts/{postsId}/likes")
+	@PutMapping("/likepost")
 	public ResponseEntity<PostsDto> likePost(@PathVariable int postsId,@RequestBody final int buttonState)
 	{
 		postsService.likes(postsId, buttonState);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@GetMapping("/posts/postsByUserId/{userId}")
+	@GetMapping("/getposts-by-userid/{userId}")
 	public ResponseEntity<List<PostsDto>> getPostsByUserId(@PathVariable int userId)
 	{
 		List<PostsDto> posts = postsService.getAllPostsByUserId(userId);
 		return new ResponseEntity<>(posts,HttpStatus.OK);
 	}
 	
-	@GetMapping("/posts/postsByCategoryId/{categoryId}")
+	@GetMapping("/getposts-by-categoryid/{categoryId}")
 	public ResponseEntity<List<PostsDto>> getPostsByCategoryId(@PathVariable int categoryId)
 	{
 		List<PostsDto> posts = postsService.getAllPostsByCategoryId(categoryId);

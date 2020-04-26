@@ -2,10 +2,9 @@ package com.univeristyguide.login.dto;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
-import com.univeristyguide.login.entity.Category;
 import com.univeristyguide.login.entity.Comments;
-import com.univeristyguide.login.entity.User;
 
 public class PostsDto {
 	
@@ -38,6 +37,8 @@ public class PostsDto {
 	private Date lastModifiedDate;
 	
 	private String createdBy;
+	
+	private List<CommentsDto> comments;
 
 	public PostsDto() {
 		
@@ -70,6 +71,9 @@ public class PostsDto {
 	}
 
 
+	
+
+
 	public PostsDto(int id, UserDto user, int userId, CategoryDto category, int categoryId, String title,
 			boolean hasComments, String postContent, int likesCount, boolean isAnonymous, int commentsCount,
 			Date createdDate, Date lastModifiedDate, String createdBy) {
@@ -88,6 +92,7 @@ public class PostsDto {
 		this.createdDate = createdDate;
 		this.lastModifiedDate = lastModifiedDate;
 		this.createdBy = createdBy;
+		
 	}
 
 
@@ -226,14 +231,27 @@ public class PostsDto {
 	}
 
 
+	public List<CommentsDto> getComments() {
+		return comments;
+	}
+
+
+	public void setComments(List<CommentsDto> comments) {
+		this.comments = comments;
+	}
+
+
 	@Override
 	public String toString() {
 		return "PostsDto [id=" + id + ", user=" + user + ", userId=" + userId + ", category=" + category
 				+ ", categoryId=" + categoryId + ", title=" + title + ", hasComments=" + hasComments + ", postContent="
 				+ postContent + ", likesCount=" + likesCount + ", isAnonymous=" + isAnonymous + ", commentsCount="
 				+ commentsCount + ", createdDate=" + createdDate + ", lastModifiedDate=" + lastModifiedDate
-				+ ", createdBy=" + createdBy + "]";
+				+ ", createdBy=" + createdBy + ", comments=" + comments + "]";
 	}
+
+
+	
 
 		
 }
