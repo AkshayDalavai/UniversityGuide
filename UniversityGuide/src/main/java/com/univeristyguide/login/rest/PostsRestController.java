@@ -42,14 +42,6 @@ public class PostsRestController {
 		return new ResponseEntity<>(posts,HttpStatus.OK);
 	}
 	
-	/*@PostMapping("/user/{userId}/{categoryId}/posts")
-	public ResponseEntity<PostsDto> createPost(@PathVariable int userId,
-			@PathVariable int categoryId,@RequestBody Posts posts)
-	{
-		posts.setId(0);
-		postsService.createPost(userId,categoryId,posts);
-		return new ResponseEntity<>(HttpStatus.OK);
-	}*/
 	
 	@PostMapping("/createpost")
 	public ResponseEntity<PostsDto> createPost(@RequestBody PostsDto postsDto)

@@ -49,44 +49,6 @@ public class PostsService {
 		
 	}
 	
-	/*public PostsDto createPost(int userId,int categoryId,Posts posts)
-	{
-		Optional<User> resultUser = userRepository.findById(userId);
-		User theUser = null;
-		if(resultUser.isPresent())
-		{
-			theUser=resultUser.get();
-		}
-		else
-		{
-			throw new RuntimeException("Did not find user id - " + userId);
-		}
-		Optional<Category> resultCategory = categoryRepository.findById(categoryId);
-		Category theCategory =null;
-		if(resultCategory.isPresent())
-		{
-			theCategory = resultCategory.get();
-		}
-		else
-		{
-			throw new RuntimeException("Did not find category id - " + categoryId);
-		}
-		if(posts.isAnonymous())
-		{
-			posts.setCreatedBy("Anonymous");
-		}
-		posts.setUser(theUser);
-		posts.setCategory(theCategory);
-		posts.setHasComments(false);
-		posts.setLikesCount(0);
-		posts.setCommentsCount(0);
-		
-		postsRepository.save(posts);
-		
-		return ToDtoConverter.postsToDtoConverter(posts);
-		
-		
-	}*/
 	
 	public PostsDto createPost(PostsDto postsDto)
 	{

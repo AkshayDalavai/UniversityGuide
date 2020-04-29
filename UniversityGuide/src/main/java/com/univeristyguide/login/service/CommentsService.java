@@ -75,8 +75,7 @@ public class CommentsService {
 		}
 		commentsDto.setUser(ToDtoConverter.userToDtoConverter(theUser));
 		commentsDto.setPosts(ToDtoConverter.postsToDtoConverter(thePosts));
-		
-	  
+
 		Comments comments = commentsRepository.save(FromDtoConverter.fromCommentsDtoConverter(commentsDto));
 		commentsDto.setCreatedDate(comments.getCreatedDate());
 		commentsDto.setLastModifiedDate(comments.getLastModifiedDate());
