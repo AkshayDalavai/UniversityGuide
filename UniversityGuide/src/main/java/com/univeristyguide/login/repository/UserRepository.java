@@ -8,5 +8,5 @@ import com.univeristyguide.login.entity.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 	
-	
+	User findByEmail(final String username);
 }
