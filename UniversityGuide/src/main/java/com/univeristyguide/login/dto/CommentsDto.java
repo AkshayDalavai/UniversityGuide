@@ -2,8 +2,8 @@ package com.univeristyguide.login.dto;
 
 import java.util.Date;
 
-import com.univeristyguide.login.entity.Posts;
-import com.univeristyguide.login.entity.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class CommentsDto {
 	
@@ -34,7 +34,8 @@ public class CommentsDto {
 	public CommentsDto() {
 		
 	}
-	  
+
+	
 	public CommentsDto(int id, UserDto user, int userId, PostsDto posts, int postsId, String commentsContent,
 			int likesCount, boolean isAnonymous, Date createdDate, Date lastModifiedDate, String createdBy) {
 		super();
@@ -51,6 +52,8 @@ public class CommentsDto {
 		this.createdBy = createdBy;
 	}
 
+
+
 	public int getId() {
 		return id;
 	}
@@ -58,11 +61,13 @@ public class CommentsDto {
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	
+	@JsonIgnore
 	public UserDto getUser() {
 		return user;
 	}
-
+	
+	@JsonSetter 
 	public void setUser(UserDto user) {
 		this.user = user;
 	}
@@ -74,11 +79,13 @@ public class CommentsDto {
 	public void setUserId(int userId) {
 		this.userId = userId;
 	}
-
+	
+	@JsonIgnore
 	public PostsDto getPosts() {
 		return posts;
 	}
-
+	
+	@JsonSetter 
 	public void setPosts(PostsDto posts) {
 		this.posts = posts;
 	}
@@ -141,11 +148,11 @@ public class CommentsDto {
 
 	@Override
 	public String toString() {
-		return "CommentsDto [id=" + id + ", user=" + user + ", userId=" + userId + ", posts=" + posts + ", postsId="
-				+ postsId + ", commentsContent=" + commentsContent + ", likesCount=" + likesCount + ", isAnonymous="
-				+ isAnonymous + ", createdDate=" + createdDate + ", lastModifiedDate=" + lastModifiedDate
-				+ ", createdBy=" + createdBy + "]";
+		return "CommentsDto [id=" + id + ", userId=" + userId + ", postsId=" + postsId + ", commentsContent="
+				+ commentsContent + ", likesCount=" + likesCount + ", isAnonymous=" + isAnonymous + ", createdDate="
+				+ createdDate + ", lastModifiedDate=" + lastModifiedDate + ", createdBy=" + createdBy + "]";
 	}
 
+	
 	
 }

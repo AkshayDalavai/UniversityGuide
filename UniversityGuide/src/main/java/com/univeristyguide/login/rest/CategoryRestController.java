@@ -34,7 +34,7 @@ List<CategoryDto> categories = categoryService.getAllCategories();
 return new ResponseEntity<>(categories,HttpStatus.OK);
 }
 
-   
+
 @PostMapping("/createcategory")
 public ResponseEntity<CategoryDto> createCategory(@RequestBody Category theCategory){
 

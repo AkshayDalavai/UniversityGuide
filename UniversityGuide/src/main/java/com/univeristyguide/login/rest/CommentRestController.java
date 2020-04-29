@@ -46,7 +46,8 @@ public class CommentRestController {
 		return new ResponseEntity<>(comments,HttpStatus.OK);
 	}
 	
-	@PostMapping("/updatecomment")
+
+	@PutMapping("/updatecomment")
 	public ResponseEntity<CommentsDto> updateComment(@RequestBody Comments comment)
 	{
 		commentsService.updateComments(comment);
@@ -54,14 +55,15 @@ public class CommentRestController {
 	}
 	
 	@DeleteMapping("/deletecomment/{commentId}")
-	public ResponseEntity<CommentsDto> deletePost(@PathVariable int commentId)
+	public ResponseEntity<CommentsDto> deleteComment(@PathVariable int commentId)
 	{
 		commentsService.deleteComments(commentId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+
 	@PostMapping("/likecomment/{commentId}")
-	public ResponseEntity<CommentsDto> likePost(@PathVariable int commentId,@RequestBody final int buttonState)
+	public ResponseEntity<CommentsDto> likeComment(@PathVariable int commentId,@RequestBody final int buttonState)
 	{
 		commentsService.likesComment(commentId, buttonState);
 		return new ResponseEntity<>(HttpStatus.OK);

@@ -36,14 +36,27 @@ public class UserRestController {
 		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 	
-	@PostMapping("/createuser")
+	//@PostMapping("/createuser")
+
+	/*@PostMapping("/user")
+>>>>>>> f496acdeebac72166fb98f056fd89cc418309959
 	public ResponseEntity<Void> addNewUser(@RequestBody User user){
 		user.setId(0);
 		userService.saveUser(user);
 		return new ResponseEntity<>(HttpStatus.OK);
+<<<<<<< HEAD
 	}
 	  
 	@PostMapping("/updateuser")
+=======
+	}*/
+	
+	@PostMapping("/createuser")
+    public void signUpUser(@RequestBody final User user) {
+        this.userService.signUp(user);
+    }
+	
+	@PutMapping("/updateuser")
 	public ResponseEntity<UserDto> updateUser(@RequestBody User user)
 	{
 		userService.updateUser(user);

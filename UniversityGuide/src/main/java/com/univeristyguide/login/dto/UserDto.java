@@ -1,10 +1,11 @@
 package com.univeristyguide.login.dto;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
-import com.univeristyguide.login.entity.Comments;
-import com.univeristyguide.login.entity.Posts;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
+import com.univeristyguide.login.entity.Role;
 
 
 
@@ -33,16 +34,17 @@ public class UserDto {
 	private String university;
 	
 
-	private String roles;
+	private Set<Role> roles;
 
 	
 	public UserDto() {
 	
 	}
 
-  
+
 	public UserDto(int id, String firstName, String lastName, String email, String password, Date createdDate,
-			Date lastModifiedDate, String university, String roles) {
+			Date lastModifiedDate, String university, Set<Role> roles) {
+		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -52,10 +54,7 @@ public class UserDto {
 		this.lastModifiedDate = lastModifiedDate;
 		this.university = university;
 		this.roles = roles;
-
 	}
-
-
 
 
 	public int getId() {
@@ -97,18 +96,35 @@ public class UserDto {
 		this.email = email;
 	}
 
-
+	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
 
-
+	@JsonSetter
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
+	@JsonIgnore
+	public Date getCreatedDate() {
+		return createdDate;
+	}
 
-	
+	@JsonSetter
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+
+	@JsonIgnore
+	public Date getLastModifiedDate() {
+		return lastModifiedDate;
+	}
+
+	@JsonSetter
+	public void setLastModifiedDate(Date lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
+	}
 
 
 	public String getUniversity() {
@@ -121,33 +137,13 @@ public class UserDto {
 	}
 
 
-	public String getRoles() {
+	public Set<Role> getRoles() {
 		return roles;
 	}
 
 
-	public void setRoles(String roles) {
+	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
-	}
-
-
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-
-
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-
-
-	public Date getLastModifiedDate() {
-		return lastModifiedDate;
-	}
-
-
-	public void setLastModifiedDate(Date lastModifiedDate) {
-		this.lastModifiedDate = lastModifiedDate;
 	}
 
 
@@ -157,7 +153,5 @@ public class UserDto {
 				+ ", password=" + password + ", createdDate=" + createdDate + ", lastModifiedDate=" + lastModifiedDate
 				+ ", university=" + university + ", roles=" + roles + "]";
 	}
-
-	
 
 }

@@ -58,9 +58,13 @@ public class PostsRestController {
 		PostsDto post = postsService.updatePosts(posts);
 		return new ResponseEntity<>(post, HttpStatus.OK);
 	}
-	  
+
 	@GetMapping("/getpost/{postsId}")
 	public ResponseEntity<?> findPostById(@PathVariable int postsId)
+
+	//@GetMapping("/getpost/{postsId}")
+	//public ResponseEntity<PostsDto> findPostById(@PathVariable int postsId)
+
 	{
 		PostsDto postsDto = postsService.getPostById(postsId);
 	    //final String uri = "http://localhost:8080/api/getcomments/" + postsId;
@@ -86,14 +90,17 @@ public class PostsRestController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+
 	@PostMapping("/likeposts")
 	public ResponseEntity<PostsDto> likePost(@RequestBody int userId,int postId, boolean likes)
 	{
 		//postsService.likes(userId, postId, likes);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	 
+
 	   
+
+	
 	@GetMapping("/getposts-by-userid/{userId}")
 	public ResponseEntity<List<PostsDto>> getPostsByUserId(@PathVariable int userId)
 	{
