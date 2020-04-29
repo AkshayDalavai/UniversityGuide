@@ -23,7 +23,7 @@ import com.univeristyguide.login.security.TokenProvider;
 import com.univeristyguide.login.service.UserService;
 
 @RestController
-@RequestMapping("/token")
+@RequestMapping("/api")
 public class AuthenticationController {
     public String currentUsername;
 
@@ -36,7 +36,7 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/generate-token", method = RequestMethod.POST)
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<?> register(@RequestBody LoginUser loginUser) throws AuthenticationException {
 
         final Authentication authentication = authenticationManager.authenticate(
