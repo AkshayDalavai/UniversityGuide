@@ -1,4 +1,4 @@
-package com.univeristyguide.login.dao;
+package com.univeristyguide.login.repository;
 
 import java.util.List;
 
@@ -24,7 +24,7 @@ public class UserDAOImpl implements UserDAO {
 			entityManager = theEntityManager;
 		}
 		
-		
+	  	
 		@Override
 		public List<User> findAll() {
 

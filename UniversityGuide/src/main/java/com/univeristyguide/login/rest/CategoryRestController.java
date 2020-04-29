@@ -28,14 +28,14 @@ public CategoryRestController(CategoryService theCategoryService) {
 categoryService = theCategoryService;
 }
 
-@GetMapping("/categories")
+@GetMapping("/getcategories")
 public ResponseEntity<List<CategoryDto>> findAllCategory(){
 List<CategoryDto> categories = categoryService.getAllCategories();
 return new ResponseEntity<>(categories,HttpStatus.OK);
 }
 
-
-@PostMapping("/category")
+   
+@PostMapping("/createcategory")
 public ResponseEntity<CategoryDto> createCategory(@RequestBody Category theCategory){
 
 theCategory.setId(0);

@@ -67,7 +67,7 @@ public class User extends Auditable<String>{
 	}
 
 
-
+  
 	public void setId(int id) {
 		this.id = id;
 	}

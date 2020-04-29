@@ -31,7 +31,7 @@ public class CommentRestController {
 		commentsService = theCommentsService;
 	}
 	
-	@PostMapping("/comments")
+	@PostMapping("/createcomment")
 	public ResponseEntity<CommentsDto> createComment(@RequestBody CommentsDto commentDto)
 	{
 		commentDto.setId(0);
@@ -39,28 +39,28 @@ public class CommentRestController {
 		return new ResponseEntity<>(theCommentsDto,HttpStatus.OK);
 	}
 	
-	@GetMapping("/comments/{postId}")
+	@GetMapping("/getcomments/{postId}")
 	public ResponseEntity<List<CommentsDto>> getCommentByPostId(@PathVariable int postId)
 	{
 		List<CommentsDto> comments = commentsService.getAllCommentsByPostId(postId);
 		return new ResponseEntity<>(comments,HttpStatus.OK);
 	}
 	
-	@PutMapping("/comments/update")
+	@PostMapping("/updatecomment")
 	public ResponseEntity<CommentsDto> updateComment(@RequestBody Comments comment)
 	{
 		commentsService.updateComments(comment);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@DeleteMapping("/comments/{commentId}")
+	@DeleteMapping("/deletecomment/{commentId}")
 	public ResponseEntity<CommentsDto> deletePost(@PathVariable int commentId)
 	{
 		commentsService.deleteComments(commentId);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@PutMapping("/comments/{commentId}/likes")
+	@PostMapping("/likecomment/{commentId}")
 	public ResponseEntity<CommentsDto> likePost(@PathVariable int commentId,@RequestBody final int buttonState)
 	{
 		commentsService.likesComment(commentId, buttonState);

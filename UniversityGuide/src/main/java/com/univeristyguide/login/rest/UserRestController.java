@@ -30,27 +30,27 @@ public class UserRestController {
 	}
 
 	// expose "/User" and return list of Users
-	@GetMapping("/user")
+	@GetMapping("/getusers")
 	public ResponseEntity<List<UserDto>> findAll(){
 		List<UserDto> users = userService.findAll();
 		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 	
-	@PostMapping("/user")
+	@PostMapping("/createuser")
 	public ResponseEntity<Void> addNewUser(@RequestBody User user){
 		user.setId(0);
 		userService.saveUser(user);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
-	
-	@PutMapping("/user/update")
+	  
+	@PostMapping("/updateuser")
 	public ResponseEntity<UserDto> updateUser(@RequestBody User user)
 	{
 		userService.updateUser(user);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
-	@GetMapping("/user/{userId}")
+	@GetMapping("/getuser/{userId}")
 	public ResponseEntity<UserDto> getUser(@PathVariable int userId)
 	{
 		UserDto theUserDto = userService.findUserById(userId);

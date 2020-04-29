@@ -34,7 +34,7 @@ public class CommentsDto {
 	public CommentsDto() {
 		
 	}
-	
+	  
 	public CommentsDto(int id, UserDto user, int userId, PostsDto posts, int postsId, String commentsContent,
 			int likesCount, boolean isAnonymous, Date createdDate, Date lastModifiedDate, String createdBy) {
 		super();

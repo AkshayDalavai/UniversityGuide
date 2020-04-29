@@ -11,7 +11,7 @@ public class CategoryDto {
 		private String CategoryName;
 		
 	
-
+  
 		public CategoryDto() {
 			
 		}

@@ -54,9 +54,13 @@ public class Posts extends Auditable<String>{
 	}
 
 
-	public Posts(User user, Category category, String title, boolean hasComments, String postContent, int likesCount,
-			boolean isAnonymous, int commentsCount) {
-		super();
+	
+
+
+	public Posts(int id, User user, Category category, String title, boolean hasComments, String postContent,
+			int likesCount, boolean isAnonymous, int commentsCount) {
+		
+		this.id = id;
 		this.user = user;
 		this.category = category;
 		this.title = title;
@@ -66,6 +70,9 @@ public class Posts extends Auditable<String>{
 		this.isAnonymous = isAnonymous;
 		this.commentsCount = commentsCount;
 	}
+
+
+
 
 
 	public int getId() {
@@ -153,12 +160,20 @@ public class Posts extends Auditable<String>{
 	}
 
 
+
+
+
 	@Override
 	public String toString() {
 		return "Posts [id=" + id + ", user=" + user + ", category=" + category + ", title=" + title + ", hasComments="
 				+ hasComments + ", postContent=" + postContent + ", likesCount=" + likesCount + ", isAnonymous="
-				+ isAnonymous + ", commentsCount=" + commentsCount + "]";
+				+ isAnonymous + ", commentsCount=" + commentsCount + ", getCreatedBy()=" + getCreatedBy()
+				+ ", getCreatedDate()=" + getCreatedDate() + ", getLastModifiedBy()=" + getLastModifiedBy()
+				+ ", getLastModifiedDate()=" + getLastModifiedDate() + "]";
 	}
 
+
 	
-}
+
+	
+}  

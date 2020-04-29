@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.univeristyguide.login.dto.PostsDto;
-import com.univeristyguide.login.dto.UserDto;
 import com.univeristyguide.login.dto.dtoconverter.FromDtoConverter;
 import com.univeristyguide.login.dto.dtoconverter.ToDtoConverter;
 import com.univeristyguide.login.entity.Category;
@@ -18,6 +17,7 @@ import com.univeristyguide.login.entity.Posts;
 import com.univeristyguide.login.entity.User;
 import com.univeristyguide.login.repository.CategoryRepository;
 import com.univeristyguide.login.repository.CommentsRepository;
+import com.univeristyguide.login.repository.PostsLikesRepository;
 import com.univeristyguide.login.repository.PostsRepository;
 import com.univeristyguide.login.repository.UserRepository;
 
@@ -28,17 +28,20 @@ public class PostsService {
 	private CommentsRepository commentsRepository;
 	private UserRepository userRepository;
 	private CategoryRepository categoryRepository;
+	private PostsLikesRepository postsLikesRepository;
 	
 	@Autowired
 	public PostsService(PostsRepository thePostsRepository,
 			CommentsRepository theCommentsRepository,
 			UserRepository theuserRepository,
-			CategoryRepository thecategoryRepository)
+			CategoryRepository thecategoryRepository,
+			PostsLikesRepository thepostsLikesRepository )
 	{
 		postsRepository = thePostsRepository;
 		commentsRepository = theCommentsRepository;
 		userRepository = theuserRepository;
 		categoryRepository = thecategoryRepository;
+		postsLikesRepository = thepostsLikesRepository;
 	}
 	
 	public PostsService()
@@ -126,11 +129,13 @@ public class PostsService {
 		
 	}
 	
+	
 	public List<PostsDto> getAllPosts()
 	{
 		List<Posts> posts = postsRepository.findAllSortedByDateReverse();
 		return posts.stream().map(ToDtoConverter::postsToDtoConverter).collect(Collectors.toList());
 	}
+	
 	
 	public PostsDto getPostById(int theId)
 	{
@@ -142,11 +147,13 @@ public class PostsService {
 			thePosts = result.get();
 		}
 		else
-		{
+		{	
 			throw new RuntimeException("Did not find post id - " + theId);
 		}
 		return ToDtoConverter.postsToDtoConverter(thePosts);
 	}
+	
+	
 	
 	public PostsDto updatePosts(Posts posts)
 	{
@@ -161,7 +168,7 @@ public class PostsService {
 		{
 			throw new RuntimeException("Did not find the post id -" + posts.getId());
 		}
-		
+	  	
 		posts.setCreatedDate(thePosts.getCreatedDate());
 		if(thePosts.isAnonymous())
 		{
@@ -174,10 +181,14 @@ public class PostsService {
 		
 		posts.setLastModifiedDate(thePosts.getLastModifiedDate());
 		posts.setLastModifiedBy(thePosts.getLastModifiedBy());
+		posts.setCategory(thePosts.getCategory());
+		posts.setUser(thePosts.getUser());
 		
 		postsRepository.save(posts);
 		return ToDtoConverter.postsToDtoConverter(posts);
 	}
+	
+	
 	
 	public void deletePosts(int theId)
 	{
@@ -195,11 +206,11 @@ public class PostsService {
 			}
 		}
 		postsRepository.deleteById(theId);
-	}
+	}  
 	
-	public void likes(int postsId,final int buttonState)
+	/*public void likes(int userId, int postId, boolean likes)
 	{
-		Optional<Posts> result = postsRepository.findById(postsId);
+		Optional<Posts> result = postsRepository.findById(postId);
 		Posts findPost = null;
 		if(result.isPresent())
 		{
@@ -209,16 +220,22 @@ public class PostsService {
 		{
 			throw new RuntimeException("Did not find the post id -" + postsId);
 		}
-		if(buttonState == 0)
+		
+		
+		
+		
+		
+		if(likes)
 		{
-			findPost.setLikesCount(findPost.getLikesCount() -1);
+			
 		}
 		else if(buttonState == 1)
 		{
 			findPost.setLikesCount(findPost.getLikesCount()+1);
 		}
 		postsRepository.save(findPost);
-	}
+	}*/
+	
 	
 	public void commentsCount(int postId)
 	{
@@ -236,7 +253,7 @@ public class PostsService {
 			{
 				findPost.setCommentsCount(comments.size());
 			}
-		}
+		}   
 		else
 		{
 			throw new RuntimeException("Did not find the post id -" + postId);

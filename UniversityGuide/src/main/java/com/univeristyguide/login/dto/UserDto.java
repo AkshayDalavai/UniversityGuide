@@ -40,7 +40,7 @@ public class UserDto {
 	
 	}
 
-
+  
 	public UserDto(int id, String firstName, String lastName, String email, String password, Date createdDate,
 			Date lastModifiedDate, String university, String roles) {
 		this.id = id;

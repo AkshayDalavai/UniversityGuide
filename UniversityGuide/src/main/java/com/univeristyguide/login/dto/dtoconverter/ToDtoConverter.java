@@ -25,7 +25,7 @@ public class ToDtoConverter {
 				);
 		return resultUser;
 	}
-	
+	  
 	public static PostsDto postsToDtoConverter(final Posts posts)
 	{
 		PostsDto resultPosts = new PostsDto(posts.getId(),
@@ -41,8 +41,7 @@ public class ToDtoConverter {
 				posts.getCommentsCount(),
 				posts.getCreatedDate(),
 				posts.getLastModifiedDate(),
-				posts.getCreatedBy()	
-				);
+				posts.getCreatedBy());
 		return resultPosts;
 				
 	}
@@ -71,4 +70,11 @@ public class ToDtoConverter {
 				);
 		return resultCategory;
 	}
+	
+	
+	
+	//public static LikesDto likesToDtoConverter(final Likes likes) {
+		
+		
+	//}
 }

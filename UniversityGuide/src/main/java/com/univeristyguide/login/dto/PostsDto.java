@@ -38,6 +38,9 @@ public class PostsDto {
 	private Date lastModifiedDate;
 	
 	private String createdBy;
+	
+	//testing
+	private boolean likes;
 
 	public PostsDto() {
 		
@@ -88,6 +91,17 @@ public class PostsDto {
 		this.createdDate = createdDate;
 		this.lastModifiedDate = lastModifiedDate;
 		this.createdBy = createdBy;
+		//this.likes = likes;
+	}
+
+
+	public boolean isLikes() {
+		return likes;
+	}
+
+
+	public void setLikes(boolean likes) {
+		this.likes = likes;
 	}
 
 
@@ -232,7 +246,7 @@ public class PostsDto {
 				+ ", categoryId=" + categoryId + ", title=" + title + ", hasComments=" + hasComments + ", postContent="
 				+ postContent + ", likesCount=" + likesCount + ", isAnonymous=" + isAnonymous + ", commentsCount="
 				+ commentsCount + ", createdDate=" + createdDate + ", lastModifiedDate=" + lastModifiedDate
-				+ ", createdBy=" + createdBy + "]";
+				+ ", createdBy=" + createdBy + ", likes=" + likes + "]";
 	}
 
 		
