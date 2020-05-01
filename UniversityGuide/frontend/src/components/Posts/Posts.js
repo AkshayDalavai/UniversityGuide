@@ -104,7 +104,7 @@ class Posts extends Component {
              .catch(err => {
                 console.log(err);
              })
-             .finaly(err => {
+             .finally(err => {
                  this.toggle();
              })
 
