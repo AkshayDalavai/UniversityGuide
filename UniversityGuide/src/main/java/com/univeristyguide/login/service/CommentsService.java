@@ -6,6 +6,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.univeristyguide.login.dto.CommentsDto;
@@ -93,6 +94,7 @@ public class CommentsService {
 		
 	}
 	
+	//@PreAuthorize("hasRole('USER')")
 	public CommentsDto updateComments(Comments comment)
 	{
 		Optional<Comments> result = commentsRepository.findById(comment.getId());
@@ -114,6 +116,7 @@ public class CommentsService {
 		return ToDtoConverter.commentsToDtoConverter(comment);
 	}
 	
+	//@PreAuthorize("hasRole('USER')")
 	public void deleteComments(int theId)
 	{
 		Optional<Comments> result = commentsRepository.findById(theId);

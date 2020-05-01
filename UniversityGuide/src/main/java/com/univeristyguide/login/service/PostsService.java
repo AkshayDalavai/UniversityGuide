@@ -1,15 +1,17 @@
 package com.univeristyguide.login.service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import com.univeristyguide.login.dto.CommentsDto;
 import com.univeristyguide.login.dto.PostsDto;
-import com.univeristyguide.login.dto.UserDto;
 import com.univeristyguide.login.dto.dtoconverter.FromDtoConverter;
 import com.univeristyguide.login.dto.dtoconverter.ToDtoConverter;
 import com.univeristyguide.login.entity.Category;
@@ -28,17 +30,20 @@ public class PostsService {
 	private CommentsRepository commentsRepository;
 	private UserRepository userRepository;
 	private CategoryRepository categoryRepository;
+	private CommentsService commentsService;
 	
 	@Autowired
 	public PostsService(PostsRepository thePostsRepository,
 			CommentsRepository theCommentsRepository,
 			UserRepository theuserRepository,
-			CategoryRepository thecategoryRepository)
+			CategoryRepository thecategoryRepository,
+			CommentsService theCommentsService)
 	{
 		postsRepository = thePostsRepository;
 		commentsRepository = theCommentsRepository;
 		userRepository = theuserRepository;
 		categoryRepository = thecategoryRepository;
+		commentsService = theCommentsService;
 	}
 	
 	public PostsService()
@@ -107,9 +112,13 @@ public class PostsService {
 		{
 			throw new RuntimeException("Did not find post id - " + theId);
 		}
-		return ToDtoConverter.postsToDtoConverter(thePosts);
+		List<CommentsDto> relatedComments = commentsService.getAllCommentsByPostId(theId);
+		PostsDto thePostsDto = ToDtoConverter.postsToDtoConverter(thePosts);
+		thePostsDto.setComments(relatedComments);
+		return thePostsDto;
 	}
 	
+	//@PreAuthorize("hasRole('USER')")
 	public PostsDto updatePosts(Posts posts)
 	{
 		Optional<Posts> result = postsRepository.findById(posts.getId());
@@ -141,6 +150,7 @@ public class PostsService {
 		return ToDtoConverter.postsToDtoConverter(posts);
 	}
 	
+	//@PreAuthorize("hasRole('USER')")
 	public void deletePosts(int theId)
 	{
 		Optional<Posts> result = postsRepository.findById(theId);
