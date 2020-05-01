@@ -87,6 +87,9 @@ class Posts extends Component {
              .catch(err => {
                 console.log(err);
              })
+             .finally(err => {
+                 this.toggle();
+             })
 
         }else{
             //Create Post
@@ -101,10 +104,11 @@ class Posts extends Component {
              .catch(err => {
                 console.log(err);
              })
+             .finaly(err => {
+                 this.toggle();
+             })
 
         }
-        //Close the Modal
-        this.toggle();
     }
 
     likePost = (postId) => {
@@ -130,7 +134,7 @@ class Posts extends Component {
                 {/* <div className="border border-secondary rounded mb-3">
                     <Filter />
                 </div> */}
-                <div className="container border border-secondary rounded mb-3">
+                <div className="container pl-0 pr-0">
                             <Form onSubmit={this.handleSubmit}>
                                 <FormGroup>
                                     <Input  type="text" name="search" id="search" maxLength="45" className="mb-3 mt-3"

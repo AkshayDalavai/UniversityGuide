@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PostCard from './PostCard';
-import { Modal, ModalHeader, ModalBody, Form, FormGroup, Button, CustomInput, Label, Input } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, Form, FormGroup, Button, CustomInput, Label, Input, Jumbotron } from 'reactstrap';
 import PropTypes from 'prop-types';
 import {GET_POST, CREATE_COMMENT} from '../../constants';
 import axios from 'axios';
@@ -18,7 +18,6 @@ class PostModal extends Component {
 
     static propTypes = {
         postId: PropTypes.number,
-        category: PropTypes.object
     }
     componentDidMount(){
         /**
@@ -30,7 +29,7 @@ class PostModal extends Component {
                 .then(res => {
                     this.setState({
                       post: res.data.posts,
-                      comments: res.data.comments
+                      comments: res.data.posts.comments
                     });
                 })
        }
@@ -55,7 +54,9 @@ class PostModal extends Component {
                  let comments = [...this.state.comments];
                  comments.unshift(res.data);
                  this.setState({
-                     comments
+                     comments,
+                     commentContent: '',
+                     isAnonymous: false
                  });
              })
              .catch(err => {
@@ -63,10 +64,28 @@ class PostModal extends Component {
              })
     }
     render() {
+        let comments;
+        if(this.state.comments.length > 0){
+            comments = <React.Fragment>
+                            <div className="container border border-secondary rounded">
+                            <div className="text-secondary">COMMENTS</div>
+                                {this.state.comments ? this.state.comments.map(comment => {
+                                    return <PostCard key={comment.id} post={comment} disable={true}></PostCard>
+                                }) : null}
+                            </div>
+                        </React.Fragment>
+        }else{
+            comments = <React.Fragment>
+                <Jumbotron>
+                    <p className="lead">There are no comments yet.</p>
+                    <small>Be the first to share your thoughts</small>
+                </Jumbotron>
+            </React.Fragment>
+        }
         return (
-            <Modal isOpen={this.props.modal} toggle={this.props.toggle} centered={true}>
+            <Modal isOpen={this.props.modal} toggle={this.props.toggle} centered={true} size="lg">
                 <ModalHeader toggle={this.props.toggle}>{this.state.post.title}</ModalHeader>
-                <ModalBody>
+                <ModalBody style={{'maxHeight': 'calc(100vh - 210px)', 'overflowY': 'auto'}}>
                     {this.state.post ?  <PostCard post={this.state.post} category={this.state.post.category} disable={true}/> : null}
                     <Form onSubmit={this.handleCommentSubmit}> 
                         <FormGroup>
@@ -80,12 +99,7 @@ class PostModal extends Component {
                             <CustomInput type="checkbox" id="postAnonymously" label="Post Anonymously" onChange={this.handleInputChange}/>
                         </FormGroup>
                     </Form>
-                    {/* { <div className="container border border-secondary rounded">
-                            <div className="text-secondary">COMMENTS</div>
-                            {this.state.comments ? this.state.comments.map(comment => {
-                                return <PostCard key={comment.id} post={comment} disable={true}></PostCard>
-                            }) : null}
-                    </div> } */}
+                    { comments }
                 </ModalBody>
             </Modal>
         )

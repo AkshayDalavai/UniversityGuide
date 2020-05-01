@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink } from 'reactstrap';
+import { Collapse, Navbar, NavbarToggler, NavbarBrand, Nav, NavItem, NavLink, ButtonDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap';
 import SignUp from '../Auth/SignUp';
 import Login from '../Auth/Login';
 import {Link} from 'react-router-dom';
@@ -8,7 +8,8 @@ class Header extends Component{
     constructor(props){
         super(props);
         this.state = {
-            isOpen: false
+            isOpen: false,
+            dropdownOpen: false
         }
     }
 
@@ -20,10 +21,43 @@ class Header extends Component{
         });
     }
 
+    dropdownToggle = () => {
+        this.setState((prevState) => {
+            return {
+                dropdownOpen: !prevState.dropdownOpen
+            }
+        });
+    }
+
     render(){
         /**
          * @todo: Conditionally render Login, Logout and Signup buttons
          */
+        let navLinks;
+        if(this.props.isAuthenticated){
+            navLinks = <React.Fragment>
+                        <NavItem>
+                            <ButtonDropdown isOpen={this.state.dropdownOpen} toggle={this.dropdownToggle}>
+                            <DropdownToggle caret>
+                                {this.props.loggedinUser ? this.props.loggedinUser.firstName : "User"}
+                            </DropdownToggle>
+                            <DropdownMenu>
+                                <DropdownItem header disabled>My Profile</DropdownItem>
+                                <DropdownItem onClick={this.props.logout}>Logout</DropdownItem>
+                            </DropdownMenu>
+                            </ButtonDropdown>
+                        </NavItem>
+                    </React.Fragment>
+        }else{
+            navLinks = <React.Fragment>
+                            <NavItem>
+                                <Login toggle={this.props.loginToggle} login={this.props.login} loginErrorMessage={this.props.loginErrorMessage} modal={this.props.showLogin}/>
+                            </NavItem>
+                            <NavItem>
+                                <SignUp />
+                            </NavItem>
+                        </React.Fragment>
+        }
         return(
             <div>
                 <Navbar color="dark" dark className="mb-5 pl-3 pr-4" expand="sm">
@@ -35,17 +69,12 @@ class Header extends Component{
                                     <NavLink tag={Link} to="/" >SU Forum</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={Link} to="/SUSports">SU Sports</NavLink>
+                                    <NavLink tag={Link} to="/susports">SU Sports</NavLink>
                                 </NavItem>
                                 <NavItem>
-                                    <NavLink tag={Link} to="/SUHousing" disabled>SU Housing</NavLink>
+                                    <NavLink tag={Link} to="/suhousing" disabled>SU Housing</NavLink>
                                 </NavItem>
-                                <NavItem>
-                                    <Login />
-                                </NavItem>
-                                <NavItem>
-                                    <SignUp />
-                                </NavItem>
+                                {navLinks}
                             </Nav>
                         </Collapse>
                 </Navbar>

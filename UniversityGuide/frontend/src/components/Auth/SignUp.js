@@ -41,7 +41,7 @@ class SignUp extends Component{
         if(!formErrors.firstName && !formErrors.email && !formErrors.password && !formErrors.confirmPassword){
             //Check if fields are empty are not as by default all the error flags are set to false before they are touched
             const {firstName, email, password, confirmPassword} = this.state;
-            if(firstName && email && password & confirmPassword)
+            if(firstName && email && password && confirmPassword)
                 formErrors.formValid = false;
             else
                 formErrors.formValid = true;
@@ -99,8 +99,7 @@ class SignUp extends Component{
             lastName: this.state.lastName,
             email: this.state.email,
             password: this.state.password,
-            university: this.state.university,
-            roles: "USER"
+            university: this.state.university
         }
         console.log(user);
         /**

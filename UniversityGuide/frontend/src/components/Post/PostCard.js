@@ -31,7 +31,7 @@ class PostCard extends Component {
     render() {
         let postCard;
         if(this.props.post && !!this.props.post.id){
-            const {id, isAnonymous, user, title, postContent, createdDate, likesCount, commentsCount} = this.props.post;
+            const {id, isAnonymous, user, title, createdDate, likesCount, commentsCount} = this.props.post;
             postCard = <Card className="mt-2 mb-2" >
                                 <CardHeader>
                                     {!this.props.disable ? <div className="text-left" > <Badge color="warning">{this.props.category.categoryName}</Badge></div> : null}
@@ -45,8 +45,8 @@ class PostCard extends Component {
                                    
                                 </CardHeader>
                                 <CardBody onClick={this.toggle}>
-                                    <CardTitle className="text-left">{title}</CardTitle>
-                                    <CardText className="text-left">{postContent}</CardText>
+                                    {title ? <CardTitle className="text-left font-weight-bold">{title}</CardTitle> : null}
+                                    <CardText className="text-left">{this.props.post.postContent ? this.props.post.postContent: this.props.post.commentsContent}</CardText>
                                 </CardBody>
                                 <CardFooter>
                                     {/* @todo: Add likes and comments here */}
