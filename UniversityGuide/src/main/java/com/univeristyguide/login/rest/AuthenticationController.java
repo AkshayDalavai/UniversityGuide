@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.univeristyguide.login.dto.AuthTokenDto;
 import com.univeristyguide.login.dto.UserDto;
 import com.univeristyguide.login.dto.dtoconverter.ToDtoConverter;
 import com.univeristyguide.login.entity.AuthToken;
@@ -48,8 +49,14 @@ public class AuthenticationController {
         SecurityContextHolder.getContext().setAuthentication(authentication);
         final String token = jwtTokenUtil.generateToken(authentication);
         currentUsername = jwtTokenUtil.getUsernameFromToken(token);
-        return ResponseEntity.ok(new AuthToken(token));
+        AuthToken authToken = new AuthToken(token);
+        UserDto userDto = ToDtoConverter.userToDtoConverter(userService.findOne(currentUsername));
+        AuthTokenDto authTokenDto = new AuthTokenDto();
+        authTokenDto.setToken(authToken.getToken());
+        authTokenDto.setUser(userDto);
+        return ResponseEntity.ok(authTokenDto);
     }
+   
 
     //    @PreAuthorize("hasRole('USER')")
     @GetMapping("/current-user")
