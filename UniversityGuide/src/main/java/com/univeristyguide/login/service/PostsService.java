@@ -1,13 +1,11 @@
 package com.univeristyguide.login.service;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.univeristyguide.login.dto.CommentsDto;
@@ -20,6 +18,7 @@ import com.univeristyguide.login.entity.Posts;
 import com.univeristyguide.login.entity.User;
 import com.univeristyguide.login.repository.CategoryRepository;
 import com.univeristyguide.login.repository.CommentsRepository;
+import com.univeristyguide.login.repository.PostSearch;
 import com.univeristyguide.login.repository.PostsRepository;
 import com.univeristyguide.login.repository.UserRepository;
 
@@ -31,19 +30,22 @@ public class PostsService {
 	private UserRepository userRepository;
 	private CategoryRepository categoryRepository;
 	private CommentsService commentsService;
+	private PostSearch postSearch;
 	
 	@Autowired
 	public PostsService(PostsRepository thePostsRepository,
 			CommentsRepository theCommentsRepository,
 			UserRepository theuserRepository,
 			CategoryRepository thecategoryRepository,
-			CommentsService theCommentsService)
+			CommentsService theCommentsService,
+			PostSearch thepostSearch)
 	{
 		postsRepository = thePostsRepository;
 		commentsRepository = theCommentsRepository;
 		userRepository = theuserRepository;
 		categoryRepository = thecategoryRepository;
 		commentsService = theCommentsService;
+		postSearch = thepostSearch;
 	}
 	
 	public PostsService()
@@ -95,6 +97,7 @@ public class PostsService {
 	
 	public List<PostsDto> getAllPosts()
 	{
+		
 		List<Posts> posts = postsRepository.findAllSortedByDateReverse();
 		return posts.stream().map(ToDtoConverter::postsToDtoConverter).collect(Collectors.toList());
 	}
@@ -231,4 +234,17 @@ public class PostsService {
 				.map(ToDtoConverter::postsToDtoConverter).collect(Collectors.toList());
 		
 	}
+	
+	//Adding search feature
+	@SuppressWarnings("unchecked")
+    public List<PostsDto> search(final String query) {
+        List<Posts> searchResults;
+        try {
+            searchResults = postSearch.search(query);
+            return searchResults.stream().map(ToDtoConverter::postsToDtoConverter).collect(Collectors.toList());
+        } catch (Exception ignored) {
+
+        }
+        return null;
+    }
 }
