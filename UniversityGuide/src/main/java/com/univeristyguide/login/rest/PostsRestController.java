@@ -88,4 +88,10 @@ public class PostsRestController {
 		List<PostsDto> posts = postsService.getAllPostsByCategoryId(categoryId);
 		return new ResponseEntity<>(posts,HttpStatus.OK);
 	}
+	
+	 @GetMapping("/search/{query}")
+	    public ResponseEntity<List<PostsDto>> searchPost(@PathVariable String query) {
+		 	List<PostsDto> theSearchedPosts = postsService.search(query);
+	        return new ResponseEntity<>(theSearchedPosts, HttpStatus.OK);
+	    }
 }
