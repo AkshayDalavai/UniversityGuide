@@ -11,10 +11,13 @@ class CreateContent extends Component {
     constructor(props){
         super(props);
         this.state = {
-            isAnonymous: true,
-            categoryID: '',
-            postTitle: '',
-            postContent: ''
+            id:  this.props.editPostObj.id ?  this.props.editPostObj.id : '',
+            userId: this.props.editPostObj.id ? this.props.editPostObj.userId : 1,
+            isAnonymous: this.props.editPostObj.id ? this.props.editPostObj.isAnonymous : true,
+            categoryId: this.props.editPostObj.id ? this.props.editPostObj.categoryId : this.props.categories[0].id,
+            postTitle: this.props.editPostObj.id ? this.props.editPostObj.title : '',
+            postContent: this.props.editPostObj.id ? this.props.editPostObj.postContent : '',
+            isEditPost: this.props.editPostObj.id ? true : false
         }
     }
 
@@ -55,7 +58,7 @@ class CreateContent extends Component {
                                         <Button color="danger" disabled={!this.state.postTitle}>Post</Button>
                                     </FormGroup>
                                     <FormGroup className="float-right">
-                                        <Input type="select" name="category" id="category" name="categoryID" value={this.state.categoryID} onChange={this.handleInputChange}>
+                                        <Input type="select" id="category" name="categoryId" value={this.state.categoryId} onChange={this.handleInputChange}>
                                             {this.props.categories.map(category => {
                                                 return <option key={category.id} value={category.id}>{category.categoryName}</option>
                                             })}

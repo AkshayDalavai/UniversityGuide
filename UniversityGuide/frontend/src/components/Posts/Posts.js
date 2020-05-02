@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import PostCard from '../Post/PostCard';
 import CreateContent from '../CreateContent/CreateContent';
 import Filter from '../Filter/Filter';
-import {Form, FormGroup, Input} from 'reactstrap';
+import {Form, FormGroup, Input, Jumbotron} from 'reactstrap';
+
 import axios from 'axios';
+import {GET_POSTS, CREATE_POST, UPDATE_POST, LIKE_POST, getAuthStatus} from '../../constants'; 
 
 class Posts extends Component {
     static propTypes = {
@@ -13,8 +15,20 @@ class Posts extends Component {
 
     state = {
         posts: [],
+        editPost: {},
         modal: false,
-        search: ''
+        search: '',
+        token: null,
+        isAuthenitcated: false
+    }
+
+    componentWillMount(){
+        //Get Auth values from local storage
+        const { token, isAuthenitcated } = getAuthStatus();
+        this.setState({
+            token,
+            isAuthenitcated
+        });
     }
 
     toggle = () => {
@@ -32,32 +46,34 @@ class Posts extends Component {
     }
 
     componentDidMount(){
-        axios.get('http://192.168.1.56:8080/UniversityGuide-0.0.1-SNAPSHOT/api/posts')
-            .then(res => {
-                console.log(res.data);
+        this.getPosts();
+    }
+
+    getPosts = () => {
+        axios.get(GET_POSTS)
+             .then(res => {
                 this.setState({
                     posts: res.data
                 })
-            })
-            .catch(err => {
+             })
+             .catch(err => {
                 console.log(err);
-            })
-        }
+             })
+    }
 
-    handleSubmit = e => {
+    searchPosts = e => {
         e.preventDefault();
         /**
          * @todo: get search results here
          */
-        console.log(this.state.search)
     }
-    
+
     addNewPost = (event, postDetails) => {
         event.preventDefault();
         const post = {
-            userId: 1,
-            isAnonymous: postDetails.isAnonymous,
-            categoryId: +postDetails.categoryID,
+            userId: postDetails.userId  ,
+            isAnonymous: postDetails.isAnonymous || false,
+            categoryId: +postDetails.categoryId,
             title: postDetails.postTitle,
             postContent: postDetails.postContent
         }
@@ -101,6 +117,23 @@ class Posts extends Component {
         }
     }
 
+    likePost = (postId) => {
+        
+        // axios.post(`${LIKE_POST}`, postId)
+        //      .then(res => {
+                 
+        //      })
+    }
+
+    editPost = (post) => {
+        this.setState((prevState) => {
+            return {
+                editPost: post,
+                modal: !prevState.modal
+            }
+        });
+    }
+
     render() {
         return (
             <div className="mt-2 mb-2">
@@ -108,7 +141,7 @@ class Posts extends Component {
                     <Filter />
                 </div> */}
                 <div className="container pl-0 pr-0">
-                            <Form onSubmit={this.handleSubmit}>
+                            <Form onSubmit={this.searchPosts}>
                                 <FormGroup>
                                     <Input  type="text" name="search" id="search" maxLength="45" className="mb-3 mt-3"
                                             placeholder="Search and Press Enter..." onChange={this.handleInputChange}
@@ -122,10 +155,11 @@ class Posts extends Component {
                             placeholder="Ask for advice, mentorship,  and more from the community . . ."/>
                 </div>
                 {this.state.modal ? 
-                <CreateContent categories={this.props.categories} toggle={this.toggle} modal={this.state.modal}
-                               addNewPost={this.addNewPost}/> : null}
+                <CreateContent categories={this.props.categories} toggle={this.toggle} modal={this.state.modal} 
+                               addNewPost={this.addNewPost} editPostObj={this.state.editPost}/> : null}
                 
-                {this.state.posts.map(indPost => <PostCard key={indPost.id} post={indPost} category={this.props.categories.filter(cat => cat.id == indPost.categoryId)[0]} />)}
+                {this.state.posts && this.state.posts.length > 0 ? this.state.posts.map(indPost => <PostCard key={indPost.id} editPost={this.editPost} likePost={this.likePost} post={indPost} category={indPost.category} />)
+                : <Jumbotron className="mt-2 mb-2"><p className="lead">No Posts Yet. Signup/Login to add a post</p></Jumbotron>}
             </div>
         )
     }

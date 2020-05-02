@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import PostCard from './PostCard';
 import { Modal, ModalHeader, ModalBody, Form, FormGroup, Button, CustomInput, Label, Input, Jumbotron } from 'reactstrap';
 import PropTypes from 'prop-types';
+import {GET_POST, CREATE_COMMENT} from '../../constants';
+import axios from 'axios';
 
 class PostModal extends Component {
     constructor(props){
@@ -92,7 +94,7 @@ class PostModal extends Component {
                                     id="postComment" placeholder="Leave your comment here..." value={this.state.commentContent}/>
                         </FormGroup>
                         <FormGroup className="col-sm-12" >
-                            <Button color="danger" className="float-right"
+                            <Button color="danger" className="float-right" onClick={this.handleCommentSubmit}
                                     disabled={!this.state.commentContent} >Comment</Button>
                             <CustomInput type="checkbox" id="postAnonymously" label="Post Anonymously" onChange={this.handleInputChange}/>
                         </FormGroup>

@@ -3,10 +3,11 @@ import { Card, CardBody, CardTitle, CardFooter, CardHeader, CardText, Badge, But
 import {Switch, Route} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import PostModal from './PostModal';
-import { library } from '@fortawesome/fontawesome-svg-core'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faHeart, faComments } from '@fortawesome/free-solid-svg-icons'
-library.add(faHeart, faComments);
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart, faComments, faPenSquare } from '@fortawesome/free-solid-svg-icons';
+
+library.add(faHeart, faComments, faPenSquare);
 
 class PostCard extends Component {
     static propTypes = {
@@ -61,30 +62,8 @@ class PostCard extends Component {
 
         return (
             <React.Fragment>
-               <Card className="mt-2 mb-2" onClick={this.toggle} >
-                   <CardHeader>
-                        <div className="text-left" > <Badge color="primary" outline>{this.props.category.categoryName}</Badge></div>
-                        <div className="small lead text-left">
-                            {isAnonymous ? "Anonymous" : `${user.lastName}, ${user.firstName}`} | &nbsp;
-                             {createdDate.split('T')[0]}
-                        </div>
-                   </CardHeader>
-                   <CardBody>
-                        <CardTitle className="text-left">{title}</CardTitle>
-                        <CardText className="text-left">{postContent}</CardText>
-                   </CardBody>
-                   <CardFooter>
-                       {/* @todo: Add likes and comments here */}
-                       <div className="float-left" >
-                          <Button color="primary" outline> Like: <FontAwesomeIcon icon="heart" /> <Badge color="secondary"> {likesCount} </Badge></Button> &nbsp;
-                          <Button color="primary" outline>Comments: <FontAwesomeIcon icon="comments" /> <Badge color="secondary">{commentsCount}</Badge></Button>
-                           {/* <AiFillLike />
-                           <AiOutlineLike />
-                           <FaCommentAlt /> */}
-                       </div>
-                   </CardFooter>
-                </Card> 
-                {this.state.modal ? <PostModal toggle={this.toggle} category={this.props.category} modal={this.state.modal} postID={id}/>: null}
+                {postCard}
+                {this.state.modal ? <PostModal toggle={this.toggle} category={this.props.category} modal={this.state.modal} postId={this.props.post.id}/>: null}
             </React.Fragment>
         )
     }

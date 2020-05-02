@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, FormFeedback} from 'reactstrap';
 //import PropTypes from 'prop-types';
 import axios from 'axios';
+import {CREATE_USER} from '../../constants';
 
 class SignUp extends Component{
     constructor(props){
@@ -105,7 +106,7 @@ class SignUp extends Component{
          * @todo: Make REST Call here
          * @todo: Handle User Already Exists error once REST is implemented
          */
-        axios.post('http://192.168.1.56:8080/UniversityGuide-0.0.1-SNAPSHOT/api/categories', user)
+        axios.post(CREATE_USER, user)
              .then(res => {
                  alert("User Added Successfully");
                  this.toggle();
