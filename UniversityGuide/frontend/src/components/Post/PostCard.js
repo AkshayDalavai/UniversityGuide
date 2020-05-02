@@ -28,7 +28,36 @@ class PostCard extends Component {
         }
     }
     render() {
-        const {id, isAnonymous, user, title, postContent, createdDate, likesCount, commentsCount} = this.props.post;
+        let postCard;
+        if(this.props.post && !!this.props.post.id){
+            const {id, isAnonymous, user, title, createdDate, likesCount, commentsCount} = this.props.post;
+            postCard = <Card className="mt-2 mb-2" >
+                                <CardHeader>
+                                    {!this.props.disable ? <div className="text-left" > <Badge color="warning">{this.props.category.categoryName}</Badge></div> : null}
+                                    <div className="small lead text-left">
+                                        {isAnonymous ? "Anonymous" : `${user.lastName}, ${user.firstName}`} | &nbsp;
+                                        {createdDate.split('T')[0]}
+                                        {!this.props.disable ? <div className="float-right" onClick={() => {this.props.editPost(this.props.post)}}>
+                                            <Button color="warning" outline > <FontAwesomeIcon icon="pen-square" /> </Button> 
+                                        </div> : null}
+                                    </div>
+                                   
+                                </CardHeader>
+                                <CardBody onClick={this.toggle}>
+                                    {title ? <CardTitle className="text-left font-weight-bold">{title}</CardTitle> : null}
+                                    <CardText className="text-left">{this.props.post.postContent ? this.props.post.postContent: this.props.post.commentsContent}</CardText>
+                                </CardBody>
+                                <CardFooter>
+                                    {/* @todo: Add likes and comments here */}
+                                    <div className="float-left" >
+                                    <Button color="warning" outline onClick={this.props.likePost}> Likes: <FontAwesomeIcon icon="heart" /> <Badge color="secondary"> {likesCount} </Badge></Button> &nbsp;
+                                    {!this.props.disable ?<Button color="warning" onClick={this.toggle} outline>Comments: <FontAwesomeIcon icon="comments" /> <Badge color="secondary">{commentsCount}</Badge></Button> : null}
+                                    </div>
+                                </CardFooter>
+                            </Card> 
+        }else{
+            postCard = null;
+        }
 
         return (
             <React.Fragment>

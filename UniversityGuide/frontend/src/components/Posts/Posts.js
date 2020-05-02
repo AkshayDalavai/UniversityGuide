@@ -61,8 +61,29 @@ class Posts extends Component {
             title: postDetails.postTitle,
             postContent: postDetails.postContent
         }
-        console.log(post);
-        axios.post('http://192.168.1.56:8080/UniversityGuide-0.0.1-SNAPSHOT/api/posts', post)
+        if(postDetails.isEditPost){
+            post.id = postDetails.id
+            //Update Post
+            axios.post(UPDATE_POST, post)
+             .then(res =>{
+                let posts = [...this.state.posts];
+                let idx = posts.findIndex(post => post.id === res.data.id)
+                if(idx !== -1)
+                    posts[idx] = res.data;
+                this.setState({
+                    posts
+                });
+             })
+             .catch(err => {
+                console.log(err);
+             })
+             .finally(err => {
+                 this.toggle();
+             })
+
+        }else{
+            //Create Post
+            axios.post(CREATE_POST, post)
              .then(res =>{
                 const posts = this.state.posts;
                 posts.unshift(res.data);
@@ -73,13 +94,11 @@ class Posts extends Component {
              .catch(err => {
                 console.log(err);
              })
-        const posts = this.state.posts;
-        posts.unshift(post);
-        this.setState({
-            posts
-        });
-        //Close the Modal
-        this.toggle();
+             .finally(err => {
+                 this.toggle();
+             })
+
+        }
     }
 
     render() {
@@ -88,7 +107,7 @@ class Posts extends Component {
                 {/* <div className="border border-secondary rounded mb-3">
                     <Filter />
                 </div> */}
-                <div className="container border border-secondary rounded mb-3">
+                <div className="container pl-0 pr-0">
                             <Form onSubmit={this.handleSubmit}>
                                 <FormGroup>
                                     <Input  type="text" name="search" id="search" maxLength="45" className="mb-3 mt-3"

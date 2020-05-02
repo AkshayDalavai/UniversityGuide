@@ -1,13 +1,10 @@
 import React, {Component} from 'react';
 import {Button, Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, FormFeedback} from 'reactstrap';
-//import PropTypes from 'prop-types';
 
 class Login extends Component{
     constructor(props){
         super(props);
         this.state = {
-            modal: false,
-            errorMessage: null,
             email: '',
             password: '',
             formErrors: {
@@ -18,13 +15,7 @@ class Login extends Component{
         }
     }
 
-    toggle = () => {
-        this.setState((prevState) => {
-          return  {
-              modal: !prevState.modal
-          }
-        });
-    }
+    // this.props.loginErrorMessage gives any error on login to be displayed to the user
 
     handleInputChange = event => {
         const {name, value} = event.target;
@@ -68,29 +59,14 @@ class Login extends Component{
         return formErrors;
     }
 
-    handleSubmit = event => {
-        event.preventDefault();
-        const user = {
-            email: this.state.email,
-            password: this.state.password,
-            updatedAt: new Date().toISOString()
-        }
-        console.log(user);
-        /**
-         * @todo: REST Call here
-         * @todo: Handle invalid credentials error once REST is implemented
-         */
-        this.toggle();
-    }
-
     render(){
         return(
              <div>
-                 <Button outline color="info" size="md" onClick={this.toggle} className="mr-3 mb-3">Log In</Button>
-                 <Modal isOpen={this.state.modal} toggle={this.toggle} centered={true}>
-                     <ModalHeader toggle={this.toggle}>Log In to your account</ModalHeader>
+                 <Button outline color="info" size="md" onClick={this.props.toggle} className="mr-3 mb-3">Log In</Button>
+                 <Modal isOpen={this.props.modal} toggle={this.props.toggle} centered={true}>
+                     <ModalHeader toggle={this.props.toggle}>Log In to your account</ModalHeader>
                      <ModalBody>
-                         <Form onSubmit={this.handleSubmit}>
+                         <Form onSubmit={(event) => this.props.login(event, this.state)}>
                               <FormGroup>
                                  <Label for="email">Email</Label>
                                 <Input  type="email" name="email" id="email" maxLength="45" className="mb-3"

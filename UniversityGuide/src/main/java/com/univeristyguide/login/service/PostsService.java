@@ -22,6 +22,7 @@ import com.univeristyguide.login.entity.User;
 import com.univeristyguide.login.repository.CategoryRepository;
 import com.univeristyguide.login.repository.CommentsRepository;
 import com.univeristyguide.login.repository.PostsLikesRepository;
+import com.univeristyguide.login.repository.PostSearch;
 import com.univeristyguide.login.repository.PostsRepository;
 import com.univeristyguide.login.repository.UserRepository;
 
@@ -34,6 +35,7 @@ public class PostsService {
 	private CategoryRepository categoryRepository;
 	private PostsLikesRepository postsLikesRepository;
 	private CommentsService commentsService;
+	private PostSearch postSearch;
 	
 	@Autowired
 	public PostsService(PostsRepository thePostsRepository,
@@ -42,6 +44,8 @@ public class PostsService {
 			CategoryRepository thecategoryRepository,
 			PostsLikesRepository thepostsLikesRepository,
 			CommentsService theCommentsService)
+			CommentsService theCommentsService,
+			PostSearch thepostSearch)
 	{
 		postsRepository = thePostsRepository;
 		commentsRepository = theCommentsRepository;
@@ -49,6 +53,7 @@ public class PostsService {
 		categoryRepository = thecategoryRepository;
 		postsLikesRepository = thepostsLikesRepository;
 		commentsService = theCommentsService;
+		postSearch = thepostSearch;
 	}
 	
 	public PostsService()
@@ -104,6 +109,7 @@ public class PostsService {
 	//get all posts in most recently created order
 	public List<PostsDto> getAllPosts(UserDto userDto)
 	{
+		
 		List<Posts> posts = postsRepository.findAllSortedByDateReverse();
 		return posts.stream().map(ToDtoConverter::postsToDtoConverter).collect(Collectors.toList());
 	}
@@ -271,4 +277,17 @@ public class PostsService {
 				.map(ToDtoConverter::postsToDtoConverter).collect(Collectors.toList());
 		
 	}
+	
+	//Adding search feature
+	@SuppressWarnings("unchecked")
+    public List<PostsDto> search(final String query) {
+        List<Posts> searchResults;
+        try {
+            searchResults = postSearch.search(query);
+            return searchResults.stream().map(ToDtoConverter::postsToDtoConverter).collect(Collectors.toList());
+        } catch (Exception ignored) {
+
+        }
+        return null;
+    }
 }

@@ -10,7 +10,7 @@ class SUForum extends Component {
                 <Posts categories={this.props.categories} />
                 <Switch>
                     <Route exact path={`SUForum/:postID`}>
-                        <PostModal category={this.props.categories[0]}/>
+                        <PostModal />
                     </Route>
                 </Switch>
             </div>

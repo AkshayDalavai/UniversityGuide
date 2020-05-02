@@ -10,10 +10,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-
 import javax.persistence.Table;
 
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+
 @Entity
+@Indexed
 @Table(name="posts")
 public class Posts extends Auditable<String>{
 	
@@ -30,12 +33,14 @@ public class Posts extends Auditable<String>{
 	@JoinColumn(name="id_category",nullable=false)
 	private Category category;
 	
+	@Field
 	@Column(name="title",nullable=false)
 	private String title;
 	
 	@Column(name="has_comments",nullable=false)
 	private boolean hasComments;
 	
+	@Field
 	@Column(name="posts_content",nullable=false)
 	private String postContent;
 	
