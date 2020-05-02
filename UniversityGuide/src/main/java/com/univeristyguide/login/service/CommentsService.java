@@ -6,18 +6,18 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.univeristyguide.login.dto.CommentsDto;
-import com.univeristyguide.login.dto.PostsDto;
+import com.univeristyguide.login.dto.CommentsLikesDto;
 import com.univeristyguide.login.dto.dtoconverter.FromDtoConverter;
 import com.univeristyguide.login.dto.dtoconverter.ToDtoConverter;
-import com.univeristyguide.login.entity.Category;
 import com.univeristyguide.login.entity.Comments;
+import com.univeristyguide.login.entity.CommentsLikes;
 import com.univeristyguide.login.entity.Posts;
 import com.univeristyguide.login.entity.User;
 import com.univeristyguide.login.repository.CategoryRepository;
+import com.univeristyguide.login.repository.CommentsLikesRepository;
 import com.univeristyguide.login.repository.CommentsRepository;
 import com.univeristyguide.login.repository.PostsRepository;
 import com.univeristyguide.login.repository.UserRepository;
@@ -29,19 +29,23 @@ public class CommentsService {
 	private UserRepository userRepository;
 	private PostsRepository postsRepository;
 	private CategoryRepository categoryRepository;
+	private CommentsLikesRepository commentsLikesRepository;
 	
 	@Autowired
 	public CommentsService(CommentsRepository theCommentsRepository,
 			UserRepository theUserRepository,
 			PostsRepository thePostsRepository,
-			CategoryRepository theCategoryRepository)
+			CategoryRepository theCategoryRepository,
+			CommentsLikesRepository theCommentsLikesRepository)
 	{
 		commentsRepository = theCommentsRepository;
 		userRepository = theUserRepository;
 		postsRepository = thePostsRepository;
 		categoryRepository = theCategoryRepository;
+		commentsLikesRepository = theCommentsLikesRepository;
 	}
 	
+	//create new comments
 	public CommentsDto createComments(CommentsDto commentsDto)
 	{
 		int userId = commentsDto.getUserId();
@@ -85,6 +89,7 @@ public class CommentsService {
 		return commentsDto;
 	}
 	
+	//get all comments by postId
 	public List<CommentsDto> getAllCommentsByPostId(int theId)
 	{
 		List<Comments> comments = commentsRepository.findByPosts(theId);
@@ -93,6 +98,7 @@ public class CommentsService {
 		
 	}
 	
+	//update or edit comments by commentId
 	//@PreAuthorize("hasRole('USER')")
 	public CommentsDto updateComments(Comments comment)
 	{
@@ -115,6 +121,7 @@ public class CommentsService {
 		return ToDtoConverter.commentsToDtoConverter(comment);
 	}
 	
+	//delete comments by commentId
 	//@PreAuthorize("hasRole('USER')")
 	public void deleteComments(int theId)
 	{
@@ -126,26 +133,60 @@ public class CommentsService {
 		commentsRepository.deleteById(theId);
 	}
 	
-	public void likesComment(int commentsId,final int buttonState)
+	//like comment
+	public int likesComment(CommentsLikesDto commentsLikesDto)
 	{
-		Optional<Comments> result = commentsRepository.findById(commentsId);
-		Comments findComment = null;
-		if(result.isPresent())
+		Optional<Comments> resultComment = commentsRepository.findById(commentsLikesDto.getCommentId());
+		Comments findComment = new Comments();
+		if(resultComment.isPresent())
 		{
-			findComment = result.get();
+			findComment = resultComment.get();
 		}
 		else
 		{
-			throw new RuntimeException("Did not find the post id -" + commentsId);
+			throw new RuntimeException("Did not find the comment id -" + commentsLikesDto.getCommentId());
 		}
-		if(buttonState == 0)
+		
+		Optional<Posts> resultPosts = postsRepository.findById(commentsLikesDto.getPostId());
+		Posts findPost = new Posts();
+		if(resultPosts.isPresent()) {
+			findPost = resultPosts.get();
+		}
+		else 
 		{
-			findComment.setLikes(findComment.getLikes() -1);
+			throw new RuntimeException("Did not find the post id -" + commentsLikesDto.getPostId());
 		}
-		else if(buttonState == 1)
-		{
-			findComment.setLikes(findComment.getLikes()+1);
+				
+		Optional<User> resultUsers = userRepository.findById(commentsLikesDto.getUserId());
+		CommentsLikes commentsLikes = new CommentsLikes();
+		User findUser = new User();
+		if(resultUsers.isPresent()) {
+			findUser = resultUsers.get();
+			//commentsLikes = commentsLikesRepository.findByIdUserAndIdComments(commentsLikesDto.getUserId(), commentsLikesDto.getCommentId());
+			if(commentsLikesDto.isCommentLike()) {
+				commentsLikes.setUser(findUser);
+				commentsLikes.setPost(findPost);
+				commentsLikes.setComment(findComment);
+				commentsLikes.setLike(true);
+				findComment.setLikes(findComment.getLikes()+1);
+				commentsRepository.save(findComment);
+				commentsLikesRepository.save(commentsLikes);
+			
+			}
+			else {
+					if(findComment.getLikes()>0) findComment.setLikes(findComment.getLikes()-1);
+					commentsRepository.save(findComment);
+					CommentsLikes commentLike = commentsLikesRepository.findByIdUserAndIdComments(commentsLikesDto.getUserId(), commentsLikesDto.getCommentId());
+					if(commentLike!=null) commentsLikesRepository.delete(commentLike);
+			}
+			
 		}
-		commentsRepository.save(findComment);
+		else {
+			throw new RuntimeException("Did not find user id- " + commentsLikesDto.getUserId());
+			
+		}
+		
+		return findComment.getLikes();
+		
 	}
 }   

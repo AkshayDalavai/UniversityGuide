@@ -18,5 +18,7 @@ public interface PostsLikesRepository extends JpaRepository<PostsLikes, Integer>
 	@Query(value = "select * from university_guide.postslikes l where l.id_posts = ?1", nativeQuery=true)
 	List<User> findByIdPosts (final int id_posts);
 	
+	@Query(value = "select * from university_guide.postsLikes l where l.id_user = ?1 and l.id_posts = ?1", nativeQuery = true)
+	PostsLikes findByIdUserAndIdPosts(final int id_user, final int id_posts);
 	
 }

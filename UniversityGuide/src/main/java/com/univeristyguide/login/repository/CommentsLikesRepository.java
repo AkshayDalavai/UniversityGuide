@@ -16,5 +16,7 @@ public interface CommentsLikesRepository extends JpaRepository<CommentsLikes, In
 	@Query(value = "select * from university_guide.commentslikes l where l.id_user = ?1", nativeQuery=true)
 	List<CommentsLikes> findByIdUser(final int id_user);
 	
+	@Query(value = "select * from university_guide.commentslikes l where l.id_user = ?1 and l.id_comments = ?1", nativeQuery = true)
+	CommentsLikes findByIdUserAndIdComments(final int id_user, final int id_comments);
 	
 }

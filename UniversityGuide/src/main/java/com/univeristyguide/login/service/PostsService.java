@@ -1,22 +1,23 @@
 package com.univeristyguide.login.service;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import com.univeristyguide.login.dto.CommentsDto;
 import com.univeristyguide.login.dto.PostsDto;
+import com.univeristyguide.login.dto.PostsLikesDto;
+import com.univeristyguide.login.dto.UserDto;
 import com.univeristyguide.login.dto.dtoconverter.FromDtoConverter;
 import com.univeristyguide.login.dto.dtoconverter.ToDtoConverter;
 import com.univeristyguide.login.entity.Category;
 import com.univeristyguide.login.entity.Comments;
 import com.univeristyguide.login.entity.Posts;
+import com.univeristyguide.login.entity.PostsLikes;
 import com.univeristyguide.login.entity.User;
 import com.univeristyguide.login.repository.CategoryRepository;
 import com.univeristyguide.login.repository.CommentsRepository;
@@ -55,11 +56,12 @@ public class PostsService {
 		
 	}
 	
-	
+	//create new post
 	public PostsDto createPost(PostsDto postsDto)
 	{
 		int userId = postsDto.getUserId();
 		int categoryId = postsDto.getCategoryId();
+		//find user from user Repository by userId
 		Optional<User> resultUser = userRepository.findById(userId);
 		User theUser = null;
 		if(resultUser.isPresent())
@@ -70,6 +72,7 @@ public class PostsService {
 		{
 			throw new RuntimeException("Did not find user id - " + userId);
 		}
+		//find category from category Repository by categoryId
 		Optional<Category> resultCategory = categoryRepository.findById(categoryId);
 		Category theCategory =null;
 		if(resultCategory.isPresent())
@@ -80,6 +83,7 @@ public class PostsService {
 		{
 			throw new RuntimeException("Did not find category id - " + categoryId);
 		}
+		//set posts class variables and save it in post Repository
 		if(postsDto.isAnonymous())
 		{
 			postsDto.setCreatedBy("Anonymous");
@@ -97,14 +101,14 @@ public class PostsService {
 		
 	}
 	
-	
-	public List<PostsDto> getAllPosts()
+	//get all posts in most recently created order
+	public List<PostsDto> getAllPosts(UserDto userDto)
 	{
 		List<Posts> posts = postsRepository.findAllSortedByDateReverse();
 		return posts.stream().map(ToDtoConverter::postsToDtoConverter).collect(Collectors.toList());
 	}
 	
-	
+	//get post by postId
 	public PostsDto getPostById(int theId)
 	{
 		Optional<Posts> result = postsRepository.findById(theId);
@@ -124,6 +128,7 @@ public class PostsService {
 		return thePostsDto;
 	}
 	
+	//edit or update post by postId
 	//@PreAuthorize("hasRole('USER')")
 	public PostsDto updatePosts(Posts posts)
 	{
@@ -158,6 +163,7 @@ public class PostsService {
 		return ToDtoConverter.postsToDtoConverter(posts);
 	}
 	
+	//delete post by postId
 	//@PreAuthorize("hasRole('USER')")
 	public void deletePosts(int theId)
 	{
@@ -177,35 +183,53 @@ public class PostsService {
 		postsRepository.deleteById(theId);
 	}  
 	
-	/*public void likes(int userId, int postId, boolean likes)
+	//like and unlike post 
+	public int likePosts(PostsLikesDto postLikeDto)
 	{
-		Optional<Posts> result = postsRepository.findById(postId);
+		Optional<Posts> resultPost = postsRepository.findById(postLikeDto.getPostId());
 		Posts findPost = null;
-		if(result.isPresent())
+		PostsLikes postLikes = new PostsLikes();
+
+		Optional<User> resultUser = userRepository.findById(postLikeDto.getUserId());
+		User findUser = null;
+		if(resultUser.isPresent()) {
+			findUser = resultUser.get();
+		}
+		else {
+			throw new RuntimeException("Did not find the user id -" + postLikeDto.getUserId());
+		}
+		
+		if(resultPost.isPresent())
 		{
-			findPost = result.get();
+			findPost = resultPost.get();
+			if(postLikeDto.isPostslikes())
+			{
+				postLikes.setPosts(findPost);
+				postLikes.setUser(findUser);
+				postLikes.setPostsLikes(true);
+				findPost.setLikesCount(findPost.getLikesCount()+1);
+				postsRepository.save(findPost);
+				postsLikesRepository.save(postLikes);
+			}
+			else if (!postLikeDto.isPostslikes())
+			{
+				if(findPost.getLikesCount()>0)findPost.setLikesCount(findPost.getLikesCount()-1);
+				postsRepository.save(findPost);
+				PostsLikes post = postsLikesRepository.findByIdUserAndIdPosts(postLikeDto.getUserId(),postLikeDto.getPostId());
+				if(post != null)postsLikesRepository.delete(post);
+				
+				
+			}
 		}
 		else
 		{
-			throw new RuntimeException("Did not find the post id -" + postsId);
+			throw new RuntimeException("Did not find the post id -" + postLikeDto.getPostId());
 		}
 		
-		
-		
-		
-		
-		if(likes)
-		{
-			
-		}
-		else if(buttonState == 1)
-		{
-			findPost.setLikesCount(findPost.getLikesCount()+1);
-		}
-		postsRepository.save(findPost);
-	}*/
+		return findPost.getLikesCount();
+	}
 	
-	
+	//comments count 
 	public void commentsCount(int postId)
 	{
 		Optional<Posts> result = postsRepository.findById(postId);
@@ -230,6 +254,7 @@ public class PostsService {
 		postsRepository.save(findPost);
 	}
 	
+	//get all posts by userId
 	public List<PostsDto> getAllPostsByUserId(int theUserId)
 	{
 		List<Posts> posts = postsRepository.findByIdUser(theUserId);
@@ -238,6 +263,7 @@ public class PostsService {
 		
 	}
 	
+	//get all posts by categoryId
 	public List<PostsDto> getAllPostsByCategoryId(int theCategoryId)
 	{
 		List<Posts> posts = postsRepository.findByCategory(theCategoryId);

@@ -8,8 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="postslikes")
 public class PostsLikes {
 
 	@Id
@@ -17,36 +19,15 @@ public class PostsLikes {
 	private int id;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="posts_id")
-	private Posts post;
+	@JoinColumn(name="id_posts", nullable=false)
+	private Posts posts;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="user_id")
+	@JoinColumn(name="id_user", nullable=false)
 	private User user;
 	
 	@Column(name="posts_likes")
 	private boolean postsLikes;
-
-	
-	
-	public boolean isPostsLikes() {
-		return postsLikes;
-	}
-
-	public void setPostsLikes(boolean postsLikes) {
-		this.postsLikes = postsLikes;
-	}
-
-		
-	
-	
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
 
 	public int getId() {
 		return id;
@@ -56,40 +37,45 @@ public class PostsLikes {
 		this.id = id;
 	}
 
-	public Posts getPost() {
-		return post;
+	public Posts getPosts() {
+		return posts;
 	}
 
-	public void setPost(Posts post) {
-		this.post = post;
+	public void setPosts(Posts posts) {
+		this.posts = posts;
 	}
 
-	
+	public User getUser() {
+		return user;
+	}
 
-
-	public PostsLikes(int id, Posts post, User user, boolean postsLikes) {
-		super();
-		this.id = id;
-		this.post = post;
+	public void setUser(User user) {
 		this.user = user;
-		this.postsLikes = postsLikes;
 	}
 
-	
-	
-	public PostsLikes() {
-		super();
+	public boolean isPostsLikes() {
+		return postsLikes;
+	}
+
+	public void setPostsLikes(boolean postsLikes) {
+		this.postsLikes = postsLikes;
 	}
 
 	@Override
 	public String toString() {
-		return "PostsLikes [id=" + id + ", post=" + post + ", user=" + user + ", postsLikes=" + postsLikes + "]";
+		return "PostsLikes [id=" + id + ", posts=" + posts + ", user=" + user + ", postsLikes=" + postsLikes + "]";
 	}
 
-	
-	
+	public PostsLikes(int id, Posts posts, User user, boolean postsLikes) {
+		super();
+		this.id = id;
+		this.posts = posts;
+		this.user = user;
+		this.postsLikes = postsLikes;
+	}
 
-	
-	
+	public PostsLikes() {
+		super();
+	}
 	
 }

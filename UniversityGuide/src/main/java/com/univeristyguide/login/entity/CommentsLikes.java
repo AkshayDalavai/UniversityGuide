@@ -8,8 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name="commentslikes")
 public class CommentsLikes {
 
 	@Id
@@ -19,15 +21,15 @@ public class CommentsLikes {
 	
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_user", nullable = true)
+	@JoinColumn(name = "id_user", nullable = false)
 	private User user;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_posts", nullable = true)
+	@JoinColumn(name = "id_posts", nullable = false)
 	private Posts post;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="id_comments", nullable = true)
+	@JoinColumn(name="id_comments", nullable = false)
 	private Comments comment;
 
 	@Column(name="comments_likes")
@@ -103,7 +105,6 @@ public class CommentsLikes {
 	public void setComment(Comments comment) {
 		this.comment = comment;
 	}
-	
 	
 	
 	

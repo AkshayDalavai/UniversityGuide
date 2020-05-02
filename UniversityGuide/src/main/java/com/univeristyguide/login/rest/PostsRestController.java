@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.univeristyguide.login.dto.CommentsDto;
 import com.univeristyguide.login.dto.PostsDto;
-import com.univeristyguide.login.dto.PostsandCommentsDto;
+import com.univeristyguide.login.dto.PostsLikesDto;
 import com.univeristyguide.login.entity.Posts;
+import com.univeristyguide.login.entity.PostsLikes;
 import com.univeristyguide.login.service.CommentsService;
 import com.univeristyguide.login.service.PostsService;
 
@@ -27,6 +27,8 @@ public class PostsRestController {
 	private PostsService postsService;
 	private CommentsService commentsService;
 	
+	
+	
 	@Autowired
 	public PostsRestController(PostsService thePostsService, CommentsService theCommentsService)
 	{
@@ -34,15 +36,15 @@ public class PostsRestController {
 		commentsService = theCommentsService;
 	}
 	
-	@GetMapping("/getposts")
-	public ResponseEntity<List<PostsDto>> findAllPosts()
-	{
-		List<PostsDto> posts = postsService.getAllPosts();
-		
-		return new ResponseEntity<>(posts,HttpStatus.OK);
-	}
+	/*
+	 * @GetMapping("/getposts") public ResponseEntity<List<PostsDto>> findAllPosts()
+	 * { List<PostsDto> posts = postsService.getAllPosts();
+	 * 
+	 * return new ResponseEntity<>(posts,HttpStatus.OK); }
+	 */
 	
 	
+	//create new post
 	@PostMapping("/createpost")
 	public ResponseEntity<PostsDto> createPost(@RequestBody PostsDto postsDto)
 	{
@@ -52,6 +54,8 @@ public class PostsRestController {
 		return new ResponseEntity<>(resultPost,HttpStatus.OK);
 	}
 	
+	
+	//update or edit post
 	@PostMapping("/updatepost")
 	public ResponseEntity<PostsDto> updatePost(@RequestBody Posts posts)
 	{
@@ -59,30 +63,17 @@ public class PostsRestController {
 		return new ResponseEntity<>(post, HttpStatus.OK);
 	}
 
+	
+	//get post by postsId
 	@GetMapping("/getpost/{postsId}")
 	public ResponseEntity<?> findPostById(@PathVariable int postsId)
-
-	//@GetMapping("/getpost/{postsId}")
-	//public ResponseEntity<PostsDto> findPostById(@PathVariable int postsId)
-
 	{
-		PostsDto postsDto = postsService.getPostById(postsId);
-	    //final String uri = "http://localhost:8080/api/getcomments/" + postsId;
-	    //RestTemplate restTemplate = new RestTemplate();
-		
-		List<CommentsDto> comments = commentsService.getAllCommentsByPostId(postsId);
-		  
-		PostsandCommentsDto postsAndComments = new PostsandCommentsDto() ;
-		postsAndComments.setComments(comments);
-		postsAndComments.setPosts(postsDto);
-	  // String result = restTemplate.getForObject(uri, String.class);
-
-	    
-	    //http://localhost:8080/api/
-	    //http://192.168.1.56:8080/UniversityGuide-0.0.1-SNAPSHOT/api/posts
-		return new ResponseEntity<>(postsAndComments, HttpStatus.OK);
+		PostsDto postsDto = postsService.getPostById(postsId);		
+		return new ResponseEntity<>(postsDto, HttpStatus.OK);
 	}
 	
+	
+	//delete post by postId
 	@DeleteMapping("/deletepost/{postId}")
 	public ResponseEntity<PostsDto> deletePost(@PathVariable int postsId)
 	{
@@ -91,16 +82,17 @@ public class PostsRestController {
 	}
 	
 
+	//like or dislike post
 	@PostMapping("/likeposts")
-	public ResponseEntity<PostsDto> likePost(@RequestBody int userId,int postId, boolean likes)
+	public ResponseEntity<?> likePost(@RequestBody PostsLikesDto postLikedto)
 	{
-		//postsService.likes(userId, postId, likes);
-		return new ResponseEntity<>(HttpStatus.OK);
+		
+		int likesCount = postsService.likePosts(postLikedto);
+		return new ResponseEntity<>(likesCount, HttpStatus.OK);
 	}
-
-	   
-
 	
+	
+	//get posts by userId
 	@GetMapping("/getposts-by-userid/{userId}")
 	public ResponseEntity<List<PostsDto>> getPostsByUserId(@PathVariable int userId)
 	{
@@ -108,10 +100,13 @@ public class PostsRestController {
 		return new ResponseEntity<>(posts,HttpStatus.OK);
 	}
 	
+	
+	//get posts by categoryId
 	@GetMapping("/getposts-by-categoryid/{categoryId}")
 	public ResponseEntity<List<PostsDto>> getPostsByCategoryId(@PathVariable int categoryId)
 	{
 		List<PostsDto> posts = postsService.getAllPostsByCategoryId(categoryId);
 		return new ResponseEntity<>(posts,HttpStatus.OK);
 	}
+	
 }
