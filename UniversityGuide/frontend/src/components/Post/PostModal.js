@@ -28,8 +28,8 @@ class PostModal extends Component {
            axios.get(`${GET_POST}${this.props.postId}`)
                 .then(res => {
                     this.setState({
-                      post: res.data.posts,
-                      comments: res.data.posts.comments
+                      post: res.data,
+                      comments: res.data.comments
                     });
                 })
        }
@@ -95,7 +95,7 @@ class PostModal extends Component {
                         </FormGroup>
                         <FormGroup className="col-sm-12" >
                             <Button color="danger" className="float-right" onClick={this.handleCommentSubmit}
-                                    disabled={!this.state.commentContent} >Comment</Button>
+                                    disabled={!this.state.commentContent || !this.props.isAuthenticated} >Comment</Button>
                             <CustomInput type="checkbox" id="postAnonymously" label="Post Anonymously" onChange={this.handleInputChange}/>
                         </FormGroup>
                     </Form>

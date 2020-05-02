@@ -7,9 +7,10 @@ class SUForum extends Component {
     render() {
         return (
             <div className="container">
-                <Posts categories={this.props.categories} />
+                <Posts categories={this.props.categories} isAuthenticated={this.props.isAuthenticated}
+                       accessToken={this.props.accessToken} loggedinUser={this.props.loggedinUser}/>
                 <Switch>
-                    <Route exact path={`SUForum/:postID`}>
+                    <Route exact path={`suforum/:postID`}>
                         <PostModal />
                     </Route>
                 </Switch>

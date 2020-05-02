@@ -51,7 +51,9 @@ class PostCard extends Component {
                                 <CardFooter>
                                     {/* @todo: Add likes and comments here */}
                                     <div className="float-left" >
-                                    <Button color="warning" outline onClick={this.props.likePost}> Likes: <FontAwesomeIcon icon="heart" /> <Badge color="secondary"> {likesCount} </Badge></Button> &nbsp;
+                                    <Button color="warning" outline onClick={() => this.props.likePost(id, this.props.loggedinUser.id, true)} disabled={!this.props.isAuthenticated}>
+                                         Likes: <FontAwesomeIcon icon="heart" /> <Badge color="secondary"> {likesCount} </Badge>
+                                    </Button> &nbsp;
                                     {!this.props.disable ?<Button color="warning" onClick={this.toggle} outline>Comments: <FontAwesomeIcon icon="comments" /> <Badge color="secondary">{commentsCount}</Badge></Button> : null}
                                     </div>
                                 </CardFooter>

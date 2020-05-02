@@ -48,13 +48,13 @@ class Login extends Component{
                     formErrors.email = true;
             }
             break;
-            case 'password': {
+            case 'password': 
                 if(value.length > 5)
                     formErrors.password = false
                 else
-                    formErrors.password = true
-            }
+                    formErrors.password = true 
             break;
+            default: 
         }
         return formErrors;
     }

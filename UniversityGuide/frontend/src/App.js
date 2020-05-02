@@ -95,7 +95,7 @@ class App extends React.Component {
                   loginErrorMessage={this.state.loginErrorMessage} showLogin={this.state.loginModal} 
                   logout={this.logout} loggedinUser={this.state.loggedinUser}/>
             <Route exact path="/">
-              <SUForum categories={this.state.categories} />
+              <SUForum categories={this.state.categories} isAuthenticated={this.state.isAuthenticated} accessToken={this.state.accessToken} loggedinUser={this.state.loggedinUser}/>
             </Route>
             <Route path="/susports">
               <SUSports />

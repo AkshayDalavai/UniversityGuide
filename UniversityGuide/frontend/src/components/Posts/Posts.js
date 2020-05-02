@@ -4,31 +4,23 @@ import PostCard from '../Post/PostCard';
 import CreateContent from '../CreateContent/CreateContent';
 import Filter from '../Filter/Filter';
 import {Form, FormGroup, Input, Jumbotron} from 'reactstrap';
-
+import Unauthenticated from '../Auth/Unauthenticated';
 import axios from 'axios';
-import {GET_POSTS, CREATE_POST, UPDATE_POST, LIKE_POST, getAuthStatus} from '../../constants'; 
+import {GET_POSTS, CREATE_POST, UPDATE_POST, LIKE_POST, SEARCH_POSTS} from '../../constants'; 
 
 class Posts extends Component {
     static propTypes = {
-        categories: PropTypes.array.isRequired
+        categories: PropTypes.array.isRequired,
+        isAuthenticated: PropTypes.bool.isRequired,
+        loggedinUser: PropTypes.object.isRequired,
+        accessToken: PropTypes.string.isRequired
     }
 
     state = {
         posts: [],
         editPost: {},
         modal: false,
-        search: '',
-        token: null,
-        isAuthenitcated: false
-    }
-
-    componentWillMount(){
-        //Get Auth values from local storage
-        const { token, isAuthenitcated } = getAuthStatus();
-        this.setState({
-            token,
-            isAuthenitcated
-        });
+        search: ''
     }
 
     toggle = () => {
@@ -66,6 +58,19 @@ class Posts extends Component {
         /**
          * @todo: get search results here
          */
+        if(this.state.search != ''){
+            axios.get(`${SEARCH_POSTS}${this.state.search}`)
+                 .then(res => {
+                     this.setState({
+                         posts: res.data
+                     })
+                 })
+                .catch(err => {
+                    alert(err);
+                });
+        }else{
+            this.getPosts();
+        }
     }
 
     addNewPost = (event, postDetails) => {
@@ -117,12 +122,25 @@ class Posts extends Component {
         }
     }
 
-    likePost = (postId) => {
-        
-        // axios.post(`${LIKE_POST}`, postId)
-        //      .then(res => {
-                 
-        //      })
+    likePost = (postId, userId = 1, postslikes = true) => {
+        const likeObj = {
+            postId,
+            userId,
+            postslikes
+        }
+        axios.post(LIKE_POST, likeObj)
+             .then(res => {
+                let posts = [...this.state.posts];
+                let idx = posts.findIndex(post => post.id === postId)
+                if(idx !== -1)
+                    posts[idx].likesCount = res.data;
+                this.setState({
+                    posts
+                });
+             })
+             .catch(err =>{
+                 alert(err);
+             })
     }
 
     editPost = (post) => {
@@ -154,11 +172,15 @@ class Posts extends Component {
                     <Input  type="text" className="mb-3" readOnly={true}  
                             placeholder="Ask for advice, mentorship,  and more from the community . . ."/>
                 </div>
-                {this.state.modal ? 
+                {this.state.modal ? this.props.isAuthenticated ? 
                 <CreateContent categories={this.props.categories} toggle={this.toggle} modal={this.state.modal} 
-                               addNewPost={this.addNewPost} editPostObj={this.state.editPost}/> : null}
+                               addNewPost={this.addNewPost} editPostObj={this.state.editPost}/> : 
+                               <Unauthenticated toggle={this.toggle} modal={this.state.modal}  /> : null}
                 
-                {this.state.posts && this.state.posts.length > 0 ? this.state.posts.map(indPost => <PostCard key={indPost.id} editPost={this.editPost} likePost={this.likePost} post={indPost} category={indPost.category} />)
+                {this.state.posts && this.state.posts.length > 0 ? this.state.posts.map(indPost => 
+                    <PostCard key={indPost.id} editPost={this.editPost} likePost={this.likePost} post={indPost}
+                              category={indPost.category} isAuthenticated={this.props.isAuthenticated} accessToken={this.props.accessToken}
+                              loggedinUser={this.props.loggedinUser}/>)
                 : <Jumbotron className="mt-2 mb-2"><p className="lead">No Posts Yet. Signup/Login to add a post</p></Jumbotron>}
             </div>
         )
