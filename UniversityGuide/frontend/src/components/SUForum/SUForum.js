@@ -19,4 +19,5 @@ class SUForum extends Component {
     }
 }
 
+// Parent component for SUForum
 export default SUForum;

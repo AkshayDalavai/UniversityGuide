@@ -6,7 +6,7 @@ import Filter from '../Filter/Filter';
 import {Form, FormGroup, Input, Jumbotron} from 'reactstrap';
 import Unauthenticated from '../Auth/Unauthenticated';
 import axios from 'axios';
-import {GET_POSTS, CREATE_POST, UPDATE_POST, LIKE_POST, SEARCH_POSTS} from '../../constants'; 
+import {GET_POSTS, CREATE_POST, UPDATE_POST, LIKE_POST, SEARCH_POSTS, DELETE_POST} from '../../constants'; 
 
 class Posts extends Component {
     static propTypes = {
@@ -21,6 +21,10 @@ class Posts extends Component {
         editPost: {},
         modal: false,
         search: ''
+    }
+    
+    componentDidMount(){
+            this.getPosts();
     }
 
     toggle = () => {
@@ -37,12 +41,11 @@ class Posts extends Component {
         });
     }
 
-    componentDidMount(){
-        this.getPosts();
-    }
-
     getPosts = () => {
-        axios.get(GET_POSTS)
+        const user =  {
+            id: this.props.loggedinUser ? this.props.loggedinUser.id : 0
+        }
+        axios.post(GET_POSTS, user)
              .then(res => {
                 this.setState({
                     posts: res.data
@@ -55,11 +58,14 @@ class Posts extends Component {
 
     searchPosts = e => {
         e.preventDefault();
+        const user =  {
+            id: this.props.loggedinUser ? this.props.loggedinUser.id : 0
+        }
         /**
          * @todo: get search results here
          */
         if(this.state.search != ''){
-            axios.get(`${SEARCH_POSTS}${this.state.search}`)
+            axios.post(`${SEARCH_POSTS}${this.state.search}`, user)
                  .then(res => {
                      this.setState({
                          posts: res.data
@@ -124,8 +130,8 @@ class Posts extends Component {
 
     likePost = (postId, userId = 1, postslikes = true) => {
         const likeObj = {
-            postId,
             userId,
+            postId,
             postslikes
         }
         axios.post(LIKE_POST, likeObj)
@@ -137,10 +143,10 @@ class Posts extends Component {
                 this.setState({
                     posts
                 });
-             })
-             .catch(err =>{
-                 alert(err);
-             })
+            })
+              .catch(err =>{
+                alert(err);
+              })
     }
 
     editPost = (post) => {
@@ -150,6 +156,22 @@ class Posts extends Component {
                 modal: !prevState.modal
             }
         });
+    }
+
+    deletePost = (id) => {
+        axios.delete(`${DELETE_POST}${id}`)
+             .then(res => {
+                let posts = [...this.state.posts];
+                let idx = posts.findIndex(post => post.id === id)
+                if(idx !== -1)
+                    posts.splice(idx, 1)
+                this.setState({
+                    posts
+                });
+             })
+             .catch(err => {
+                 alert(err);
+             });
     }
 
     render() {
@@ -174,13 +196,13 @@ class Posts extends Component {
                 </div>
                 {this.state.modal ? this.props.isAuthenticated ? 
                 <CreateContent categories={this.props.categories} toggle={this.toggle} modal={this.state.modal} 
-                               addNewPost={this.addNewPost} editPostObj={this.state.editPost}/> : 
+                               addNewPost={this.addNewPost} editPostObj={this.state.editPost} loggedinUser={this.props.loggedinUser}/> : 
                                <Unauthenticated toggle={this.toggle} modal={this.state.modal}  /> : null}
                 
                 {this.state.posts && this.state.posts.length > 0 ? this.state.posts.map(indPost => 
                     <PostCard key={indPost.id} editPost={this.editPost} likePost={this.likePost} post={indPost}
                               category={indPost.category} isAuthenticated={this.props.isAuthenticated} accessToken={this.props.accessToken}
-                              loggedinUser={this.props.loggedinUser}/>)
+                              loggedinUser={this.props.loggedinUser} deletePost={this.deletePost}/>)
                 : <Jumbotron className="mt-2 mb-2"><p className="lead">No Posts Yet. Signup/Login to add a post</p></Jumbotron>}
             </div>
         )

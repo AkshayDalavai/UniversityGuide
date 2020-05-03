@@ -19,6 +19,7 @@ class App extends React.Component {
     loginErrorMessage: null
   };
   
+  // Get accesstoken and userdetails from localstorage
   componentDidMount(){
     //Get config values on load
     axios.get(GET_CATEGORIES)
@@ -37,7 +38,7 @@ class App extends React.Component {
            console.log(err);
          });
   }
-
+  //All the toggle methods in the project helps in closing and opening the modals.
   toggle = () => {
     this.setState((prevState) => {
       return  {
@@ -46,6 +47,7 @@ class App extends React.Component {
     });
   }
 
+  //accept the user config and check if the credentials are right, if yes: store the token and user details in localstorage
   login = (event, userDetails) => {
       event.preventDefault();
       const user = {
@@ -75,6 +77,7 @@ class App extends React.Component {
            })
   }
 
+  //Code for User logout -- Clear the accesstoken and user details 
   logout = () => {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('loggedinUser');
@@ -89,7 +92,7 @@ class App extends React.Component {
     return (
       <Router>
         <div className="App"> 
-        {this.state.categories ? 
+        {this.state.categories && this.state.categories.length > 0? 
         <React.Fragment>
           <Header isAuthenticated={this.state.isAuthenticated} loginToggle={this.toggle} login={this.login}
                   loginErrorMessage={this.state.loginErrorMessage} showLogin={this.state.loginModal} 
