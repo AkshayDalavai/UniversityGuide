@@ -1,5 +1,6 @@
 package com.univeristyguide.login.repository;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,6 +14,8 @@ public interface PostsRepository extends JpaRepository<Posts, Integer>{
 	
 	@Query("from Posts p order by p.createdBy desc")
     List<Posts> findAllSortedByDateReverse();
+	
+	//HashMap<Integer, Posts> map = findAllSortedByDateReverse();
 	
 	@Query(value ="select * from university_guide.posts p where p.id_user =?1",nativeQuery=true)
 	List<Posts> findByIdUser (final int id_user);

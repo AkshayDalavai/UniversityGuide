@@ -16,13 +16,15 @@ import com.univeristyguide.login.dto.dtoconverter.FromDtoConverter;
 import com.univeristyguide.login.dto.dtoconverter.ToDtoConverter;
 import com.univeristyguide.login.entity.Category;
 import com.univeristyguide.login.entity.Comments;
+import com.univeristyguide.login.entity.CommentsLikes;
 import com.univeristyguide.login.entity.Posts;
 import com.univeristyguide.login.entity.PostsLikes;
 import com.univeristyguide.login.entity.User;
 import com.univeristyguide.login.repository.CategoryRepository;
+import com.univeristyguide.login.repository.CommentsLikesRepository;
 import com.univeristyguide.login.repository.CommentsRepository;
-import com.univeristyguide.login.repository.PostsLikesRepository;
 import com.univeristyguide.login.repository.PostSearch;
+import com.univeristyguide.login.repository.PostsLikesRepository;
 import com.univeristyguide.login.repository.PostsRepository;
 import com.univeristyguide.login.repository.UserRepository;
 
@@ -36,6 +38,7 @@ public class PostsService {
 	private PostsLikesRepository postsLikesRepository;
 	private CommentsService commentsService;
 	private PostSearch postSearch;
+	private CommentsLikesRepository commentsLikesRepository;
 	
 	@Autowired
 	public PostsService(PostsRepository thePostsRepository,
@@ -43,9 +46,9 @@ public class PostsService {
 			UserRepository theuserRepository,
 			CategoryRepository thecategoryRepository,
 			PostsLikesRepository thepostsLikesRepository,
-			CommentsService theCommentsService)
 			CommentsService theCommentsService,
-			PostSearch thepostSearch)
+			PostSearch thepostSearch,
+			CommentsLikesRepository thecommentsLikesRepository)
 	{
 		postsRepository = thePostsRepository;
 		commentsRepository = theCommentsRepository;
@@ -54,6 +57,7 @@ public class PostsService {
 		postsLikesRepository = thepostsLikesRepository;
 		commentsService = theCommentsService;
 		postSearch = thepostSearch;
+		commentsLikesRepository = thecommentsLikesRepository;
 	}
 	
 	public PostsService()
@@ -107,12 +111,33 @@ public class PostsService {
 	}
 	
 	//get all posts in most recently created order
-	public List<PostsDto> getAllPosts(UserDto userDto)
-	{
-		
+	
+	  public List<PostsDto> getAllPosts() {
+	  
+	  List<Posts> posts = postsRepository.findAllSortedByDateReverse();
+	  return posts.stream().sorted(Comparator.comparing(Posts::getCreatedDate).reversed())
+			  .map(ToDtoConverter::postsToDtoConverter).collect(Collectors.toList());
+	  
+	  }
+	 
+	
+	public List<PostsDto> getAllPosts(UserDto userDto) {
+		 
+		//find the posts from postsLikes Repository which a user has liked
+		List<PostsLikes> postsLikes = postsLikesRepository.findByIdUser(userDto.getId());
 		List<Posts> posts = postsRepository.findAllSortedByDateReverse();
-		return posts.stream().map(ToDtoConverter::postsToDtoConverter).collect(Collectors.toList());
-	}
+		for(PostsLikes thePostsLikes:postsLikes) {
+			for(Posts thePosts:posts) {
+				if(thePostsLikes.getPosts().getId()==thePosts.getId()) {
+					thePosts.setLikes(true);
+					break;
+				}
+			}
+		}		
+		  return posts.stream().sorted(Comparator.comparing(Posts::getCreatedDate).reversed())
+				  .map(ToDtoConverter::postsToDtoConverter).collect(Collectors.toList()); 
+  }
+	
 	
 	//get post by postId
 	public PostsDto getPostById(int theId)
@@ -131,6 +156,38 @@ public class PostsService {
 		List<CommentsDto> relatedComments = commentsService.getAllCommentsByPostId(theId);
 		PostsDto thePostsDto = ToDtoConverter.postsToDtoConverter(thePosts);
 		thePostsDto.setComments(relatedComments);
+		return thePostsDto;
+	}
+	
+	public PostsDto getPostById(int theId, UserDto userDto)
+	{
+		Optional<Posts> result = postsRepository.findById(theId);
+		
+		Posts thePosts = null;
+		if(result.isPresent())
+		{
+			thePosts = result.get();
+		}
+		else
+		{	
+			throw new RuntimeException("Did not find post id - " + theId);
+		}
+		//List<CommentsDto> commentsDto = commentsService.getAllCommentsByPostId(theId);
+
+		PostsDto thePostsDto = ToDtoConverter.postsToDtoConverter(thePosts);
+		List<Comments> comments = commentsRepository.findByPosts(theId);
+		List<CommentsLikes> commentsLikes = commentsLikesRepository.findByIdUser(userDto.getId());
+		for(CommentsLikes theCommentsLikes:commentsLikes) {
+			for(Comments thecomments:comments) {
+				if(theCommentsLikes.getComment().getId()==thecomments.getId()) {
+					thecomments.setLikes(true);
+					break;
+				}
+			}
+		}
+		
+		List<CommentsDto> commentsDto = ToDtoConverter.listofCommentsToDtoConverter(comments);
+		thePostsDto.setComments(commentsDto);
 		return thePostsDto;
 	}
 	
@@ -208,22 +265,27 @@ public class PostsService {
 		if(resultPost.isPresent())
 		{
 			findPost = resultPost.get();
-			if(postLikeDto.isPostslikes())
-			{
-				postLikes.setPosts(findPost);
-				postLikes.setUser(findUser);
-				postLikes.setPostsLikes(true);
-				findPost.setLikesCount(findPost.getLikesCount()+1);
-				postsRepository.save(findPost);
-				postsLikesRepository.save(postLikes);
+			PostsLikes post = postsLikesRepository.findByIdUserAndIdPosts(postLikeDto.getUserId(),postLikeDto.getPostId());
+			//find if there is an entry in the postsLikesRepository, if not found then add it and increase the likes count in posts
+			//prevents from having duplicate entries in the postsLikesRepository
+			if(post==null && postLikeDto.isPostslikes()) {
+				
+					postLikes.setPosts(findPost);
+					postLikes.setUser(findUser);
+					postLikes.setPostsLikes(true);
+					findPost.setLikesCount(findPost.getLikesCount()+1);
+					postsRepository.save(findPost);
+					postsLikesRepository.save(postLikes);
+			
 			}
-			else if (!postLikeDto.isPostslikes())
+			//if user has disliked the post and there is an entry in the postsLikesRepository
+			//if the user had liked the post then there has to be an entry in the postsLikesRepository
+			else if (!postLikeDto.isPostslikes() && post != null)
 			{
 				if(findPost.getLikesCount()>0)findPost.setLikesCount(findPost.getLikesCount()-1);
 				postsRepository.save(findPost);
-				PostsLikes post = postsLikesRepository.findByIdUserAndIdPosts(postLikeDto.getUserId(),postLikeDto.getPostId());
+				//PostsLikes post = postsLikesRepository.findByIdUserAndIdPosts(postLikeDto.getUserId(),postLikeDto.getPostId());
 				if(post != null)postsLikesRepository.delete(post);
-				
 				
 			}
 		}

@@ -1,5 +1,8 @@
 package com.univeristyguide.login.dto.dtoconverter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.univeristyguide.login.dto.CategoryDto;
 import com.univeristyguide.login.dto.CommentsDto;
 import com.univeristyguide.login.dto.PostsDto;
@@ -34,7 +37,8 @@ public class FromDtoConverter {
 				postsDto.getPostContent(),
 				postsDto.getLikesCount(),
 				postsDto.isAnonymous(),
-				postsDto.getCommentsCount());
+				postsDto.getCommentsCount(),
+				postsDto.isLikes());
 			return resultPosts;
 	}
 	
@@ -53,7 +57,26 @@ public class FromDtoConverter {
 				fromPostsDtoConverter(commentsDto.getPosts()),
 				commentsDto.getCommentsContent(),
 				commentsDto.getLikesCount(),
-				commentsDto.isAnonymous());
+				commentsDto.isAnonymous(),
+				commentsDto.isLikes());
 		return resultComments;   
+	}
+	
+	
+	
+	public static List<Comments> fromListofCommentsDtoConverter(final List<CommentsDto> commentsDto){
+		List<Comments> resultComments = new ArrayList<Comments>() ;
+		Comments tempComments = null;
+		for(CommentsDto thecommentsDto:commentsDto) {
+			tempComments = new Comments(thecommentsDto.getId(),
+					fromUsersDtoConverter(thecommentsDto.getUser()),
+					fromPostsDtoConverter(thecommentsDto.getPosts()),
+					thecommentsDto.getCommentsContent(),
+					thecommentsDto.getLikesCount(),
+					thecommentsDto.isAnonymous(),
+					thecommentsDto.isLikes());
+			resultComments.add(tempComments);
+		}
+		return resultComments;
 	}
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.univeristyguide.login.dto.CommentsDto;
 import com.univeristyguide.login.dto.CommentsLikesDto;
+import com.univeristyguide.login.dto.UserDto;
 import com.univeristyguide.login.entity.Comments;
 import com.univeristyguide.login.service.CommentsService;
 
@@ -42,10 +43,11 @@ public class CommentRestController {
 	@GetMapping("/getcomments/{postId}")
 	public ResponseEntity<List<CommentsDto>> getCommentByPostId(@PathVariable int postId)
 	{
-		List<CommentsDto> comments = commentsService.getAllCommentsByPostId(postId);
-		return new ResponseEntity<>(comments,HttpStatus.OK);
-	}
+		
+		List<CommentsDto> commentsDto = commentsService.getAllCommentsByPostId(postId);
+		return new ResponseEntity<>(commentsDto,HttpStatus.OK);
 	
+	}
 
 	@PutMapping("/updatecomment")
 	public ResponseEntity<CommentsDto> updateComment(@RequestBody Comments comment)
@@ -62,7 +64,7 @@ public class CommentRestController {
 	}
 	
 
-	@PostMapping("/likecomment/{commentId}")
+	@PostMapping("/likecomment")
 	public ResponseEntity<?> likeComment(@RequestBody CommentsLikesDto commentsLikesDto)
 	{
 		int commentsLikesCount = commentsService.likesComment(commentsLikesDto);

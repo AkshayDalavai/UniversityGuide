@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.univeristyguide.login.dto.CommentsDto;
 import com.univeristyguide.login.dto.CommentsLikesDto;
+import com.univeristyguide.login.dto.UserDto;
 import com.univeristyguide.login.dto.dtoconverter.FromDtoConverter;
 import com.univeristyguide.login.dto.dtoconverter.ToDtoConverter;
 import com.univeristyguide.login.entity.Comments;
@@ -92,11 +93,32 @@ public class CommentsService {
 	//get all comments by postId
 	public List<CommentsDto> getAllCommentsByPostId(int theId)
 	{
+		
 		List<Comments> comments = commentsRepository.findByPosts(theId);
 		return comments.stream().sorted(Comparator.comparing(Comments::getCreatedDate).reversed())
 				.map(ToDtoConverter::commentsToDtoConverter).collect(Collectors.toList());
 		
 	}
+	
+	
+	//get all comments by postId
+		/*public List<CommentsDto> getAllCommentsByPostId(int theId, UserDto userDto)
+		{
+			
+			List<Comments> comments = commentsRepository.findByPosts(theId);
+			List<CommentsLikes> commentsLikes = commentsLikesRepository.findByIdUser(userDto.getId());
+			for(CommentsLikes theCommentsLikes:commentsLikes) {
+				for(Comments thecomments:comments) {
+					if(theCommentsLikes.getComment().getId()==thecomments.getId()) {
+						thecomments.setLikes(true);
+						break;
+					}
+				}
+			}
+			return comments.stream().sorted(Comparator.comparing(Comments::getCreatedDate).reversed())
+					.map(ToDtoConverter::commentsToDtoConverter).collect(Collectors.toList());
+		}*/
+	
 	
 	//update or edit comments by commentId
 	//@PreAuthorize("hasRole('USER')")
@@ -162,22 +184,25 @@ public class CommentsService {
 		User findUser = new User();
 		if(resultUsers.isPresent()) {
 			findUser = resultUsers.get();
-			//commentsLikes = commentsLikesRepository.findByIdUserAndIdComments(commentsLikesDto.getUserId(), commentsLikesDto.getCommentId());
-			if(commentsLikesDto.isCommentLike()) {
+			CommentsLikes theComment = commentsLikesRepository.findByIdUserAndIdComments(commentsLikesDto.getUserId(), commentsLikesDto.getCommentId());
+			//find if there is an entry in the commentsLikesRepository, if not found then add it and increase the likes count in comments
+			//prevents from having duplicate entries in the commentsLikesRepository
+			if(commentsLikesDto.isCommentLike() && theComment ==null) {
 				commentsLikes.setUser(findUser);
 				commentsLikes.setPost(findPost);
 				commentsLikes.setComment(findComment);
 				commentsLikes.setLike(true);
-				findComment.setLikes(findComment.getLikes()+1);
+				findComment.setLikesCount(findComment.getLikesCount()+1);
 				commentsRepository.save(findComment);
 				commentsLikesRepository.save(commentsLikes);
 			
 			}
-			else {
-					if(findComment.getLikes()>0) findComment.setLikes(findComment.getLikes()-1);
+			//if user has disliked the comments and there is an entry in the commentsLikesRepository
+			//if the user had liked the post then there has to be an entry in the commentsLikesRepository
+			else if(!commentsLikesDto.isCommentLike() && theComment != null) {
+					if(findComment.getLikesCount()>0) findComment.setLikesCount(findComment.getLikesCount()-1);
 					commentsRepository.save(findComment);
-					CommentsLikes commentLike = commentsLikesRepository.findByIdUserAndIdComments(commentsLikesDto.getUserId(), commentsLikesDto.getCommentId());
-					if(commentLike!=null) commentsLikesRepository.delete(commentLike);
+					if(theComment!=null) commentsLikesRepository.delete(theComment);
 			}
 			
 		}
@@ -186,7 +211,7 @@ public class CommentsService {
 			
 		}
 		
-		return findComment.getLikes();
+		return findComment.getLikesCount();
 		
 	}
 }   

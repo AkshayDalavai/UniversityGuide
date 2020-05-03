@@ -30,14 +30,21 @@ public class CommentsDto {
 	private Date lastModifiedDate;
 	
 	private String createdBy;
+	
+	private boolean likes;
 
 	public CommentsDto() {
 		
 	}
 
 	
+
+
+
+
 	public CommentsDto(int id, UserDto user, int userId, PostsDto posts, int postsId, String commentsContent,
-			int likesCount, boolean isAnonymous, Date createdDate, Date lastModifiedDate, String createdBy) {
+			int likesCount, boolean isAnonymous, Date createdDate, Date lastModifiedDate, String createdBy,
+			boolean likes) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -50,7 +57,11 @@ public class CommentsDto {
 		this.createdDate = createdDate;
 		this.lastModifiedDate = lastModifiedDate;
 		this.createdBy = createdBy;
+		this.likes = likes;
 	}
+
+
+
 
 
 
@@ -62,12 +73,12 @@ public class CommentsDto {
 		this.id = id;
 	}
 	
-	@JsonIgnore
+	//@JsonIgnore
 	public UserDto getUser() {
 		return user;
 	}
 	
-	@JsonSetter 
+	//@JsonSetter 
 	public void setUser(UserDto user) {
 		this.user = user;
 	}
@@ -146,12 +157,27 @@ public class CommentsDto {
 		this.createdBy = createdBy;
 	}
 
+
+
+
+	public boolean isLikes() {
+		return likes;
+	}
+
+	public void setLikes(boolean likes) {
+		this.likes = likes;
+	}
+
+
 	@Override
 	public String toString() {
-		return "CommentsDto [id=" + id + ", userId=" + userId + ", postsId=" + postsId + ", commentsContent="
-				+ commentsContent + ", likesCount=" + likesCount + ", isAnonymous=" + isAnonymous + ", createdDate="
-				+ createdDate + ", lastModifiedDate=" + lastModifiedDate + ", createdBy=" + createdBy + "]";
+		return "CommentsDto [id=" + id + ", user=" + user + ", userId=" + userId + ", posts=" + posts + ", postsId="
+				+ postsId + ", commentsContent=" + commentsContent + ", likesCount=" + likesCount + ", isAnonymous="
+				+ isAnonymous + ", createdDate=" + createdDate + ", lastModifiedDate=" + lastModifiedDate
+				+ ", createdBy=" + createdBy + ", likes=" + likes + "]";
 	}
+
+	
 
 	
 	

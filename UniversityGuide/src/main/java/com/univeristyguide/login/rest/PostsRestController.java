@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.univeristyguide.login.dto.PostsDto;
 import com.univeristyguide.login.dto.PostsLikesDto;
+import com.univeristyguide.login.dto.UserDto;
 import com.univeristyguide.login.entity.Posts;
-import com.univeristyguide.login.entity.PostsLikes;
 import com.univeristyguide.login.service.CommentsService;
 import com.univeristyguide.login.service.PostsService;
 
@@ -36,12 +36,13 @@ public class PostsRestController {
 		commentsService = theCommentsService;
 	}
 	
+	
 	/*
 	 * @GetMapping("/getposts") public ResponseEntity<List<PostsDto>> findAllPosts()
-	 * { List<PostsDto> posts = postsService.getAllPosts();
-	 * 
-	 * return new ResponseEntity<>(posts,HttpStatus.OK); }
+	 * { List<PostsDto> posts = postsService.getAllPosts(); return new
+	 * ResponseEntity<>(posts,HttpStatus.OK); }
 	 */
+	 
 	
 	
 	//create new post
@@ -65,16 +66,23 @@ public class PostsRestController {
 
 	
 	//get post by postsId
-	@GetMapping("/getpost/{postsId}")
-	public ResponseEntity<?> findPostById(@PathVariable int postsId)
+	@PostMapping("/getpost/{postsId}")
+	public ResponseEntity<?> findPostById(@PathVariable int postsId, @RequestBody UserDto userDto)
 	{
-		PostsDto postsDto = postsService.getPostById(postsId);		
-		return new ResponseEntity<>(postsDto, HttpStatus.OK);
+		if(userDto.getId()>0) {
+			PostsDto postsDto = postsService.getPostById(postsId, userDto);
+			return new ResponseEntity<>(postsDto, HttpStatus.OK);
+		}
+		else{
+			PostsDto postsDto = postsService.getPostById(postsId);
+			return new ResponseEntity<>(postsDto, HttpStatus.OK);
+		}
+		
 	}
 	
 	
 	//delete post by postId
-	@DeleteMapping("/deletepost/{postId}")
+	@DeleteMapping("/deletepost/{postsId}")
 	public ResponseEntity<PostsDto> deletePost(@PathVariable int postsId)
 	{
 		postsService.deletePosts(postsId);

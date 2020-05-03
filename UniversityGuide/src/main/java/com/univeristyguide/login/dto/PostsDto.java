@@ -81,7 +81,7 @@ public class PostsDto {
 
 	public PostsDto(int id, UserDto user, int userId, CategoryDto category, int categoryId, String title,
 			boolean hasComments, String postContent, int likesCount, boolean isAnonymous, int commentsCount,
-			Date createdDate, Date lastModifiedDate, String createdBy) {
+			Date createdDate, Date lastModifiedDate, String createdBy, boolean likes) {
 		super();
 		this.id = id;
 		this.user = user;
@@ -97,19 +97,19 @@ public class PostsDto {
 		this.createdDate = createdDate;
 		this.lastModifiedDate = lastModifiedDate;
 		this.createdBy = createdBy;
+		this.likes = likes;
 
-		//this.likes = likes;
 	}
 
 
-	public boolean isLikes() {
+	/*public boolean isLikes() {
 		return likes;
 	}
 
 
 	public void setLikes(boolean likes) {
 		this.likes = likes;
-	}
+	}*/
 
 
 	public void setId(int id) {
@@ -257,17 +257,27 @@ public class PostsDto {
 	}
 
 
+	public boolean isLikes() {
+		return likes;
+	}
+
+
+	public void setLikes(boolean likes) {
+		this.likes = likes;
+	}
+
+
 	@Override
 	public String toString() {
 		return "PostsDto [id=" + id + ", user=" + user + ", userId=" + userId + ", category=" + category
 				+ ", categoryId=" + categoryId + ", title=" + title + ", hasComments=" + hasComments + ", postContent="
 				+ postContent + ", likesCount=" + likesCount + ", isAnonymous=" + isAnonymous + ", commentsCount="
 				+ commentsCount + ", createdDate=" + createdDate + ", lastModifiedDate=" + lastModifiedDate
-
-				+ ", createdBy=" + createdBy + ", likes=" + likes + "]";
-
-			//	+ ", createdBy=" + createdBy + ", comments=" + comments + "]";
+				+ ", createdBy=" + createdBy + ", likes=" + likes + ", comments=" + comments + "]";
 	}
+
+
+
 
 
 	

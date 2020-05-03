@@ -1,5 +1,8 @@
 package com.univeristyguide.login.dto.dtoconverter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.univeristyguide.login.dto.CategoryDto;
 import com.univeristyguide.login.dto.CommentsDto;
 import com.univeristyguide.login.dto.PostsDto;
@@ -41,7 +44,8 @@ public class ToDtoConverter {
 				posts.getCommentsCount(),
 				posts.getCreatedDate(),
 				posts.getLastModifiedDate(),
-				posts.getCreatedBy());
+				posts.getCreatedBy(),
+				posts.isLikes());
 		return resultPosts;
 				
 	}
@@ -54,14 +58,38 @@ public class ToDtoConverter {
 				postsToDtoConverter(comments.getPosts()),
 				comments.getPosts().getId(),
 				comments.getCommentsContent(),
-				comments.getLikes(),
+				comments.getLikesCount(),
 				comments.isAnonymous(),
 				comments.getCreatedDate(),
 				comments.getLastModifiedDate(),
-				comments.getCreatedBy()
-				);
+				comments.getCreatedBy(),
+				comments.isLikes());
 		return resultComments;
 	}
+	
+	
+	public static List<CommentsDto> listofCommentsToDtoConverter(final List<Comments> theComments){
+		List<CommentsDto> commentsDto = new ArrayList<CommentsDto>();
+		CommentsDto tempCommentsDto = new CommentsDto();
+		for(Comments comments:theComments) {
+			tempCommentsDto = new CommentsDto(comments.getId(),
+					userToDtoConverter(comments.getUser()),
+					comments.getUser().getId(),
+					postsToDtoConverter(comments.getPosts()),
+					comments.getPosts().getId(),
+					comments.getCommentsContent(),
+					comments.getLikesCount(),
+					comments.isAnonymous(),
+					comments.getCreatedDate(),
+					comments.getLastModifiedDate(),
+					comments.getCreatedBy(),
+					comments.isLikes());
+			commentsDto.add(tempCommentsDto);
+		}
+		return commentsDto;
+		
+	}
+	
 	
 	public static CategoryDto categoryToDtoConverter(final Category category)
 	{

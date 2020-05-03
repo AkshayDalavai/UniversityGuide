@@ -53,6 +53,8 @@ public class Posts extends Auditable<String>{
 	@Column(name="comments_count")
 	private int commentsCount;
 	
+	@Column(name="haslike", nullable = false)
+	private boolean likes;
 	
 	public Posts() {
 		
@@ -62,9 +64,14 @@ public class Posts extends Auditable<String>{
 	
 
 
+	
+
+
+
+
 	public Posts(int id, User user, Category category, String title, boolean hasComments, String postContent,
-			int likesCount, boolean isAnonymous, int commentsCount) {
-		
+			int likesCount, boolean isAnonymous, int commentsCount, boolean likes) {
+		super();
 		this.id = id;
 		this.user = user;
 		this.category = category;
@@ -74,8 +81,8 @@ public class Posts extends Auditable<String>{
 		this.likesCount = likesCount;
 		this.isAnonymous = isAnonymous;
 		this.commentsCount = commentsCount;
+		this.likes = likes;
 	}
-
 
 
 
@@ -168,15 +175,34 @@ public class Posts extends Auditable<String>{
 
 
 
+	public boolean isLikes() {
+		return likes;
+	}
+
+
+
+
+
+	public void setLikes(boolean likes) {
+		this.likes = likes;
+	}
+
+
+
+
+
 	@Override
 	public String toString() {
 		return "Posts [id=" + id + ", user=" + user + ", category=" + category + ", title=" + title + ", hasComments="
 				+ hasComments + ", postContent=" + postContent + ", likesCount=" + likesCount + ", isAnonymous="
-				+ isAnonymous + ", commentsCount=" + commentsCount + ", getCreatedBy()=" + getCreatedBy()
-				+ ", getCreatedDate()=" + getCreatedDate() + ", getLastModifiedBy()=" + getLastModifiedBy()
-				+ ", getLastModifiedDate()=" + getLastModifiedDate() + "]";
+				+ isAnonymous + ", commentsCount=" + commentsCount + ", likes=" + likes + "]";
 	}
 
+
+
+
+
+	
 
 	
 
