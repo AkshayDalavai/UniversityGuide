@@ -1,7 +1,7 @@
 /**
  * Stores all the constants required for application to Run
  */
-export const BASE_URI = 'http://192.168.1.56:8080/UniversityGuide-0.0.1-SNAPSHOT';
+export const BASE_URI = 'http://192.168.1.56:8081';
 
 export const LOGIN = `${BASE_URI}/api/login`;
 
@@ -12,10 +12,15 @@ export const GET_POST = `${BASE_URI}/api/getpost/`;
 export const CREATE_POST = `${BASE_URI}/api/createpost`;
 export const LIKE_POST = `${BASE_URI}/api/likeposts`;
 export const UPDATE_POST = `${BASE_URI}/api/updatepost`;
+//postId to be added at the end of url 
+export const DELETE_POST = `${BASE_URI}/api/deletepost/`
 //search text to be added at the end of url
 export const SEARCH_POSTS = `${BASE_URI}/api/search/`;
 
 export const CREATE_COMMENT = `${BASE_URI}/api/createcomment`;
+//commenttId to be added at the end of url for get_post
+export const DELETE_COMMENT = `${BASE_URI}/api/deletecomment/`;
+export const LIKE_COMMENT = `${BASE_URI}/api/likecomment`;
 
 export const CREATE_USER = `${BASE_URI}/api/createuser`;
 
