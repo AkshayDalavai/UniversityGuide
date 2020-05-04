@@ -24,8 +24,11 @@ class PostModal extends Component {
          * @todo: Make rest call here and get the comments for the post
          * 
          */
+        const user =  {
+            id: this.props.loggedinUser ? this.props.loggedinUser.id : 0
+        }
        if(this.props.postId){
-           axios.get(`${GET_POST}${this.props.postId}`)
+           axios.post(`${GET_POST}${this.props.postId}`, user)
                 .then(res => {
                     this.setState({
                       post: res.data,
@@ -64,6 +67,16 @@ class PostModal extends Component {
              })
     }
 
+    likePostInter = (id, userId = 1, postslikes = true, isComments = false, postId) => {
+        const post = {...this.state.post};
+        postslikes ? post.likesCount += 1 : post.likesCount -= 1;
+        post.likes = postslikes;
+        this.setState({
+            post
+        });
+        this.props.likePost(id, userId, postslikes, isComments, postId);
+    }
+
     likeComment = (id, userId = 1, postslikes = true, isComments = false, postId) => {
         const likeObj = {
             userId,
@@ -76,8 +89,10 @@ class PostModal extends Component {
                  .then(res => {
                     let comments = [...this.state.comments];
                     let idx = comments.findIndex(comment => comment.id === id)
-                    if(idx !== -1)
-                    comments[idx].likesCount = res.data;
+                    if(idx !== -1){
+                        comments[idx].likes = postslikes;
+                        comments[idx].likesCount = res.data;
+                    }
                     this.setState({
                         comments
                     });
@@ -132,7 +147,7 @@ class PostModal extends Component {
                 <ModalBody style={{'maxHeight': 'calc(100vh - 210px)', 'overflowY': 'auto'}}>
                     {this.state.post ?  
                         <PostCard post={this.state.post} category={this.state.post.category} disable={true} deletePost={this.props.deletePost}
-                                 likePost={this.props.likePost} isAuthenticated={this.props.isAuthenticated} loggedinUser={this.props.loggedinUser}
+                                 likePost={this.likePostInter} isAuthenticated={this.props.isAuthenticated} loggedinUser={this.props.loggedinUser}
                                  accessToken={this.props.accessToken}/> : null}
                     <Form onSubmit={this.handleCommentSubmit}> 
                         <FormGroup>

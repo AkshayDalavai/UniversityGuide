@@ -91,7 +91,7 @@ class App extends React.Component {
   render(){
     return (
       <Router>
-        <div className="App"> 
+        <div className="App" style={{background: '#eff2f6'}}> 
         {this.state.categories && this.state.categories.length > 0? 
         <React.Fragment>
           <Header isAuthenticated={this.state.isAuthenticated} loginToggle={this.toggle} login={this.login}

@@ -138,8 +138,10 @@ class Posts extends Component {
              .then(res => {
                 let posts = [...this.state.posts];
                 let idx = posts.findIndex(post => post.id === postId)
-                if(idx !== -1)
+                if(idx !== -1){
+                    posts[idx].likes = postslikes;
                     posts[idx].likesCount = res.data;
+                }
                 this.setState({
                     posts
                 });
