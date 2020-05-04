@@ -2,11 +2,14 @@ import React from 'react';
 import Header from './components/Header/Header';
 import SUForum from './components/SUForum/SUForum';
 import SUSports from './components/SUSports/SUSports';
+import {Jumbotron} from 'reactstrap';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import axios from 'axios';
 import {GET_CATEGORIES, LOGIN} from './constants'; 
 import logo from './SUImage.jpg';
-import 'bootstrap/dist/css/bootstrap.min.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-progress-2/main.css';
+import Progress from 'react-progress-2';
 import './App.css';
 
 class App extends React.Component {
@@ -29,9 +32,11 @@ class App extends React.Component {
   // Get accesstoken and userdetails from localstorage
   componentDidMount(){
     //Get config values on load
+    Progress.show();
     axios.get(GET_CATEGORIES)
          .then(res => {
             //Get accessToken if available
+            Progress.hide();
             const token = localStorage.getItem('accessToken');
             const user = JSON.parse(localStorage.getItem('loggedinUser'));
             this.setState({
@@ -42,6 +47,7 @@ class App extends React.Component {
             });
          })
          .catch(err => {
+           Progress.hide();
            console.log(err);
          });
   }
@@ -99,6 +105,7 @@ class App extends React.Component {
     return (
       <Router>
         <div className="App" style={{background: '#eff2f6'}}> 
+        <Progress.Component />
         {this.state.categories && this.state.categories.length > 0? 
         <React.Fragment>
           <Header isAuthenticated={this.state.isAuthenticated} loginToggle={this.toggle} login={this.login}
@@ -106,7 +113,10 @@ class App extends React.Component {
                   logout={this.logout} loggedinUser={this.state.loggedinUser}/>
             <Route exact path="/">
               <div id="welcomeImage"> 
-                {/* class="col-xs-12" style={{display:'grid', height: '100vh'}} <img src={this.items.src} alt={this.items.altText} style={{maxWidth: '100%', maxHeight:'100vh', margin:'auto'}}/> */}
+                <Jumbotron style={{opacity: '0.5', width: '90%'}} >
+                    <div className="d-none d-sm-block display-3">Welcome to Univer[c]ity Guide</div>
+                    <div className="d-block d-sm-none pl-5" style={{fontSize: '1.2rem'}}> Welcome to Univer[c]ity Guide</div>
+                </Jumbotron>
                 &nbsp;
               </div>
             </Route>

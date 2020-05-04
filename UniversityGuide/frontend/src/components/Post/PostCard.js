@@ -12,7 +12,10 @@ library.add(faHeart, faComments, faPenSquare, faTrash);
 class PostCard extends Component {
     static propTypes = {
         post: PropTypes.object.isRequired,
-        category: PropTypes.object.isRequired
+        category: PropTypes.object.isRequired,
+        isAuthenticated: PropTypes.bool,
+        likePost: PropTypes.func,
+        loggedinUser: PropTypes.object
     }
 
     state= {
@@ -38,7 +41,7 @@ class PostCard extends Component {
                                         <div className="col-xs-9 col-md-9 col-lg-9 lead text-left">
                                             {!this.props.disable ? <div className="text-left" > <Badge color="warning">{this.props.category.categoryName}</Badge></div> : null}
                                         </div>
-                                        {!this.props.disable ? <div className="col-xs-3 col-lg-3 mb-1" onClick={() => {this.props.editPost(this.props.post)}}>
+                                        {!this.props.disable && (this.props.loggedinUser.id === this.props.post.user.id) ? <div className="col-xs-3 col-lg-3 mb-1" onClick={() => {this.props.editPost(this.props.post)}}>
                                             <Button color="warning" outline className="float-right"> <FontAwesomeIcon icon="pen-square" /> </Button> 
                                         </div> : null}
                                     </div>
@@ -47,9 +50,10 @@ class PostCard extends Component {
                                             {isAnonymous ? "Anonymous" : `${user.lastName}, ${user.firstName}`} | &nbsp;
                                             {createdDate.split('T')[0]}
                                         </div>
+                                        {(this.props.loggedinUser.id === this.props.post.user.id) ?
                                         <div className="col-xs-3 col-lg-3 mt-1 pb-1" onClick={() => {this.props.deletePost(this.props.post.id)}}>
                                         <Button color="warning pr-2" outline className="float-right"><FontAwesomeIcon icon="trash" /></Button>
-                                    </div>
+                                    </div> : null }
                                     </div>                                   
                                 </CardHeader>
                                 <CardBody onClick={this.toggle}>

@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import PostCard from '../Post/PostCard';
 import CreateContent from '../CreateContent/CreateContent';
-import Filter from '../Filter/Filter';
 import {Form, FormGroup, Input, Jumbotron} from 'reactstrap';
 import Unauthenticated from '../Auth/Unauthenticated';
 import axios from 'axios';
 import {GET_POSTS, CREATE_POST, UPDATE_POST, LIKE_POST, SEARCH_POSTS, DELETE_POST} from '../../constants'; 
+import Progress from 'react-progress-2';
 
 class Posts extends Component {
     static propTypes = {
@@ -42,36 +42,42 @@ class Posts extends Component {
     }
 
     getPosts = () => {
+        Progress.show();
         const user =  {
             id: this.props.loggedinUser ? this.props.loggedinUser.id : 0
         }
         axios.post(GET_POSTS, user)
              .then(res => {
+                Progress.hide();
                 this.setState({
                     posts: res.data
                 })
              })
              .catch(err => {
                 console.log(err);
+                Progress.hide();
              })
     }
 
     searchPosts = e => {
         e.preventDefault();
-        const user =  {
-            id: this.props.loggedinUser ? this.props.loggedinUser.id : 0
-        }
+        // const user =  {
+        //     id: this.props.loggedinUser ? this.props.loggedinUser.id : 0
+        // }
         /**
          * @todo: get search results here
          */
         if(this.state.search != ''){
-            axios.post(`${SEARCH_POSTS}${this.state.search}`, user)
+            Progress.show();
+            axios.get(`${SEARCH_POSTS}${this.state.search}`)
                  .then(res => {
+                    Progress.hide();
                      this.setState({
                          posts: res.data
                      })
                  })
                 .catch(err => {
+                    Progress.hide();
                     alert(err);
                 });
         }else{
@@ -81,6 +87,7 @@ class Posts extends Component {
 
     addNewPost = (event, postDetails) => {
         event.preventDefault();
+        Progress.show();
         const post = {
             userId: postDetails.userId  ,
             isAnonymous: postDetails.isAnonymous || false,
@@ -105,6 +112,7 @@ class Posts extends Component {
                 console.log(err);
              })
              .finally(err => {
+                 Progress.hide();
                  this.toggle();
              })
 
@@ -122,6 +130,7 @@ class Posts extends Component {
                 console.log(err);
              })
              .finally(err => {
+                 Progress.hide();
                  this.toggle();
              })
 

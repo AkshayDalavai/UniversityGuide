@@ -4,6 +4,7 @@ import { Modal, ModalHeader, ModalBody, Form, FormGroup, Button, CustomInput, La
 import PropTypes from 'prop-types';
 import {GET_POST, CREATE_COMMENT, LIKE_COMMENT, DELETE_COMMENT} from '../../constants';
 import axios from 'axios';
+import Progress from 'react-progress-2';
 
 class PostModal extends Component {
     constructor(props){
@@ -46,6 +47,7 @@ class PostModal extends Component {
 
     handleCommentSubmit = (event) => {
         event.preventDefault();
+        Progress.show();
         const comment = {
             userId: this.props.loggedinUser.id,
             postsId: this.state.post.id,
@@ -54,6 +56,7 @@ class PostModal extends Component {
         }
         axios.post(CREATE_COMMENT, comment)
              .then(res => {
+                 Progress.hide();
                  let comments = [...this.state.comments];
                  comments.unshift(res.data);
                  this.setState({
@@ -63,6 +66,7 @@ class PostModal extends Component {
                  });
              })
              .catch(err => {
+                 Progress.hide();
                  console.log(err);
              })
     }
