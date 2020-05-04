@@ -5,9 +5,10 @@ import PropTypes from 'prop-types';
 import PostModal from './PostModal';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHeart, faComments, faPenSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faHeart as fasHeart, faComments, faPenSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {faHeart as farHeart} from '@fortawesome/fontawesome-free-regular';
 
-library.add(faHeart, faComments, faPenSquare, faTrash);
+library.add(fasHeart, faComments, faPenSquare, faTrash);
 
 class PostCard extends Component {
     static propTypes = {
@@ -41,7 +42,7 @@ class PostCard extends Component {
                                         <div className="col-xs-9 col-md-9 col-lg-9 lead text-left">
                                             {!this.props.disable ? <div className="text-left" > <Badge color="warning">{this.props.category.categoryName}</Badge></div> : null}
                                         </div>
-                                        {!this.props.disable && (this.props.loggedinUser.id === this.props.post.user.id) ? <div className="col-xs-3 col-lg-3 mb-1" onClick={() => {this.props.editPost(this.props.post)}}>
+                                        {!this.props.disable && this.props.loggedinUser && (this.props.loggedinUser.id === this.props.post.user.id) ? <div className="col-xs-3 col-lg-3 mb-1" onClick={() => {this.props.editPost(this.props.post)}}>
                                             <Button color="warning" outline className="float-right"> <FontAwesomeIcon icon="pen-square" /> </Button> 
                                         </div> : null}
                                     </div>
@@ -50,9 +51,9 @@ class PostCard extends Component {
                                             {isAnonymous ? "Anonymous" : `${user.lastName}, ${user.firstName}`} | &nbsp;
                                             {createdDate.split('T')[0]}
                                         </div>
-                                        {(this.props.loggedinUser.id === this.props.post.user.id) ?
+                                        {this.props.loggedinUser && (this.props.loggedinUser.id === this.props.post.user.id) ?
                                         <div className="col-xs-3 col-lg-3 mt-1 pb-1" onClick={() => {this.props.deletePost(this.props.post.id)}}>
-                                        <Button color="warning pr-2" outline className="float-right"><FontAwesomeIcon icon="trash" /></Button>
+                                        <Button color="warning" outline className="float-right"><FontAwesomeIcon icon="trash" /></Button>
                                     </div> : null }
                                     </div>                                   
                                 </CardHeader>
@@ -64,7 +65,7 @@ class PostCard extends Component {
                                     {/* @todo: Add likes and comments here */}
                                     <div className="float-left" >
                                     <Button color="warning" outline onClick={() => this.props.likePost(id, this.props.loggedinUser.id, !this.props.post.likes, this.props.isComment, this.props.post.postsId)} disabled={!this.props.isAuthenticated}>
-                                         Likes: <FontAwesomeIcon icon="heart" /> <Badge color="secondary"> {likesCount} </Badge>
+                                         Likes: <FontAwesomeIcon icon={this.props.post.likes ? fasHeart : farHeart} /> <Badge color="secondary"> {likesCount} </Badge>
                                     </Button> &nbsp;
                                     {!this.props.disable ?<Button color="warning" onClick={this.toggle} outline>Comments: <FontAwesomeIcon icon="comments" /> <Badge color="secondary">{commentsCount}</Badge></Button> : null}
                                     </div>
