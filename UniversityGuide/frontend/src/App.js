@@ -5,6 +5,7 @@ import SUSports from './components/SUSports/SUSports';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import axios from 'axios';
 import {GET_CATEGORIES, LOGIN} from './constants'; 
+import logo from './SUImage.jpg';
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css';
 
@@ -18,6 +19,12 @@ class App extends React.Component {
     loggedinUser: {},
     loginErrorMessage: null
   };
+
+  items = {
+      src: logo,
+      altText: 'Welcome to University Guide',
+      caption: 'Welcome to University Guide'
+    }
   
   // Get accesstoken and userdetails from localstorage
   componentDidMount(){
@@ -98,6 +105,12 @@ class App extends React.Component {
                   loginErrorMessage={this.state.loginErrorMessage} showLogin={this.state.loginModal} 
                   logout={this.logout} loggedinUser={this.state.loggedinUser}/>
             <Route exact path="/">
+              <div id="welcomeImage"> 
+                {/* class="col-xs-12" style={{display:'grid', height: '100vh'}} <img src={this.items.src} alt={this.items.altText} style={{maxWidth: '100%', maxHeight:'100vh', margin:'auto'}}/> */}
+                &nbsp;
+              </div>
+            </Route>
+            <Route exact path="/suforum">
               <SUForum categories={this.state.categories} isAuthenticated={this.state.isAuthenticated} accessToken={this.state.accessToken} loggedinUser={this.state.loggedinUser}/>
             </Route>
             <Route path="/susports">

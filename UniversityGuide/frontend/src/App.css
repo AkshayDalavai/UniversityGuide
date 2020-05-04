@@ -36,3 +36,18 @@
     transform: rotate(360deg);
   }
 }
+
+div#welcomeImage {
+  background-image: url(./SUImage.jpg);
+	background-repeat: no-repeat;
+	background-size: cover;
+	width: 100%;
+	height: 92vh;
+	position: relative;
+}
+
+@media (max-width: 1024px) {
+  div#welcomeImage {
+    background-position:center center;
+  }
+}

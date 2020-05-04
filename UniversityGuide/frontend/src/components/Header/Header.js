@@ -60,13 +60,13 @@ class Header extends Component{
         }
         return(
             <div>
-                <Navbar color="dark" dark className="mb-5 pl-3 pr-4" expand="sm">
+                <Navbar color="dark" dark className="pl-3 pr-4" expand="sm">
                         <NavbarBrand href="/">University Guide</NavbarBrand>
                         <NavbarToggler onClick={this.toggle} />
                         <Collapse isOpen={this.state.isOpen} navbar>
                             <Nav className="ml-auto" navbar>
                                 <NavItem>
-                                    <NavLink tag={Link} to="/" >SU Forum</NavLink>
+                                    <NavLink tag={Link} to="/suforum" >SU Forum</NavLink>
                                 </NavItem>
                                 <NavItem>
                                     <NavLink tag={Link} to="/susports">SU Sports</NavLink>
