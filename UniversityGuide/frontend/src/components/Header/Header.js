@@ -61,7 +61,7 @@ class Header extends Component{
         return(
             <div>
                 <Navbar color="dark" dark className="pl-3 pr-4" expand="sm">
-                        <NavbarBrand href="/">University Guide</NavbarBrand>
+                        <NavbarBrand href="/" style={{fontFamily: 'monospace'}}>Univer[c]ity Guide</NavbarBrand>
                         <NavbarToggler onClick={this.toggle} />
                         <Collapse isOpen={this.state.isOpen} navbar>
                             <Nav className="ml-auto" navbar>
