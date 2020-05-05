@@ -160,7 +160,7 @@ class PostModal extends Component {
                                     id="postComment" placeholder="Leave your comment here..." value={this.state.commentContent}/>
                         </FormGroup>
                         <FormGroup className="col-sm-12" >
-                            <div className="col-sm-9" onClick={this.handleCommentSubmit}>
+                            <div className="col-sm-9" >
                                 <Button color="danger" className="float-right" onClick={this.handleCommentSubmit}
                                         disabled={!this.state.commentContent || !this.props.isAuthenticated} >Comment
                                 </Button>
