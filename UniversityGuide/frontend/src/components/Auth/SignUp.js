@@ -29,7 +29,21 @@ class SignUp extends Component{
     toggle = () => {
         this.setState((prevState) => {
           return  {
-              modal: !prevState.modal
+                modal: !prevState.modal,
+                errorMessage: null,
+                firstName: '',
+                lastName: '',
+                email: '',
+                password: '',
+                confirmPassword: '',
+                university: 'Syracuse University',
+                formErrors: {
+                    firstName: false,
+                    email: false,
+                    password: false,
+                    confirmPassword: false,
+                    formValid: true
+                }
           }
         });
     }
@@ -88,6 +102,7 @@ class SignUp extends Component{
                     formErrors.confirmPassword = true;
             }
             break;
+            default:
         }
         return formErrors;
     }

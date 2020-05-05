@@ -153,16 +153,21 @@ class PostModal extends Component {
                         <PostCard post={this.state.post} category={this.state.post.category} disable={true} deletePost={this.props.deletePost}
                                  likePost={this.likePostInter} isAuthenticated={this.props.isAuthenticated} loggedinUser={this.props.loggedinUser}
                                  accessToken={this.props.accessToken}/> : null}
-                    <Form onSubmit={this.handleCommentSubmit}> 
+                    <Form onSubmit={this.handleCommentSubmit} className="border border-rounded mb-1 mt-1"> 
                         <FormGroup>
                             <Label for="postComment" hidden>Leave your comment here...</Label>
                             <Input  type="textarea" className="mb-3" name="commentContent" onChange={this.handleInputChange}
                                     id="postComment" placeholder="Leave your comment here..." value={this.state.commentContent}/>
                         </FormGroup>
                         <FormGroup className="col-sm-12" >
-                            <Button color="danger" className="float-right" onClick={this.handleCommentSubmit}
-                                    disabled={!this.state.commentContent || !this.props.isAuthenticated} >Comment</Button>
-                            <CustomInput type="checkbox" id="postAnonymously" label="Post Anonymously" onChange={this.handleInputChange}/>
+                            <div className="col-sm-9" onClick={this.handleCommentSubmit}>
+                                <Button color="danger" className="float-right" onClick={this.handleCommentSubmit}
+                                        disabled={!this.state.commentContent || !this.props.isAuthenticated} >Comment
+                                </Button>
+                            </div>
+                            <div className="col-sm-3">
+                                <CustomInput type="checkbox" id="postAnonymously" label="Post Anonymously" onChange={this.handleInputChange}/>
+                            </div>
                         </FormGroup>
                     </Form>
                     { comments }

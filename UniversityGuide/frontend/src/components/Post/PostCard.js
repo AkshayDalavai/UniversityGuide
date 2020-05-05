@@ -12,8 +12,8 @@ library.add(fasHeart, faComments, faPenSquare, faTrash);
 
 class PostCard extends Component {
     static propTypes = {
-        post: PropTypes.object.isRequired,
-        category: PropTypes.object.isRequired,
+        post: PropTypes.object,
+        category: PropTypes.object,
         isAuthenticated: PropTypes.bool,
         likePost: PropTypes.func,
         loggedinUser: PropTypes.object
