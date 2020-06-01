@@ -18,4 +18,4 @@ React - v16.13.1
 
 # Project Setup
 `cd UniversityGuide/frontend` to learn how to setup the frontend of the project <br>
-`cd UniversityGuide/frontend` to learn how to setup the backend of the project 
+`cd UniversityGuide` to learn how to setup the backend of the project 
