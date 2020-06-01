@@ -17,5 +17,5 @@ Spring Boot - v2.2.6
 React - v16.13.1
 
 # Project Setup
-<p>`cd UniversityGuide/frontend` to learn how to setup the frontend of the project</p>
-<p> `cd UniversityGuide/frontend` to learn how to setup the backend of the project </p>
+`cd UniversityGuide/frontend` to learn how to setup the frontend of the project <br>
+`cd UniversityGuide/frontend` to learn how to setup the backend of the project 
