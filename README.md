@@ -1,4 +1,4 @@
-# UniversityGuide
+# <h1 align="center">UniversityGuide</h1>
 
 # Introduction: 
 
@@ -12,36 +12,10 @@ Our application would mainly consists of four modules such as :
 3.	SU Sports, gives the latest articles on the Syracuse Sports such as football and Soccer, etc .
 4.	SU Marketplace, which will help university student/faculty/staff to buy/sell/exchange products.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 # Technology  Stack:
 Spring Boot - v2.2.6
 React - v16.13.1
 
-## Available Scripts
-
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
+# Project Setup
+<p>`cd UniversityGuide/frontend` to learn how to setup the frontend of the project</p>
+<p> `cd UniversityGuide/frontend` to learn how to setup the backend of the project </p>
