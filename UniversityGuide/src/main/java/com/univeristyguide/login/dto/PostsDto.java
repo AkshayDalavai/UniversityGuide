@@ -28,7 +28,7 @@ public class PostsDto {
 	
 	private int likesCount;
 	
-	private boolean isAnonymous;
+	private boolean anonymous;
 	
 	private int commentsCount;
 	
@@ -48,6 +48,30 @@ public class PostsDto {
 	public PostsDto() {
 		
 	}
+
+	
+
+	public PostsDto(int id, UserDto user, int userId, CategoryDto category, int categoryId, String title,
+			boolean hasComments, String postContent, int likesCount, boolean anonymous, int commentsCount,
+			Date createdDate, Date lastModifiedDate, String createdBy, boolean likes) {
+		
+		this.id = id;
+		this.user = user;
+		this.userId = userId;
+		this.category = category;
+		this.categoryId = categoryId;
+		this.title = title;
+		this.hasComments = hasComments;
+		this.postContent = postContent;
+		this.likesCount = likesCount;
+		this.anonymous = anonymous;
+		this.commentsCount = commentsCount;
+		this.createdDate = createdDate;
+		this.lastModifiedDate = lastModifiedDate;
+		this.createdBy = createdBy;
+		this.likes = likes;
+	}
+
 
 
 	/*public PostsDto(int id, UserDto user, CategoryDto category, String title, boolean hasComments, String postContent,
@@ -78,8 +102,8 @@ public class PostsDto {
 
 	
 
-
-	public PostsDto(int id, UserDto user, int userId, CategoryDto category, int categoryId, String title,
+	//Added by Yashwant
+	/*public PostsDto(int id, UserDto user, int userId, CategoryDto category, int categoryId, String title,
 			boolean hasComments, String postContent, int likesCount, boolean isAnonymous, int commentsCount,
 			Date createdDate, Date lastModifiedDate, String createdBy, boolean likes) {
 		super();
@@ -99,7 +123,7 @@ public class PostsDto {
 		this.createdBy = createdBy;
 		this.likes = likes;
 
-	}
+	}*/
 
 
 	/*public boolean isLikes() {
@@ -174,16 +198,6 @@ public class PostsDto {
 
 	public void setLikesCount(int likesCount) {
 		this.likesCount = likesCount;
-	}
-
-
-	public boolean isAnonymous() {
-		return isAnonymous;
-	}
-
-
-	public void setAnonymous(boolean isAnonymous) {
-		this.isAnonymous = isAnonymous;
 	}
 
 
@@ -267,20 +281,27 @@ public class PostsDto {
 	}
 
 
-	@Override
-	public String toString() {
-		return "PostsDto [id=" + id + ", user=" + user + ", userId=" + userId + ", category=" + category
-				+ ", categoryId=" + categoryId + ", title=" + title + ", hasComments=" + hasComments + ", postContent="
-				+ postContent + ", likesCount=" + likesCount + ", isAnonymous=" + isAnonymous + ", commentsCount="
-				+ commentsCount + ", createdDate=" + createdDate + ", lastModifiedDate=" + lastModifiedDate
-				+ ", createdBy=" + createdBy + ", likes=" + likes + ", comments=" + comments + "]";
+
+	public boolean isAnonymous() {
+		return anonymous;
 	}
 
 
 
+	public void setAnonymous(boolean anonymous) {
+		this.anonymous = anonymous;
+	}
 
+
+
+	@Override
+	public String toString() {
+		return "PostsDto [id=" + id + ", user=" + user + ", userId=" + userId + ", category=" + category
+				+ ", categoryId=" + categoryId + ", title=" + title + ", hasComments=" + hasComments + ", postContent="
+				+ postContent + ", likesCount=" + likesCount + ", anonymous=" + anonymous + ", commentsCount="
+				+ commentsCount + ", createdDate=" + createdDate + ", lastModifiedDate=" + lastModifiedDate
+				+ ", createdBy=" + createdBy + ", likes=" + likes + ", comments=" + comments + "]";
+	}
 
 	
-
-		
 }

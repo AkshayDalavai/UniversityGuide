@@ -39,19 +39,20 @@ public class AuthenticationController {
     @Autowired
     private TokenProvider jwtTokenUtil;
 
-    //@Autowired
+    @Autowired
     private UserService userService;
+    
+    @Autowired
     private PostsService postsService;
     
    
     
     
-    @Autowired
-    public AuthenticationController(UserService userService, PostsService postsService) {
-		super();
-		this.userService = userService;
-		this.postsService = postsService;
-	}
+	/*
+	 * @Autowired public AuthenticationController(UserService userService,
+	 * PostsService postsService) { super(); this.userService = userService;
+	 * this.postsService = postsService; }
+	 */
 
 
 	@RequestMapping(value = "/login", method = RequestMethod.POST)

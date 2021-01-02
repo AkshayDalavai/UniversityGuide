@@ -7,7 +7,6 @@ public class LoginUser {
 	private String password;
 	
 	
-	
 	public LoginUser() {
 
 	}
@@ -28,4 +27,5 @@ public class LoginUser {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
 }

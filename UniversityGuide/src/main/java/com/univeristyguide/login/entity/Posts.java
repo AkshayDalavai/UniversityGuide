@@ -48,30 +48,22 @@ public class Posts extends Auditable<String>{
 	private int likesCount;
 	
 	@Column(name="is_anonymous",nullable=false)
-	private boolean isAnonymous;
+	private boolean anonymous;
 	
 	@Column(name="comments_count")
 	private int commentsCount;
 	
-	@Column(name="haslike", nullable = false)
+	@Column(name="has_like", nullable = false)
 	private boolean likes;
 	
 	public Posts() {
 		
 	}
 
-
 	
-
-
-	
-
-
-
-
 	public Posts(int id, User user, Category category, String title, boolean hasComments, String postContent,
-			int likesCount, boolean isAnonymous, int commentsCount, boolean likes) {
-		super();
+			int likesCount, boolean anonymous, int commentsCount, boolean likes) {
+		
 		this.id = id;
 		this.user = user;
 		this.category = category;
@@ -79,12 +71,10 @@ public class Posts extends Auditable<String>{
 		this.hasComments = hasComments;
 		this.postContent = postContent;
 		this.likesCount = likesCount;
-		this.isAnonymous = isAnonymous;
+		this.anonymous = anonymous;
 		this.commentsCount = commentsCount;
 		this.likes = likes;
 	}
-
-
 
 
 	public int getId() {
@@ -147,20 +137,6 @@ public class Posts extends Auditable<String>{
 		this.likesCount = likesCount;
 	}
 
-
-
-	public boolean isAnonymous() {
-		return isAnonymous;
-	}
-
-
-
-	public void setAnonymous(boolean isAnonymous) {
-		this.isAnonymous = isAnonymous;
-	}
-
-
-
 	public int getCommentsCount() {
 		return commentsCount;
 	}
@@ -171,40 +147,30 @@ public class Posts extends Auditable<String>{
 		this.commentsCount = commentsCount;
 	}
 
-
-
-
-
 	public boolean isLikes() {
 		return likes;
 	}
-
-
-
-
 
 	public void setLikes(boolean likes) {
 		this.likes = likes;
 	}
 
+	public boolean isAnonymous() {
+		return anonymous;
+	}
 
-
-
+	public void setAnonymous(boolean anonymous) {
+		this.anonymous = anonymous;
+	}
 
 	@Override
 	public String toString() {
 		return "Posts [id=" + id + ", user=" + user + ", category=" + category + ", title=" + title + ", hasComments="
-				+ hasComments + ", postContent=" + postContent + ", likesCount=" + likesCount + ", isAnonymous="
-				+ isAnonymous + ", commentsCount=" + commentsCount + ", likes=" + likes + "]";
+				+ hasComments + ", postContent=" + postContent + ", likesCount=" + likesCount + ", anonymous="
+				+ anonymous + ", commentsCount=" + commentsCount + ", likes=" + likes + ", getCreatedBy()="
+				+ getCreatedBy() + ", getCreatedDate()=" + getCreatedDate() + ", getLastModifiedBy()="
+				+ getLastModifiedBy() + ", getLastModifiedDate()=" + getLastModifiedDate() + "]";
 	}
-
-
-
-
-
-	
-
-	
 
 	
 }  

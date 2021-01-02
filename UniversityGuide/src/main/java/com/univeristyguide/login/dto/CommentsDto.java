@@ -91,12 +91,12 @@ public class CommentsDto {
 		this.userId = userId;
 	}
 	
-	@JsonIgnore
+	
 	public PostsDto getPosts() {
 		return posts;
 	}
 	
-	@JsonSetter 
+	
 	public void setPosts(PostsDto posts) {
 		this.posts = posts;
 	}

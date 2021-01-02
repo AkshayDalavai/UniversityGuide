@@ -28,7 +28,7 @@ public class ToDtoConverter {
 				);
 		return resultUser;
 	}
-	  
+	
 	public static PostsDto postsToDtoConverter(final Posts posts)
 	{
 		PostsDto resultPosts = new PostsDto(posts.getId(),

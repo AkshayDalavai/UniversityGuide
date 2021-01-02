@@ -37,11 +37,11 @@ public class PostsRestController {
 	}
 	
 	
-	/*
-	 * @GetMapping("/getposts") public ResponseEntity<List<PostsDto>> findAllPosts()
-	 * { List<PostsDto> posts = postsService.getAllPosts(); return new
-	 * ResponseEntity<>(posts,HttpStatus.OK); }
-	 */
+
+	 @GetMapping("/getpostsr") public ResponseEntity<List<PostsDto>> findAllPosts()
+	 { List<PostsDto> posts = postsService.getAllPosts(); return new
+	 ResponseEntity<>(posts,HttpStatus.OK); }
+
 	 
 	
 	
