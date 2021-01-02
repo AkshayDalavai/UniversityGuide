@@ -1,7 +1,10 @@
 package com.univeristyguide.login.service;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -124,7 +127,7 @@ public class PostsService {
 	public List<PostsDto> getAllPosts(UserDto userDto) {
 		 
 		//find the posts from postsLikes Repository which a user has liked
-		List<PostsLikes> postsLikes = postsLikesRepository.findByIdUser(userDto.getId());
+		/*List<PostsLikes> postsLikes = postsLikesRepository.findByIdUser(userDto.getId());
 		List<Posts> posts = postsRepository.findAllSortedByDateReverse();
 		for(PostsLikes thePostsLikes:postsLikes) {
 			for(Posts thePosts:posts) {
@@ -133,8 +136,29 @@ public class PostsService {
 					break;
 				}
 			}
-		}		
-		  return posts.stream().sorted(Comparator.comparing(Posts::getCreatedDate).reversed())
+		}*/
+		
+		//Added by Akshay for Optimization
+		LinkedHashMap<Integer,Posts> theMap = new LinkedHashMap<>();
+		List<Posts> posts = postsRepository.findAllSortedByDateReverse();
+		for(Posts thePosts:posts)
+		{
+			theMap.put(thePosts.getId(), thePosts);
+		}
+		List<PostsLikes> postsLikes = postsLikesRepository.findByIdUser(userDto.getId());
+		for(PostsLikes thePostsLikes:postsLikes)
+		{
+			int postId = thePostsLikes.getPosts().getId();
+			Posts theMapPosts = theMap.get(postId);
+			theMapPosts.setLikes(true);
+		}
+		List<Posts> resultPosts = new ArrayList<>();
+		for(Map.Entry<Integer,Posts> entry :theMap.entrySet())
+		{
+			resultPosts.add(entry.getValue());
+		}
+		//End Added by Akshay for Optimization
+		  return resultPosts.stream().sorted(Comparator.comparing(Posts::getCreatedDate).reversed())
 				  .map(ToDtoConverter::postsToDtoConverter).collect(Collectors.toList()); 
   }
 	

@@ -75,9 +75,9 @@ public class UserService implements UserDetailsService{
 		}
 
 		user.setCreatedDate(theUser.getCreatedDate());
-		user.setCreatedBy(theUser.getCreatedBy());
+		//user.setCreatedBy(theUser.getCreatedBy());
 		user.setLastModifiedDate(theUser.getLastModifiedDate());
-		user.setLastModifiedBy(theUser.getLastModifiedBy());
+		//user.setLastModifiedBy(theUser.getLastModifiedBy());
 		
 		
 		userRepository.save(user);

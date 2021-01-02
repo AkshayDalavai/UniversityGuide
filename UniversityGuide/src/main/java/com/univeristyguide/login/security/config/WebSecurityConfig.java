@@ -22,7 +22,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
+import com.univeristyguide.login.entity.User;
 import com.univeristyguide.login.security.JwtAuthenticationEntryPoint;
 import com.univeristyguide.login.security.JwtAuthenticationFilter;
 
@@ -36,6 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtAuthenticationEntryPoint unauthorizedHandler;
+    
     
     /* Added By AkshayDalavai as it was not working in Spring 2.0*/
     @Override
@@ -62,7 +63,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
        */
        // return () -> Optional.ofNullable("ADMIN");
     	//System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-		return () -> Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication().getName());
+		//return () -> Optional.ofNullable(SecurityContextHolder.getContext().getAuthentication().getName());
+    	return new AuditorAwareImpl();
     }
     
     @Bean
@@ -78,6 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/**",
                         "/token/**"
                        ).permitAll()
+                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
