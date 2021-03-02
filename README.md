@@ -19,23 +19,7 @@ React - v16.13.1
 # Project Setup
 `cd UniversityGuide/frontend` to learn how to setup the frontend of the project <br>
 
-# Back end Setup
-
-UniversityGuide is a [Spring Boot](https://spring.io/projects/spring-boot) application built using [Maven](https://maven.apache.org/). 
-You can build a jar file and run it from the command line:
-```$xslt
- git clone https://github.com/AkshayDalavai/UniversityGuide.git
- ./mvnw package
- java -jar target/*.jar
-```
-You can then access UniversityGuide backend here: http://localhost:8080/
-
-Or you can run it from Maven directly using the Spring Boot Maven plugin. If you do this it will pick up changes that 
-you make in the project immediately (changes to Java source files require a 
-compile as well - most people use an IDE for this):
-```$xslt
-./mvnw spring-boot:run
-```
+`cd UniversityGuide/` to learn how to setup the backend of the project <br>
 
 # Running UniversityGuide using IDE
 **Prerequisites** <br>
@@ -65,4 +49,3 @@ choosing `Run 'UniversityGuideApplication'`.
 4. Navigate to UniversityGuide <br>
     Visit http://localhost:8080 in your browser.
     
-**DataBase Configuration** <br>
